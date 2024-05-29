@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { ToastContainer } from "react-toastify";
+import { Route, Routes } from "react-router-dom";
+import LayoutAdmin from "./layouts/LayoutAdmin/LayoutAdmin";
+import LayoutClient from "./layouts/LayoutClient/LayoutClient";
+import { HomePage } from "./pages/Client";
+import {
+  SanPhamPage,
+  ChatLieuPage,
+  HoaDonPage,
+  NhaSanXuatPage,
+  PhieuGiamGiaPage,
+  ThuongHieuPage,
+} from "./pages/Administrator";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <ToastContainer theme="colored" autoClose={1000} />
+        <Routes>
+          <Route path="/" element={<LayoutClient />}>
+            <Route index path="*" element={<HomePage />}></Route>
+          </Route>
+
+          <Route path="/admin" element={<LayoutAdmin />}>
+            <Route index path="*" element={<SanPhamPage />}></Route>
+            <Route path="san-pham" element={<SanPhamPage />}></Route>
+
+            <Route path="chat-lieu" element={<ChatLieuPage />}></Route>
+            <Route path="nha-san-xuat" element={<NhaSanXuatPage />}></Route>
+            <Route path="thuong-hieu" element={<ThuongHieuPage />}></Route>
+
+            <Route path="phieu-giam-gia" element={<PhieuGiamGiaPage />}></Route>
+            <Route path="hoa-don" element={<HoaDonPage />}></Route>
+          </Route>
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
