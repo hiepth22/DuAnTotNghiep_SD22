@@ -14,7 +14,7 @@ function LayoutAdmin() {
         <Sider
           collapsed={collapsed}
           theme="light"
-          width={270}
+          width={320}
           style={{
             position: "sticky",
             overflow: "auto",
@@ -27,7 +27,7 @@ function LayoutAdmin() {
           <div className="demo-logo-vertical">
             <Image
               preview={false}
-              src="https://dw0i2gv3d32l1.cloudfront.net/uploads/stage/stage_image/19630/optimized_product_thumb_stage.jpg"
+              src="https://pendecor.vn/uploads/files/2023/08/15/thiet-ke-logo-shop-giay-3.jpg"
             />
             <hr className="m-0" />
           </div>

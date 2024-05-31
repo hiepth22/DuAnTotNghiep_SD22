@@ -11,6 +11,11 @@ import {
   NhaSanXuatPage,
   PhieuGiamGiaPage,
   ThuongHieuPage,
+  DeGiayPage,
+  DanhMucPage,
+  KichCoPage,
+  MauSacPage,
+  ThongKePage,
 } from "./pages/Administrator";
 
 function App() {
@@ -30,9 +35,16 @@ function App() {
             <Route path="chat-lieu" element={<ChatLieuPage />}></Route>
             <Route path="nha-san-xuat" element={<NhaSanXuatPage />}></Route>
             <Route path="thuong-hieu" element={<ThuongHieuPage />}></Route>
+            <Route path="de-giay" element={<DeGiayPage />}></Route>
+            <Route path="danh-muc" element={<DanhMucPage />}></Route>
+            <Route path="kich-co" element={<KichCoPage />}></Route>
+            <Route path="mau-sac" element={<MauSacPage />}></Route>
 
             <Route path="phieu-giam-gia" element={<PhieuGiamGiaPage />}></Route>
+
             <Route path="hoa-don" element={<HoaDonPage />}></Route>
+
+            <Route path="thong-ke" element={<ThongKePage />}></Route>
           </Route>
         </Routes>
       </div>
