@@ -15,6 +15,7 @@ function LayoutAdmin() {
           collapsed={collapsed}
           theme="light"
           width={320}
+          className="custom-menu"
           style={{
             position: "sticky",
             overflow: "auto",

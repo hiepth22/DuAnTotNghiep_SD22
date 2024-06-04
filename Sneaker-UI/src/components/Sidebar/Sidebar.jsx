@@ -1,8 +1,5 @@
-import {
-  ProductOutlined,
-  AppstoreAddOutlined,
-  TableOutlined,
-} from "@ant-design/icons";
+import { ProductOutlined, AppstoreAddOutlined } from "@ant-design/icons";
+import { GiConverseShoe } from "react-icons/gi";
 import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -18,6 +15,15 @@ function getItem(label, key, icon, children, type) {
 }
 
 const items = [
+  {
+    key: "7",
+    icon: <i className="fa-solid fa-store"></i>,
+    label: (
+      <Link className="text-decoration-none" to={"ban-tai-quay"}>
+        Bán hàng tại quầy
+      </Link>
+    ),
+  },
   {
     key: "3",
     icon: <ProductOutlined />,
@@ -87,11 +93,20 @@ const items = [
         ),
       },
       {
-        key: "4f",
+        key: "4g",
         icon: <i className="fa-solid fa-bars"></i>,
         label: (
           <Link className="text-decoration-none" to={"danh-muc"}>
             Danh mục
+          </Link>
+        ),
+      },
+      {
+        key: "4h",
+        icon: <GiConverseShoe />,
+        label: (
+          <Link className="text-decoration-none" to={"co-giay"}>
+            Cổ giày
           </Link>
         ),
       },
@@ -101,7 +116,7 @@ const items = [
     key: "1",
     icon: <i className="fa-solid fa-receipt"></i>,
     label: (
-      <Link class="text-decoration-none" to={"phieu-giam-gia"}>
+      <Link className="text-decoration-none" to={"phieu-giam-gia"}>
         Phiếu giảm giá
       </Link>
     ),
@@ -138,7 +153,7 @@ const items = [
 function Sidebar() {
   return (
     <>
-      <Menu theme="light" mode="inline" items={items} />
+      <Menu className="custom-menu" theme="light" mode="inline" items={items} />
     </>
   );
 }

@@ -13,3 +13,6 @@ export { default as MauSacPage } from "./ThuocTinhSanPham/MauSacPage";
 export { default as KichCoPage } from "./ThuocTinhSanPham/KichCoPage";
 export { default as DanhMucPage } from "./ThuocTinhSanPham/DanhMucPage";
 export { default as DeGiayPage } from "./ThuocTinhSanPham/DeGiayPage";
+export { default as CoGiayPage } from "./ThuocTinhSanPham/CoGiayPage";
+
+export { default as BanTaiQuay } from "./BanHang/BanTaiQuayPage";
