@@ -15,7 +15,7 @@ public class HoaDonController {
     @Autowired
     HoaDonService hoaDonService;
 
-    @PostMapping("/hoa-don/add")
+    @PostMapping("/add")
     public ResponseEntity<?> addHoaDon(@RequestBody HoaDon hoaDon) {
         return ResponseEntity.ok(hoaDonService.add(hoaDon));
     }
