@@ -1,13 +1,9 @@
 package com.poly.sneaker.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "hoa_don_chi_tiet")
@@ -17,6 +13,26 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-
 public class HoaDonChiTiet {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "idSanPhamChiTiet")
+    private SanPhamChiTiet sanPhamChiTiet;
+
+    @ManyToOne
+    @JoinColumn(name = "idHoaDon")
+    private HoaDon hoaDon;
+
+    @Column(name = "soLuong")
+    private Integer soLuong;
+
+    @Column(name = "gia")
+    private BigDecimal gia;
+
+    @Column(name = "trangThai")
+    private Integer trangThai;
 }
