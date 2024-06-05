@@ -1,3 +1,7 @@
+import {
+  QueryClient,
+  QueryClientProvider
+} from '@tanstack/react-query';
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import { Route, Routes } from "react-router-dom";
@@ -16,13 +20,22 @@ import {
   MauSacPage,
   ThongKePage,
   CoGiayPage,
+  // BanTaiQuayPage,
 } from "./pages/Administrator";
 import BanTaiQuayPage from "./pages/Administrator/BanHang/BanTaiQuayPage";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+      queries: {
+          refetchOnWindowFocus: false
+      }
+  }
+})
+
 function App() {
   return (
-    <>
-      <div>
+    <QueryClientProvider client={queryClient}>
+      <div className="">
         <ToastContainer theme="colored" autoClose={1000} />
         <Routes>
           <Route path="/" element={<LayoutAdmin />}>
@@ -52,7 +65,7 @@ function App() {
           </Route>
         </Routes>
       </div>
-    </>
+    </QueryClientProvider>
   );
 }
 

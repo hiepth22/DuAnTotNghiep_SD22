@@ -1,12 +1,22 @@
 package com.poly.sneaker.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.poly.sneaker.entity.HoaDon;
+import com.poly.sneaker.service.HoaDonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/hoa-don")
 @CrossOrigin("*")
 
 public class HoaDonController {
+
+    @Autowired
+    HoaDonService hoaDonService;
+
+    @PostMapping("/hoa-don/add")
+    public ResponseEntity<?> addHoaDon(@RequestBody HoaDon hoaDon) {
+        return ResponseEntity.ok(hoaDonService.add(hoaDon));
+    }
 }
