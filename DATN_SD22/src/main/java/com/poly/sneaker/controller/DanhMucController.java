@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/vai-tro")
+@RequestMapping("/loai-giay")
 @CrossOrigin("*")
 
-public class VaiTroController {
+public class DanhMucController {
 }
