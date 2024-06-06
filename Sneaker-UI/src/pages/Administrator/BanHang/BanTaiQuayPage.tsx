@@ -60,7 +60,7 @@ const BanTaiQuayPage: React.FC = () => {
 
   const CreateHD = () => {
     if (tabState.items.length >= 10) {
-      toast.warning("Không thể tạo thêm hóa đơn. Số lượng tab đã đạt tối đa.");
+      toast.warning("Không thể tạo thêm hóa đơn. Số lượng hóa đơn đã đạt tối đa.");
       return;
     }
 

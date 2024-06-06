@@ -7,6 +7,8 @@ import com.poly.sneaker.repository.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HoaDonService {
     @Autowired
@@ -17,6 +19,11 @@ public class HoaDonService {
 //
 //    @Autowired
 //    private KhachHangRepository khachHangRepository;
+
+    public List<HoaDon> getAll(){
+        return hoaDonRepository.findAll();
+    }
+
 
     public HoaDon add(HoaDon hoaDon) {
 //        NhanVien nhanVien = nhanVienRepository.findById(hoaDon.getNhanVien().getId()).orElse(null);
