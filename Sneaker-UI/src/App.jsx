@@ -23,6 +23,7 @@ import {
   // BanTaiQuayPage,
 } from "./pages/Administrator";
 import BanTaiQuayPage from "./pages/Administrator/BanHang/BanTaiQuayPage";
+import NhanVienPage from './pages/TaiKhoan/NhanVien/NhanVienPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,6 +63,7 @@ function App() {
             <Route path="hoa-don" element={<HoaDonPage />}></Route>
 
             <Route path="thong-ke" element={<ThongKePage />}></Route>
+            <Route path="nhan-vien" element={<NhanVienPage />}></Route>
           </Route>
         </Routes>
       </div>

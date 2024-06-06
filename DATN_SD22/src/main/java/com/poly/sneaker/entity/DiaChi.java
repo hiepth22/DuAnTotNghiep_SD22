@@ -1,6 +1,7 @@
 package com.poly.sneaker.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +20,6 @@ import lombok.ToString;
 @Builder
 
 public class DiaChi {
+    @Id
+    private Long id;
 }
