@@ -59,34 +59,37 @@ const BanTaiQuayPage: React.FC = () => {
 
 
   const CreateHD = () => {
-    if (tabState.items.length >= 10) {  // Kiểm tra giới hạn 10 tab
+    if (tabState.items.length >= 10) {
       toast.warning("Không thể tạo thêm hóa đơn. Số lượng tab đã đạt tối đa.");
       return;
     }
 
-    const hoaDonData = {
-      ten: "1",
-      hoTen: "Khách Vãng Lai",
+    const hoaDonDataAdd = {
+      nhanVien: {
+        id: 1
+      },
+      khachHang: {
+        id: 1
+      },
       nguoiTao: "system",
-      ngayTao: getDateNow(),
-      trangThai: "1",
+      trangThai: "1"
     };
 
-    BanHangService.add(hoaDonData)
+    BanHangService.add(hoaDonDataAdd)
       .then((res) => {
         const newHoaDon = res.data;
         toast.success("Thêm hóa đơn thành công");
         console.log(newHoaDon.id);
 
         const newTab = {
-          label: `Hóa Đơn ${tabState.items.length + 1}`,  // Đánh số tab mới
+          label: `Hóa Đơn ${tabState.items.length + 1}`,
           key: `${tabState.items.length + 1}`,
           children: <HoaDonChiTietTab idHoaDon={newHoaDon.id} />,
         };
 
         setTabState(prevState => ({
           activeKey: `${tabState.items.length + 1}`,
-          items: [...prevState.items, newTab],  // Thêm tab mới vào danh sách
+          items: [...prevState.items, newTab],
         }));
 
         return BanHangService.add2(newHoaDon);
