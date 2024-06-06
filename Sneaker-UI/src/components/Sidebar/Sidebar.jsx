@@ -141,13 +141,30 @@ const items = [
   },
   {
     key: "6",
+    label: "Quản Lý Tài Khoản",
     icon: <i className="fa-solid fa-users"></i>,
-    label: (
-      <Link className="text-decoration-none" to={"tai-khoan"}>
-        Tài khoản
-      </Link>
-    ),
+    children: [
+      {
+        key: "6a",
+        
+        label: (
+          <Link className="text-decoration-none" to={"nhan-vien"}>
+            Nhân Viên
+          </Link>
+        ),
+      },
+      {
+        key: "6b",
+       
+        label: (
+          <Link className="text-decoration-none" to={"khach-hang"}>
+           Khách Hàng
+          </Link>
+        ),
+      },
+    ],
   },
+  
 ];
 
 function Sidebar() {

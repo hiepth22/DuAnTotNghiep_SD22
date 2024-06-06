@@ -17,7 +17,7 @@ public class NhanVien {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "ten", length = 30)
     private String ten;
