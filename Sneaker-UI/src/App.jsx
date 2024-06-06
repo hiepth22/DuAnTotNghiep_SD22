@@ -1,7 +1,4 @@
-import {
-  QueryClient,
-  QueryClientProvider
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import { Route, Routes } from "react-router-dom";
@@ -26,11 +23,11 @@ import BanTaiQuayPage from "./pages/Administrator/BanHang/BanTaiQuayPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
-      queries: {
-          refetchOnWindowFocus: false
-      }
-  }
-})
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
@@ -43,7 +40,7 @@ function App() {
           </Route>
 
           <Route path="/admin" element={<LayoutAdmin />}>
-            <Route index path="*" element={<SanPhamPage />}></Route>
+            <Route index path="/admin" element={<SanPhamPage />}></Route>
             <Route path="san-pham" element={<SanPhamPage />}></Route>
 
             <Route path="ban-tai-quay" element={<BanTaiQuayPage />}></Route>
