@@ -33,7 +33,16 @@ public class NhanVienSevice {
         Optional<NhanVien> optional = nhanVienRepository.findById(id);
         return optional.map(o -> {
             o.setTen(newnv.getTen());
-
+            o.setMa(newnv.getMa());
+            o.setAnh(newnv.getAnh());
+            o.setCccd(newnv.getCccd());
+            o.setEmail(newnv.getEmail());
+            o.setGioiTinh(newnv.getGioiTinh());
+            o.setMatKhau(newnv.getMatKhau());
+            o.setNgaySinh(newnv.getNgaySinh());
+            o.setSdt(newnv.getSdt());
+            o.setTrangThai(newnv.getTrangThai());
+            o.setVaiTro(newnv.getVaiTro());
             return nhanVienRepository.save(o);
         }).orElse(null);
     }
