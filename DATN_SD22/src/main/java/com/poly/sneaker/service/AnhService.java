@@ -48,4 +48,20 @@ public class AnhService {
             return repository.save(o);
         }).orElse(null);
     }
+
+    public Anh updateTrangThai(Long id) {
+        Optional<Anh> optional = repository.findById(id);
+        return optional.map(o -> {
+            o.setTrangThai(0);
+            return repository.save(o);
+        }).orElse(null);
+    }
+
+    public Boolean existingById(Long id) {
+        return repository.existsById(id);
+    }
+
+    public Boolean existingByTen(String ten) {
+        return repository.findByTen(ten).size() > 0;
+    }
 }
