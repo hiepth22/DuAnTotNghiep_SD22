@@ -5,10 +5,7 @@ import com.poly.sneaker.entity.SanPhamChiTiet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-<<<<<<< HEAD
 import org.springframework.data.repository.query.Param;
-=======
->>>>>>> 87b1b3f7d4abc31e76673ef29ad0af9035a6ff1c
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +13,6 @@ import java.util.List;
 @Repository
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, Long>, JpaSpecificationExecutor<SanPhamChiTiet> {
 
-<<<<<<< HEAD
     @Query(value = "\tSELECT \n" +
             "\tspct.id,\n" +
             "    anh.url AS url,\n" +
@@ -41,11 +37,9 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     List<Object[]> findBySanPhamCT();
 
 
-=======
     List<SanPham> findByMa(String ma);
 
     @Query(value = "select * \n" +
             "from [chi_tiet_san_pham] where idSanPham = ?1", nativeQuery = true)
     List<SanPhamChiTiet> findBySanPham(Long id);
->>>>>>> 87b1b3f7d4abc31e76673ef29ad0af9035a6ff1c
 }
