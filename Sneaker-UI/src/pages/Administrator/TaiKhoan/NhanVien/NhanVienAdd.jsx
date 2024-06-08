@@ -107,13 +107,16 @@ const NhanVienAdd = () => {
 
     console.log(nhanVienData);
     if(id){
+      try {
       updateNhanvien(id,nhanVienData).then((response)=>{
         toast.success('Nhân viên được cập nhập thành công!');
         console.log(response.data)
         navigate('/admin/nhan-vien');
-      }).catch (error =>{
-        console.log(error)});
+      })}catch (error ){
+        console.log(error)
         toast.warning("update thất bại");
+      };
+       
     }
     else{
     try {
