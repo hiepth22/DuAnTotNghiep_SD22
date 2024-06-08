@@ -1,6 +1,6 @@
 import request from "../Request";
 
-class ChatLieuService {
+class NhaSanXuatService {
   // Hiển thị
   static getAll = async () => {
     let response = await request.get(`nha-san-xuat`);
@@ -28,3 +28,5 @@ class ChatLieuService {
     return request.delete("nha-san-xuat/" + id);
   }
 }
+
+export default NhaSanXuatService;
