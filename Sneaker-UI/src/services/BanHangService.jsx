@@ -1,11 +1,8 @@
-import {
-    useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import request from "./Request";
 import axios from "axios";
 
 class BanHangService {
-
     static add(data) {
         return request.post("/hoa-don/add", data);
     }
@@ -17,26 +14,34 @@ class BanHangService {
 
 export default BanHangService;
 
-
 export const hoaDonData = () => {
     return useQuery({
-        queryKey: ['hoaDonData'], 
+        queryKey: ["hoaDonData"],
         queryFn: async () => {
             const res = await request.get(`/hoa-don`);
             return res.data;
-        }
+        },
     });
-
-}
+};
 
 export const hoaDonChiTietDataByIdHD = (id) => {
     return useQuery({
-        queryKey: ['hoaDonCTData', id], 
+        queryKey: ["hoaDonCTData", id],
         queryFn: async () => {
             const res = await request.get(`/hoa-don-chi-tiet/${id}`);
             return res.data;
-        }
+        },
     });
-}
+};
 
-
+export const sanPhamCTData = () => {
+    return useQuery({
+        queryKey: ["SPCTData"],
+        queryFn: async () => {
+            const res = await request.get(
+                `/ban-hang-tai-quay/san-pham-chi-tiet`
+            );
+            return res.data;
+        },
+    });
+};
