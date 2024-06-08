@@ -22,6 +22,8 @@ import {
 import BanTaiQuayPage from "./pages/Administrator/BanHang/BanTaiQuayPage";
 import NhanVienPage from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienPage";
 import NhanVienAdd from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienAdd";
+import KhachHangPage from "./pages/Administrator/TaiKhoan/KhachHang/KhachHangPage";
+import KhachHangAdd from "./pages/Administrator/TaiKhoan/KhachHang/KhachHangAdd";
 
 
 const queryClient = new QueryClient({
@@ -67,6 +69,10 @@ function App() {
             <Route path="nhanvien-add" element={<NhanVienAdd />}></Route>
             <Route path="nhanvien-add/:id" element={<NhanVienAdd />}></Route>
             {/* <Route path="nhanvien-detail/:id" element={<NhanVienAdd />}></Route> */}
+            {/* Khach-Hang */}
+            <Route path="khach-hang" element={<KhachHangPage />}></Route>
+            <Route path="khachhang-add" element={<KhachHangAdd />}></Route>
+            <Route path="khachhang-add/:id" element={<KhachHangAdd />}></Route>
           </Route>
         </Routes>
       </div>
