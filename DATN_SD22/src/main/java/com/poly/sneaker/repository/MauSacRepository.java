@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface MauSacRepository extends JpaRepository<MauSac, Long>, JpaSpecificationExecutor<MauSac> {
-    List<MauSac> findAllByOrderOrderByIdDesc();
 
     List<MauSac> findByTen(String ten);
 }

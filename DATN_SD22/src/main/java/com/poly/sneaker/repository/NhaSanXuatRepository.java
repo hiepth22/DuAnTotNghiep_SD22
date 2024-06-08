@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface NhaSanXuatRepository extends JpaRepository<NhaSanXuat, Long>, JpaSpecificationExecutor<NhanVien> {
-    List<NhaSanXuat> findAllByOrderOrderByIdDesc();
 
     List<NhaSanXuat> findByTen(String ten);
 }

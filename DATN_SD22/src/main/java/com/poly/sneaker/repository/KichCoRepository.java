@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface KichCoRepository extends JpaRepository<KichCo, Long>, JpaSpecificationExecutor<KichCo> {
-    List<KichCo> findAllByOrderOrderByIdDesc();
 
     List<KichCo> findByTen(String ten);
 }

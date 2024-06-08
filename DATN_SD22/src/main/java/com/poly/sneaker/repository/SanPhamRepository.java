@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, Long>, JpaSpecificationExecutor<SanPham> {
-    List<SanPham> findAllByOrderOrderByIdDesc();
 
     List<SanPham> findByTen(String ten);
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface DanhMucRepository extends JpaRepository<DanhMuc, Long>, JpaSpecificationExecutor<DanhMuc> {
-    List<DanhMuc> findAllByOrderOrderByIdDesc();
 
     List<DanhMuc> findByTen(String ten);
 }
