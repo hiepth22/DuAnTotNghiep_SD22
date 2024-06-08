@@ -3,6 +3,9 @@ package com.poly.sneaker.service;
 import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.repository.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +17,18 @@ public class NhanVienSevice {
     private NhanVienRepository nhanVienRepository;
 
     public List<NhanVien> getall() {
+
         return nhanVienRepository.findAll();
     }
-
+    public Page<NhanVien> phantrang(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return nhanVienRepository.findAll(pageable);
+    }
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
     }
 
-    public NhanVien deleteById(Integer id) {
+    public NhanVien deleteById(Long id) {
         Optional<NhanVien> optional = nhanVienRepository.findById(id);
         return optional.map(o -> {
             nhanVienRepository.delete(o);
@@ -29,7 +36,7 @@ public class NhanVienSevice {
         }).orElse(null);
     }
 
-    public NhanVien update(Integer id, NhanVien newnv) {
+    public NhanVien update(Long id, NhanVien newnv) {
         Optional<NhanVien> optional = nhanVienRepository.findById(id);
         return optional.map(o -> {
             o.setTen(newnv.getTen());
@@ -38,16 +45,18 @@ public class NhanVienSevice {
             o.setCccd(newnv.getCccd());
             o.setEmail(newnv.getEmail());
             o.setGioiTinh(newnv.getGioiTinh());
+            o.setDiachi(newnv.getDiachi());
             o.setMatKhau(newnv.getMatKhau());
             o.setNgaySinh(newnv.getNgaySinh());
             o.setSdt(newnv.getSdt());
             o.setTrangThai(newnv.getTrangThai());
             o.setVaiTro(newnv.getVaiTro());
+            o.setNgaycapnhap(java.time.LocalDateTime.now());
             return nhanVienRepository.save(o);
         }).orElse(null);
     }
 
-    public Boolean existsById(Integer id) {
+    public Boolean existsById(Long id) {
         return nhanVienRepository.existsById(id);
     }
 
@@ -55,7 +64,7 @@ public class NhanVienSevice {
         return nhanVienRepository.findByTen(ten).size() > 0;
     }
 
-    public NhanVien findById(Integer id) {
+    public NhanVien findById(Long id) {
         Optional<NhanVien> optional = nhanVienRepository.findById(id);
         return optional.map(o -> o).orElse(null);
     }

@@ -415,6 +415,9 @@ CREATE TABLE [dbo].[nhan_vien](
 	[matKhau] [nvarchar](30) NULL,
 	[vai_tro] [int] NULL,
 	[trangThai] [int] NULL,
+	[ngayTao] [datetime] NULL,
+	[ngayCapNhat] [datetime] NULL,
+	diachi [nvarchar](100) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

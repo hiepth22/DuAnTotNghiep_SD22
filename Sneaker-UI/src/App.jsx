@@ -62,9 +62,11 @@ function App() {
             <Route path="hoa-don" element={<HoaDonPage />}></Route>
 
             <Route path="thong-ke" element={<ThongKePage />}></Route>
-
+            {/* nhân viên */}
             <Route path="nhan-vien" element={<NhanVienPage />}></Route>
             <Route path="nhanvien-add" element={<NhanVienAdd />}></Route>
+            <Route path="nhanvien-add/:id" element={<NhanVienAdd />}></Route>
+            {/* <Route path="nhanvien-detail/:id" element={<NhanVienAdd />}></Route> */}
           </Route>
         </Routes>
       </div>
