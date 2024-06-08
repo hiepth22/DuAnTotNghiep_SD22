@@ -11,7 +11,16 @@ const chiTietColumns = [
     { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },
     { title: "Kích Cỡ", dataIndex: "tenKichCo", key: "tenKichCo" },
     { title: "Màu Sắc", dataIndex: "tenMauSac", key: "tenMauSac" },
-    { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" }
+    { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" },
+    {
+        title: "Action",
+        key: "action",
+        render: (text, record) => (
+            <Button type="primary" >
+                Thêm
+            </Button>
+        ),
+    }
 ];
 
 const ModalBanHang = () => {
@@ -29,10 +38,12 @@ const ModalBanHang = () => {
             <Modal
                 centered
                 visible={open}
-                onOk={hideModal}
-                onCancel={hideModal}
                 width={1300}
                 closable={false}
+                footer={null}
+                maskClosable={true}
+                onCancel={hideModal}
+                bodyStyle={{ height: '80vh', overflowY: 'auto' }} // Tăng chiều cao của modal
             >
                 <div className='h-[500px]'>
                     <div className='flex gap-5 mb-4'>
@@ -48,6 +59,9 @@ const ModalBanHang = () => {
                     />
                 </div>
             </Modal>
+
+
+
         </>
     );
 }
