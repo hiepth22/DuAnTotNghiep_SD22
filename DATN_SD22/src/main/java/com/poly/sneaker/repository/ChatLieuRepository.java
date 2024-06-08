@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ChatLieuRepository extends JpaRepository<ChatLieu, Long>, JpaSpecificationExecutor<ChatLieu> {
-    List<ChatLieu> findAllByOrderOrderByIdDesc();
 
     List<ChatLieu> findByTen(String ten);
 }

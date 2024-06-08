@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface AnhRepository extends JpaRepository<Anh, Long>, JpaSpecificationExecutor<Anh> {
-    List<Anh> findAllByOrderOrderByIdDesc();
 
     List<Anh> findByTen(String ten);
 }

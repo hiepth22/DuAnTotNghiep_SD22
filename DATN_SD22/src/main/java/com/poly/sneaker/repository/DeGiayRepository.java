@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface DeGiayRepository extends JpaRepository<DeGiay, Long>, JpaSpecificationExecutor<DeGiay> {
-    List<DeGiay> findAllByOrderOrderByIdDesc();
 
     List<DeGiay> findByTen(String ten);
 }

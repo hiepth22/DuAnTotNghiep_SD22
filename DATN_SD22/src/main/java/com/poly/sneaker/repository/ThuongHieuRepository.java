@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ThuongHieuRepository extends JpaRepository<ThuongHieu, Long>, JpaSpecificationExecutor<ThuongHieu> {
-    List<ThuongHieu> findAllByOrderOrderByIdDesc();
 
     List<ThuongHieu> findByTen(String ten);
 }
