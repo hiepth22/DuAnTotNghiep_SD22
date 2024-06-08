@@ -1,8 +1,11 @@
 package com.poly.sneaker.service;
 
 import com.poly.sneaker.dto.HoaDonChiTietCustom;
+import com.poly.sneaker.dto.HoaDonChiTietReqest;
 import com.poly.sneaker.entity.HoaDonChiTiet;
+import com.poly.sneaker.entity.SanPhamChiTiet;
 import com.poly.sneaker.repository.HoaDonChiTietRepository;
+import com.poly.sneaker.repository.SanPhamChiTietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,9 @@ import java.util.stream.Collectors;
 public class HoaDonChiTietService {
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
+
+    @Autowired
+    private SanPhamChiTietRepository sanPhamChiTietRepository;
 
     public HoaDonChiTiet addHoaDonChiTiet (HoaDonChiTiet hoaDonChiTiet) {
         return hoaDonChiTietRepository.save(hoaDonChiTiet);
@@ -37,17 +43,17 @@ public class HoaDonChiTietService {
     }
 
 
-//    public HoaDonChiTiet updateSanPham(HoaDonChiTietRequest hdct, Long id) {
-//        Optional<HoaDonChiTiet> optional = hoaDonChiTietRepository.findById(id);
-//        Optional<SanPhamChiTiet> optional1 = chiTietSanPhamRepository.findById(hdct.getIdChiTietSanPham());
-//
-//        HoaDonChiTiet hoaDonChiTiet = optional.get();
-//        SanPhamChiTiet sanPhamChiTiet = optional1.get();
-//
-//        hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
-//        hoaDonChiTiet.setDonGia(hdct.getDonGia());
-//        hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
-//
-//        return hoaDonChiTietRepository.save(hoaDonChiTiet);
-//    }
+    public HoaDonChiTiet updateSanPham(HoaDonChiTietReqest hdct, Long id) {
+        Optional<HoaDonChiTiet> optional = hoaDonChiTietRepository.findById(id);
+        Optional<SanPhamChiTiet> optional1 = sanPhamChiTietRepository.findById(hdct.getIdChiTietSanPham());
+
+        HoaDonChiTiet hoaDonChiTiet = optional.get();
+        SanPhamChiTiet sanPhamChiTiet = optional1.get();
+
+        hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
+        hoaDonChiTiet.setGia(hdct.getDonGia());
+        hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
+
+        return hoaDonChiTietRepository.save(hoaDonChiTiet);
+    }
 }

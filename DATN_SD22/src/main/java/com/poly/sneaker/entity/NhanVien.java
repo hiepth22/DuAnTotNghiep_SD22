@@ -1,8 +1,10 @@
 package com.poly.sneaker.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.File;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
@@ -18,7 +20,7 @@ public class NhanVien {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "ten", length = 30)
     private String ten;
@@ -37,7 +39,8 @@ public class NhanVien {
 
     @Column(name = "gioiTinh")
     private Boolean gioiTinh;
-
+    @Column(name = "diachi", length = 100)
+    private String diachi;
     @Column(name = "cccd", length = 30)
     private String cccd;
 
@@ -52,4 +55,11 @@ public class NhanVien {
 
     @Column(name = "trangThai")
     private Integer trangThai;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    @Column(name = "ngaytao")
+    private LocalDateTime ngaytao;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    @Column(name = "ngayCapNhap")
+    private LocalDateTime ngaycapnhap;
+
 }

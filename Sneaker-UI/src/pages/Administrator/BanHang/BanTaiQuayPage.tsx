@@ -3,6 +3,7 @@ import { Button, Tabs, Modal, Table } from "antd";
 import BanHangService, {
   hoaDonData,
   hoaDonChiTietDataByIdHD,
+  sanPhamCTData
 } from "../../../services/BanHangService";
 import { toast } from "react-toastify";
 import getDateNow from "../../../utils/GetDateNow";
@@ -36,7 +37,7 @@ const BanTaiQuayPage: React.FC = () => {
   useEffect(() => {
     if (initialHoaDonData && initialHoaDonData.length > 0) {
       const tabs = initialHoaDonData.slice(0, 10).map((hoaDon, index) => ({
-        label: `Hóa Đơn ${index + 1}`,  // Đánh số tab từ 1 đến 10
+        label: `Hóa Đơn ${index + 1}`,
         key: `${index + 1}`,
         children: <HoaDonChiTietTab idHoaDon={hoaDon.id} />,
       }));
