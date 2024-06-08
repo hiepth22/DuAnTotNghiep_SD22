@@ -33,7 +33,7 @@ public class ThuongHieu {
     @Column(name = "ten")
     private String ten;
 
-    private String moTa;
+//    private String moTa;
 
     private String nguoiTao;
 
