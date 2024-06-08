@@ -290,8 +290,8 @@ const NhanVienAdd = () => {
                         onChange={(e) => setVaiTro(e.target.value)}
                       >
                         <option value="">Chọn Vai Trò</option>
-                        <option value="1">Nhân Viên</option>
-                        <option value="2">Quản Lý</option>
+                        <option value="0">Nhân Viên</option>
+                        <option value="1">Quản Lý</option>
                       </select>
                     </div>
                     <div className="form-group mb-3">

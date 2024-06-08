@@ -1,71 +1,93 @@
 import React, { useEffect, useState } from "react";
-import { GetAllNhanvien } from "../../../../services/NhanVienSevice";
+import { GetAllNhanvien, updatett } from "../../../../services/NhanVienSevice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 function NhanVienPage() {
 
     const [nhanviens, setnhanviens] = useState([]);
     const Navigate = useNavigate();
+    const fetchAllNhanviens = () => {
+        GetAllNhanvien()
+            .then((response) => {
+                setnhanviens(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+                toast.error('Failed to fetch data');
+            });
+    };
 
+    useEffect(() => {
+        fetchAllNhanviens();
+    }, []);
+
+    const detailNhanVien = (id, ten) => {
+        updatett(id)
+            .then(() => {
+                toast.success(`Ngừng hoạt động nhân viên ${ten}`);
+                fetchAllNhanviens(); // Refresh data after update
+                setTimeout(() => {
+                    window.location.reload(); // Reload page after data is fetched
+                }, 1500); // Adding a slight delay to ensure data is fetched
+            })
+            .catch((error) => {
+                toast.error(`Cập nhật thất bại: ${error.message}`);
+            });
+    };
+    
     const GioiTinh = (gt) => {
         return gt ? "Nam" : "Nữ";
     };
     const Trangthai = (tt) => {
-        return tt ? "Hoạt Động" : "Không Hoạt Động";
-    };
-    const vaitro = (vt) => {
-        return vt ? "Nhân Viên" : "Quản Lí";
+        return tt == 0 ? "Không Hoạt Động" : "Hoạt Động";
     };
 
-    useEffect(() => {
-        GetAllNhanvien().then((response) => {
-            setnhanviens(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-    }, [])
+    const vaitro = (vt) => {
+        return vt==0 ? "Nhân Viên" : "Quản Lí";
+    };
+
+
     const addNhanVien = () => {
         Navigate('/admin/nhanvien-add');
     }
     const updateNhanVien = (id) => {
         Navigate(`/admin/nhanvien-add/${id}`);
     }
-    const detailNhanVien = (id) => {
-        Navigate(`/admin/nhanvien-detail/${id}`);
-    }
+    
     return (
         <div className="container mt-4">
             <form className="d-flex">
                 <div className="cot1">
-                <div className="input-group mb-2">
-                    <input type="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                    <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>search</button>
-                </div>
-                <div className="combo mb-3">
-                <select className="form-control">
-                    <option >Chọn Vai Trò</option>
-                    <option id="1">Quản Lý</option>
-                    <option id="2">Nhân Viên</option>
-                </select>
+                    <div className="input-group mb-2">
+                        <input type="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                        <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+                    </div>
+                    <div className="combo mb-3">
+                        <select className="form-control">
+                            <option >Chọn Vai Trò</option>
+                            <option id="1">Quản Lý</option>
+                            <option id="2">Nhân Viên</option>
+                        </select>
 
-                </div>
+                    </div>
                 </div>
                 <div className="cot1">
-                <div className="input-group mb-2">
-                    <input type="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                    <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>search</button>
-                </div>
-                <div className="combo mb-3">
-                <select className="form-control">
-                    <option >Chọn Vai Trò</option>
-                    <option id="1">Quản Lý</option>
-                    <option id="2">Nhân Viên</option>
-                </select>
+                    <div className="input-group mb-2">
+                        <input type="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                        <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+                    </div>
+                    <div className="combo mb-3">
+                        <select className="form-control">
+                            <option >Chọn Vai Trò</option>
+                            <option id="1">Quản Lý</option>
+                            <option id="2">Nhân Viên</option>
+                        </select>
 
+                    </div>
                 </div>
-                </div>
-               
+
             </form>
 
             <h4 className="fs-3 p-3 mb-2 bg-success text-white"> <i className="fa-solid fa-list .bg-dark "></i> Danh Sách Nhân Viên </h4>
@@ -106,7 +128,7 @@ function NhanVienPage() {
                                 <td>{Trangthai(nhanvien.trangThai)}</td>
                                 <td className="text-center ">
                                     <button className="btn btn-success" onClick={() => updateNhanVien(nhanvien.id)}><i className="fa-solid fa-pen"></i></button>
-                                    <button type="button" className="btn btn-warning" onClick={() => detailNhanVien(nhanvien.id)}><i className="fa-solid fa-eye"></i></button>
+                                    <button type="button" className="btn btn-warning" onClick={() => detailNhanVien(nhanvien.id, nhanvien.ten)}><i className="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
                         )

@@ -28,8 +28,8 @@ public class NhanVienController {
 
     @GetMapping("")
     public List<NhanVien> HienThi() {
-        List<NhanVien> lst = sevice.getall();
-        return lst;
+        List<NhanVien> lst = sevice.getall1(1);
+       return lst;
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable(name = "id") Long id) {
@@ -74,6 +74,16 @@ public class NhanVienController {
             );
         }
         return ResponseEntity.ok(sevice.update(id, nv));
+    }
+    @PutMapping("tt/{id}")
+    public ResponseEntity<?> updateTT(@PathVariable("id") Long id
+             ) {
+        if (!sevice.existsById(id)) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy"
+            );
+        }
+        return ResponseEntity.ok(sevice.updateTrangThai(id));
     }
     @GetMapping ("page")
     public Page<NhanVien> getNhanViens(@RequestParam(defaultValue = "0") int page) {

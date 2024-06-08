@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface NhanVienRepository extends JpaRepository<NhanVien,Long> {
     List<NhanVien> findByTen(String ten);
+    List<NhanVien> findByTrangThai(int tt);
 }
