@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/ban-hang-tai-quay")
 @CrossOrigin("*")
 
 public class BanHangController {
@@ -21,7 +21,7 @@ public class BanHangController {
     @Autowired
     BanHangTaiQuayService banHangTaiQuayService;
 
-    @GetMapping("ban-hang-tai-quay/san-pham-chi-tiet")
+    @GetMapping("/san-pham-chi-tiet")
     public ResponseEntity<List<SanPhamChiTietCustom>> getAllSanPhamCT() {
         List<SanPhamChiTietCustom> sanPhamChiTietCustoms = banHangTaiQuayService.getAllCTSP();
         return ResponseEntity.ok(sanPhamChiTietCustoms);
