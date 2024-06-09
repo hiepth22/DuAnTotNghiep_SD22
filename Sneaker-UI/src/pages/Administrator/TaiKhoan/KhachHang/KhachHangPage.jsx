@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import moment from 'moment';
-import { getAll, add, detail, update } from "../../../../services/KhachHangService";
+import { getAll, detail } from "../../../../services/KhachHangService";
 import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function KhachHangPage() {
     const [khachHangs, setKH] = useState([]);
+    const [selectedKH, setSelectedKH] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const nav = useNavigate();
 
     const gt = (gt) => {
@@ -33,8 +36,47 @@ function KhachHangPage() {
         nav(`/admin/khachhang-add/${id}`);
     };
 
-    const detailKH = (id) => {
-        nav(`/admin/khachhang-detail/${id}`);
+    const openDetailModal = (id) => {
+        detail(id).then((response) => {
+            setSelectedKH(response.data);
+            setShowModal(true);
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedKH(null);
+    };
+
+    const modalStyles = {
+        modalHeader: {
+            backgroundColor: '#007bff',
+            color: 'white'
+        },
+        modalTitle: {
+            fontWeight: 'bold'
+        },
+        modalBody: {
+            padding: '20px'
+        },
+        modalBodyP: {
+            margin: '10px 0'
+        },
+        modalFooter: {
+            padding: '10px'
+        },
+        imgThumbnail: {
+            objectFit: 'cover',
+            borderRadius: '50%'
+        },
+        imgFluid: {
+            width: '100px',
+            height: '100px',
+            borderRadius: '50%',
+            objectFit: 'cover'
+        }
     };
 
     return (
@@ -43,18 +85,17 @@ function KhachHangPage() {
                 <div className="cot1">
                     <div className="input-group mb-2">
                         <input type="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                        <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+                        <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>Search</button>
                     </div>
                     <div className="combo mb-3">
                         {/* Additional filters can be added here */}
                     </div>
                 </div>
             </form>
-
-            <h4 className="fs-3 p-3 mb-2 bg-success text-white"><i className="fa-solid fa-list .bg-dark"></i> Danh Sách Khách Hàng </h4>
+            <h1 className=" p-3 mb-2 bg-secondary text-white" ><i className="fa-solid fa-list .bg-dark"></i> Danh Sách Khách Hàng </h1>
             <br />
-            <button className="btn btn-danger mb-3" onClick={addKH}> + Thêm </button>
-            <table className="table table-bg-gray text-center">
+            <button className="btn btn-dark" onClick={addKH}><i class="bi bi-plus-square-fill"></i></button>
+            <table className="table table-hover text-center">
                 <thead className="thead-dark">
                     <tr className="text-center">
                         <th scope="col">STT</th>
@@ -64,7 +105,7 @@ function KhachHangPage() {
                         <th scope="col">Số Điện Thoại</th>
                         <th scope="col">Ngày Sinh</th>
                         <th scope="col">Giới Tính</th>
-                        <th scope="col">Cccd</th>
+                        <th scope="col">CCCD</th>
                         <th scope="col">Trạng Thái</th>
                         <th scope="col" className="text-center">Hành Động</th>
                     </tr>
@@ -74,17 +115,17 @@ function KhachHangPage() {
                         khachHangs.map((khachHang, index) => (
                             <tr key={khachHang.id}>
                                 <td>{index + 1}</td>
-                                <td><img src={khachHang.anh} alt="Avatar" width="50" height="50" /></td>
+                                <td><img src={khachHang.anh} alt="Avatar" style={modalStyles.imgThumbnail} width="50" height="50" /></td>
                                 <td>{khachHang.ten}</td>
                                 <td>{khachHang.ma}</td>
                                 <td>{khachHang.sdt}</td>
-                                <td>{moment(khachHang.ngaySinh).format('YYYY-MM-DD')}</td> {/* Định dạng lại ngày sinh */}
+                                <td>{moment(khachHang.ngaySinh).format('YYYY-MM-DD')}</td>
                                 <td>{gt(khachHang.gioiTinh)}</td>
                                 <td>{khachHang.cccd}</td>
                                 <td>{trangThai(khachHang.trangThai)}</td>
                                 <td className="text-center">
-                                    <button className="btn btn-success" onClick={() => updateKH(khachHang.id)}><i className="fa-solid fa-pen"></i></button>
-                                    <button type="button" className="btn btn-warning" onClick={() => detailKH(khachHang.id)}><i className="fa-solid fa-eye"></i></button>
+                                    <button className="btn btn-success me-2" onClick={() => updateKH(khachHang.id)}><i className="fa-solid fa-pen"></i></button>
+                                    <button type="button" className="btn btn-warning" onClick={() => openDetailModal(khachHang.id)}><i className="fa-solid fa-eye"></i></button>
                                 </td>
                             </tr>
                         ))
@@ -92,13 +133,46 @@ function KhachHangPage() {
                 </tbody>
             </table>
             <div className="text-center">
-                <button type="button" className="btn btn-light">
+                <button type="button" className="btn btn-light me-2">
                     <i className="fa-solid fa-angles-left"></i>
                 </button>
                 <button type="button" className="btn btn-light">
                     <i className="fa-solid fa-angles-right"></i>
                 </button>
             </div>
+
+            {/* Modal */}
+            {selectedKH && (
+                <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header" style={modalStyles.modalHeader}>
+                                <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> </h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
+                            </div>
+                            <div className="modal-body" style={modalStyles.modalBody}>
+                                <div className="row">
+                                    <div className="col-4 text-center">
+                                        <img src={selectedKH.anh} alt="Avatar" style={modalStyles.imgFluid} />
+                                    </div>
+                                    <div className="col-8">
+                                        <p style={modalStyles.modalBodyP}><strong>Tên:</strong> {selectedKH.ten}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Mã Khách Hàng:</strong> {selectedKH.ma}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Số Điện Thoại:</strong> {selectedKH.sdt}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Ngày Sinh:</strong> {moment(selectedKH.ngaySinh).format('YYYY-MM-DD')}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Giới Tính:</strong> {gt(selectedKH.gioiTinh)}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>CCCD:</strong> {selectedKH.cccd}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Trạng Thái:</strong> {trangThai(selectedKH.trangThai)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer" style={modalStyles.modalFooter}>
+                                <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
