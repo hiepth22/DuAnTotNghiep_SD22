@@ -15,7 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -24,6 +26,7 @@ import java.util.List;
 public class NhanVienController {
     @Autowired
     private NhanVienSevice sevice;
+    private NhanVienRepository repo;
 
 
     @GetMapping("")
@@ -85,8 +88,15 @@ public class NhanVienController {
         }
         return ResponseEntity.ok(sevice.updateTrangThai(id));
     }
-    @GetMapping ("page")
-    public Page<NhanVien> getNhanViens(@RequestParam(defaultValue = "0") int page) {
-        return sevice.phantrang(page);
+    @GetMapping("page")
+    public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NhanVien> nhanVienPage = sevice.page( pageable,1);
+
+        List<NhanVien> lst = nhanVienPage.getContent()
+                .stream()
+                .sorted(Comparator.comparing(NhanVien::getNgaytao))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lst);
     }
 }

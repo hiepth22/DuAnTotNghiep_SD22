@@ -66,6 +66,7 @@ function App() {
             <Route path="nhan-vien" element={<NhanVienPage />}></Route>
             <Route path="nhanvien-add" element={<NhanVienAdd />}></Route>
             <Route path="nhanvien-add/:id" element={<NhanVienAdd />}></Route>
+            <Route path="nhan-vien/:id" element={<NhanVienPage />}></Route>
             {/* <Route path="nhanvien-detail/:id" element={<NhanVienAdd />}></Route> */}
           </Route>
         </Routes>

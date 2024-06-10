@@ -17,3 +17,4 @@ export const addNhanVien = async (nhanVien) => {
   export const detailNhanvien =  (nhanVienid,nhanVien) => axios.get(API_BASE_URL+'/'+nhanVienid,nhanVien);
   export const updateNhanvien=  (nhanVienid,nhanVien) => axios.put(API_BASE_URL+'/'+nhanVienid,nhanVien);
   export const updatett=  (nhanVienid) => axios.put(API_BASE_URL+'/tt/'+nhanVienid);
+  export const phantrangsevice = (page) => axios.get(API_BASE_URL + '/page?page=' + page);

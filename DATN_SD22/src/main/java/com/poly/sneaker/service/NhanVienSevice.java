@@ -22,9 +22,8 @@ public class NhanVienSevice {
     }public List<NhanVien> getall1(int tt) {
         return nhanVienRepository.findByTrangThai(tt);
     }
-    public Page<NhanVien> phantrang(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return nhanVienRepository.findAll(pageable);
+    public Page<NhanVien> page(Pageable pageable,int tt) {
+        return nhanVienRepository.findByTrangThai(tt,pageable);
     }
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
