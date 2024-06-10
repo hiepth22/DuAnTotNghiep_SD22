@@ -44,7 +44,7 @@ public class ChatLieuController {
         return ResponseEntity.ok(service.finById(id));
     }
 
-    @PostMapping("")
+    @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody ChatLieu chatLieu) {
         if (service.existingByTen(chatLieu.getTen())) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Tên đã tồn tại");

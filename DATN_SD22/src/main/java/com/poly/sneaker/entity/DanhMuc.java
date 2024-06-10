@@ -17,7 +17,7 @@ import lombok.ToString;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "loai_giay")
+@Table(name = "danh_muc")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

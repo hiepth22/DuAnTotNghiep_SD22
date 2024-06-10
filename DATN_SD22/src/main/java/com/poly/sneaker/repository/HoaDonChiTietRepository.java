@@ -1,5 +1,6 @@
 package com.poly.sneaker.repository;
 
+import com.poly.sneaker.dto.HoaDonChiTietCustom;
 import com.poly.sneaker.entity.HoaDonChiTiet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +22,15 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, Lo
             "where hdct.idHoaDon = :idHoaDon", nativeQuery = true)
     List<Object[]> findByHoaDonId(@Param("idHoaDon") Long idHoaDon);
 
+//
+//    @Query(value = "SELECT new com.poly.sneaker.dto.HoaDonChiTietCustom(hdct.id, a.url, sp.ten, kc.ten, ms.ten, spct.soLuong, spct.giaBan) " +
+//            "FROM HoaDonChiTiet hdct " +
+//            "JOIN Anh a ON a.id = hdct.id " +
+//            "JOIN SanPhamChiTiet spct ON hdct.idSanPhamChiTiet = spct.id " +
+//            "JOIN KichCo kc ON spct.idKichCo = kc.id " +
+//            "JOIN MauSac ms ON spct.idMauSac = ms.id " +
+//            "JOIN SanPham sp ON spct.idSanPham = sp.id " +
+//            "WHERE hdct.idHoaDon = :idHoaDon")
+//    List<HoaDonChiTietCustom> findByHoaDonId(@Param("idHoaDon") Long idHoaDon);
 
 }

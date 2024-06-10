@@ -1,6 +1,6 @@
 import request from "../Request";
 
-class ChatLieuService {
+class KichCoService {
   // Hiển thị
   static getAll = async () => {
     let response = await request.get(`kich-co`);
@@ -28,3 +28,5 @@ class ChatLieuService {
     return request.delete("kich-co/" + id);
   }
 }
+
+export default KichCoService;

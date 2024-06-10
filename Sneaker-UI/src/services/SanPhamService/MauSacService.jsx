@@ -1,6 +1,6 @@
 import request from "../Request";
 
-class ChatLieuService {
+class MauSacService {
   // Hiển thị
   static getAll = async () => {
     let response = await request.get(`mau-sac`);
@@ -28,3 +28,5 @@ class ChatLieuService {
     return request.delete("mau-sac/" + id);
   }
 }
+
+export default MauSacService;

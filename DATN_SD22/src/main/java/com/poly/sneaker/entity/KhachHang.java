@@ -1,9 +1,11 @@
 package com.poly.sneaker.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "khach_hang")
@@ -29,7 +31,7 @@ public class KhachHang {
     private String sdt;
 
     @Column(name = "ngaySinh")
-    private LocalDateTime ngaySinh;
+    private Date ngaySinh;
 
     @Column(name = "email", length = 50)
     private String email;

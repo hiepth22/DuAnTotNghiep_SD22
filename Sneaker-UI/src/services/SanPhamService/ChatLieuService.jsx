@@ -28,3 +28,5 @@ class ChatLieuService {
     return request.delete("chat-lieu/" + id);
   }
 }
+
+export default ChatLieuService;

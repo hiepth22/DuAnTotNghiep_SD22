@@ -1,6 +1,6 @@
 import request from "../Request";
 
-class ChatLieuService {
+class CoGiayService {
   // Hiển thị
   static getAll = async () => {
     let response = await request.get(`co-giay`);
@@ -28,3 +28,5 @@ class ChatLieuService {
     return request.delete("co-giay/" + id);
   }
 }
+
+export default CoGiayService;
