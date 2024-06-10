@@ -31,21 +31,17 @@ public class BanHangController {
         return ResponseEntity.ok(sanPhamChiTietCustoms);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody HoaDonChiTietReqest hoaDonChiTietRequest) {
-        HoaDonChiTiet updatedHoaDonChiTiet = hoaDonChiTietService.updateSanPham(hoaDonChiTietRequest, id);
+    @PostMapping("/add-to-cart/{id}")
+    public ResponseEntity<?> addCTSP(@PathVariable Long id, @RequestBody HoaDonChiTiet hoaDonChiTiet) {
+        HoaDonChiTiet addCTSP = hoaDonChiTietService.addSPToHDCT(hoaDonChiTiet, id);
 
-        System.out.println(hoaDonChiTietRequest.getIdChiTietSanPham());
-        System.out.println(hoaDonChiTietRequest.getDonGia());
-        System.out.println(hoaDonChiTietRequest.getSoLuong());
-        System.out.println(id);
-
-        if (updatedHoaDonChiTiet != null) {
-            return ResponseEntity.ok(updatedHoaDonChiTiet);
+        if (addCTSP != null) {
+            return ResponseEntity.ok(addCTSP);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn chi tiết hoặc chi tiết sản phẩm không tồn tại");
         }
     }
+
 
 
 }
