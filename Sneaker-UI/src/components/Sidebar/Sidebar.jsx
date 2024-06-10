@@ -116,7 +116,7 @@ const items = [
     key: "1",
     icon: <i className="fa-solid fa-receipt"></i>,
     label: (
-      <Link className="text-decoration-none" to={"phieu-giam-gia"}>
+      <Link className="text-decoration-none" to={"/admin/phieu-giam-gia"}>
         Phiếu giảm giá
       </Link>
     ),
@@ -125,7 +125,7 @@ const items = [
     key: "2",
     icon: <i className="fa-solid fa-file-invoice-dollar"></i>,
     label: (
-      <Link className="text-decoration-none" to={"hoa-don"}>
+      <Link className="text-decoration-none" to={"/admin/hoa-don"}>
         Hóa đơn
       </Link>
     ),

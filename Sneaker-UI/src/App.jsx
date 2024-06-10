@@ -39,7 +39,7 @@ function App() {
         <ToastContainer theme="colored" autoClose={1000} />
         <Routes>
           <Route path="/" element={<LayoutAdmin />}>
-            <Route index path="*" element={<HomePage />}></Route>
+            <Route index path="*" element={<PhieuGiamGiaPage />}></Route>
           </Route>
 
           <Route path="/admin" element={<LayoutAdmin />}>
