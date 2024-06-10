@@ -37,7 +37,7 @@ function NhanVienPage() {
       })
       .catch((error) => {
         console.error(error);
-        toast.error('Failed to fetch data');
+       
       });
   };
   
@@ -76,7 +76,7 @@ function NhanVienPage() {
     updatett(id)
       .then(() => {
         toast.success(`Ngừng hoạt động nhân viên ${ten}`);
-        fetchAllNhanviens(); // Refresh data after update
+        phantrang(); 
         setTimeout(() => {
           window.location.reload();
         }, 1500);
