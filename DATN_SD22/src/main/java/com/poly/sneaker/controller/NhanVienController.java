@@ -5,6 +5,7 @@ import com.poly.sneaker.repository.NhanVienRepository;
 import com.poly.sneaker.service.NhanVienSevice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,8 @@ public class NhanVienController {
     private NhanVienSevice sevice;
     private NhanVienRepository repo;
 
+    @Value("${upload.path}")
+    private String fileUpload;
 
     @GetMapping("")
     public List<NhanVien> HienThi() {
@@ -50,14 +53,12 @@ public class NhanVienController {
             List<ObjectError> lst = rs.getAllErrors();
             return ResponseEntity.ok(lst);
         }
-        if (sevice.existsByTen(nv.getTen())) {
-            return ResponseEntity.ok("tên đã tồn tại");
-        }
-
         sevice.Add(nv);
         return ResponseEntity.ok("thêm thành công");
     }
+public void anḥ̣̣̣(){
 
+}
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {

@@ -37,12 +37,12 @@ const KhachHangAdd = () => {
                     setTen(kh.data.ten);
                     setMa(kh.data.ma);
                     setSdt(kh.data.sdt);
-                    setNgaySinh(convertDate(kh.data.ngaySinh)); // Chuyển đổi ngày sinh
+                    setNgaySinh(convertDate(kh.data.ngaySinh)); 
                     setMail(kh.data.email);
-                    setGioiTinh(kh.data.gioiTinh.toString()); // Chuyển đổi giới tính thành chuỗi
+                    setGioiTinh(kh.data.gioiTinh.toString()); 
                     setCccd(kh.data.cccd);
                     setMatKhau(kh.data.matKhau);
-                    setTrangThai(kh.data.trangThai.toString()); // Chuyển đổi trạng thái thành chuỗi
+                    setTrangThai(kh.data.trangThai.toString());
                 })
                 .catch((error) => {
                     console.log(error);

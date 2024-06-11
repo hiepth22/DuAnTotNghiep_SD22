@@ -10,12 +10,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "nhan_vien")
-@AllArgsConstructor
+
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
+@AllArgsConstructor
 public class NhanVien {
 
     @Id
