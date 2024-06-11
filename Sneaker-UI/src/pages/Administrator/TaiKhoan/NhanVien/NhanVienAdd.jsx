@@ -306,7 +306,7 @@ placeholder="Nhập mã nhân viên"
                         onChange={(e) =>
                           setTrangThai(e.target.value)}
                       >
-                        <option value="">Chọn Trạng Thái</option>
+                       
                         <option value="1">Hoạt động</option>
                         <option value="0">Không hoạt động</option>
                       </select>

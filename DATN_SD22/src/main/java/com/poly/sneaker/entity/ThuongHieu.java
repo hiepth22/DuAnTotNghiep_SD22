@@ -32,13 +32,7 @@ public class ThuongHieu {
 
     @Column(name = "ten")
     private String ten;
-<<<<<<< HEAD
-=======
 
-
-//    private String moTa;
-
->>>>>>> e37eb84d1a5fc5ce9eab1aab93bd078a6067a057
     private String nguoiTao;
 
     private String nguoiCapNhat;
