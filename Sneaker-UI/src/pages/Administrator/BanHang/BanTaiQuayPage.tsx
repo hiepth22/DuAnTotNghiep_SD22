@@ -173,16 +173,6 @@ const BanTaiQuayPage: React.FC = () => {
 const HoaDonChiTietTab: React.FC<{ idHoaDon: number }> = ({ idHoaDon }) => {
   const { isPending, data } = hoaDonChiTietDataByIdHD(idHoaDon);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await hoaDonChiTietDataByIdHD(idHoaDon);
-  //     } catch (error) {
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [idHoaDon]);
 
   const dataSource = data?.map((item, index) => ({
     ...item,

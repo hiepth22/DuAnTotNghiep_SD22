@@ -22,20 +22,28 @@ class BanHangService {
                 trangThai: 1,
             };
 
-            console.log("Request data:", hoaDonChiTietRequest);
-
             const res = await request.post(
                 `/ban-hang-tai-quay/add-to-cart/${idHoaDon}`,
                 hoaDonChiTietRequest
             );
-
-            console.log("Response data:", res.data);
             return res.data;
         } catch (error) {
             console.error("Error updating hoa don chi tiet:", error);
             throw error;
         }
     };
+
+    static updateTrangThaiHD(idHoaDon, trangThai) {
+        try {
+            const HoaDonRequest = {
+                trangThai: 0,
+            };
+            return request.put("/hoa-don/update/${idHoaDon}", HoaDonRequest);
+        } catch (error) {
+            console.error("Error updating hoa don:", error);
+            throw error;
+        }
+    }
 }
 
 export default BanHangService;
