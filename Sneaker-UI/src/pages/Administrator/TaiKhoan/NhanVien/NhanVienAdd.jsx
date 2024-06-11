@@ -36,9 +36,12 @@ const NhanVienAdd = () => {
 
   const { id } = useParams();
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setAnh(file);
-    setPreview(URL.createObjectURL(file));
+    const file1 = e.target.files[0].name;
+    const file2 = e.target.files[0];
+    console.log(file2);
+    setAnh(file1);
+    setPreview(URL.createObjectURL(file2));
+    
   };
   const navigate = useNavigate();
   const triggerFileInput = () => {
