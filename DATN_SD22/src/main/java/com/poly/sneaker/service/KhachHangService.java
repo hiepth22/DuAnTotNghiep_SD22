@@ -25,10 +25,9 @@ public class KhachHangService {
         return khachHangRepository.findAll();
     }
 
-    public Page<KhachHang> phanTrang(int page) {
-        Pageable pageable = PageRequest.of(page, 5);
-        return khachHangRepository.findAll(pageable);
-    }
+//    public Page<KhachHang> phanTrang(int pageable) {
+//        return khachHangRepository.findAll(pageable);
+//    }
 
     public KhachHang add(KhachHang kh) {
         return khachHangRepository.save(kh);

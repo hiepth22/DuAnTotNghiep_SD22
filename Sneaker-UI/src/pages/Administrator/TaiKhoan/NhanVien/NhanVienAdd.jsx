@@ -112,7 +112,7 @@ const NhanVienAdd = () => {
         toast.success('Nhân viên được cập nhập thành công!');
         console.log(response.data)
         navigate('/admin/nhan-vien');
-      })}catch (error ){
+})}catch (error ){
         console.log(error)
         toast.warning("update thất bại");
       };
@@ -196,7 +196,7 @@ const NhanVienAdd = () => {
                       <label className="form-label">Mã Nhân Viên:</label>
                       <input
                         type="text"
-                        placeholder="Nhập mã nhân viên"
+placeholder="Nhập mã nhân viên"
                         name="ma"
                         value={ma}
                         className="form-control"
@@ -263,7 +263,7 @@ const NhanVienAdd = () => {
                     </div>
                     <div className="form-group mb-3">
                       <label className="form-label">CCCD:</label>
-                      <input
+<input
                         type="text"
                         name="cccd"
                         value={cccd}

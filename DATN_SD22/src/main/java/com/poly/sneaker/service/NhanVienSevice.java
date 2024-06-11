@@ -19,10 +19,11 @@ public class NhanVienSevice {
     public List<NhanVien> getall() {
 
         return nhanVienRepository.findAll();
+    }public List<NhanVien> getall1(int tt) {
+        return nhanVienRepository.findByTrangThai(tt);
     }
-    public Page<NhanVien> phantrang(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return nhanVienRepository.findAll(pageable);
+    public Page<NhanVien> page(Pageable pageable,int tt) {
+        return nhanVienRepository.findByTrangThai(tt,pageable);
     }
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
@@ -55,15 +56,25 @@ public class NhanVienSevice {
             return nhanVienRepository.save(o);
         }).orElse(null);
     }
+    public NhanVien updateTrangThai(Long id){
+        Optional<NhanVien> optional = nhanVienRepository.findById(id);
+        return optional.map(o -> {
+            //
+            o.setTrangThai(0);
 
+            return nhanVienRepository.save(o);
+        }).orElse(null);
+    }
     public Boolean existsById(Long id) {
         return nhanVienRepository.existsById(id);
     }
 
-    public Boolean existsByTen(String ten) {
-        return nhanVienRepository.findByTen(ten).size() > 0;
+    public Boolean existsByTen(String tt) {
+        return nhanVienRepository.findByTen(tt).size() > 0;
     }
-
+    public Boolean trangthai(int tt) {
+        return nhanVienRepository.findByTrangThai(tt).size() > 0;
+    }
     public NhanVien findById(Long id) {
         Optional<NhanVien> optional = nhanVienRepository.findById(id);
         return optional.map(o -> o).orElse(null);

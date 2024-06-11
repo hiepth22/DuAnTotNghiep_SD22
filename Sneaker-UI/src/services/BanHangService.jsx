@@ -10,6 +10,40 @@ class BanHangService {
     static add2(data) {
         return request.post("/hoa-don-chi-tiet/add", data);
     }
+
+    static addSPChiTietToHDChiTiet = async (idHoaDon, idSanPham, giaBan) => {
+        try {
+            const hoaDonChiTietRequest = {
+                sanPhamChiTiet: {
+                    id: idSanPham,
+                },
+                soLuong: 1,
+                gia: giaBan,
+                trangThai: 1,
+            };
+
+            const res = await request.post(
+                `/ban-hang-tai-quay/add-to-cart/${idHoaDon}`,
+                hoaDonChiTietRequest
+            );
+            return res.data;
+        } catch (error) {
+            console.error("Error updating hoa don chi tiet:", error);
+            throw error;
+        }
+    };
+
+    static updateTrangThaiHD(idHoaDon, trangThai) {
+        try {
+            const HoaDonRequest = {
+                trangThai: 0,
+            };
+            return request.put("/hoa-don/update/${idHoaDon}", HoaDonRequest);
+        } catch (error) {
+            console.error("Error updating hoa don:", error);
+            throw error;
+        }
+    }
 }
 
 export default BanHangService;

@@ -15,7 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -24,12 +26,13 @@ import java.util.List;
 public class NhanVienController {
     @Autowired
     private NhanVienSevice sevice;
+    private NhanVienRepository repo;
 
 
     @GetMapping("")
     public List<NhanVien> HienThi() {
-        List<NhanVien> lst = sevice.getall();
-        return lst;
+        List<NhanVien> lst = sevice.getall1(1);
+       return lst;
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable(name = "id") Long id) {
@@ -75,8 +78,25 @@ public class NhanVienController {
         }
         return ResponseEntity.ok(sevice.update(id, nv));
     }
-    @GetMapping ("page")
-    public Page<NhanVien> getNhanViens(@RequestParam(defaultValue = "0") int page) {
-        return sevice.phantrang(page);
+    @PutMapping("tt/{id}")
+    public ResponseEntity<?> updateTT(@PathVariable("id") Long id
+             ) {
+        if (!sevice.existsById(id)) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy"
+            );
+        }
+        return ResponseEntity.ok(sevice.updateTrangThai(id));
+    }
+    @GetMapping("page")
+    public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NhanVien> nhanVienPage = sevice.page( pageable,1);
+
+        List<NhanVien> lst = nhanVienPage.getContent()
+                .stream()
+                .sorted(Comparator.comparing(NhanVien::getNgaytao))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lst);
     }
 }
