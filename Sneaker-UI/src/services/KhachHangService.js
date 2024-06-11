@@ -25,5 +25,26 @@ export const update = async (khId, khachHang) => {
     } catch (error) {
         console.error('Error updating data:', error.response ? error.response.data : error.message);
         throw error;
+    
+    }
+};
+export const phantrangsevice = (page) => axios.get(API_BASE_URL + '/page?page=' + page);
+export const search = async (keyword) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/search?keyword=${keyword}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error searching data:', error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+export const deleteKH = async (id) => {
+    try {
+        const response = await axios.delete(`${API_BASE_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting data:', error.response ? error.response.data : error.message);
+        throw error;
     }
 };

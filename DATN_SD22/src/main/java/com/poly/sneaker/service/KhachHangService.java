@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class KhachHangService {
@@ -25,9 +26,9 @@ public class KhachHangService {
         return khachHangRepository.findAll();
     }
 
-//    public Page<KhachHang> phanTrang(int pageable) {
-//        return khachHangRepository.findAll(pageable);
-//    }
+    public Page<KhachHang> phanTrang(Pageable pageable, int tt) {
+        return khachHangRepository.findByTrangThai(tt,pageable);
+    }
 
     public KhachHang add(KhachHang kh) {
         return khachHangRepository.save(kh);
@@ -57,6 +58,13 @@ public class KhachHangService {
             return khachHangRepository.save(o);
         }).orElse(null);
     }
+    public KhachHang deleteTrangThai(Long id){
+        Optional<KhachHang> optional = khachHangRepository.findById(id);
+        return optional.map(o-> {
+            o.setTrangThai(0);
+            return khachHangRepository.save(o);
+        }).orElse(null);
+    }
 
     public Boolean existsById(Long id) {
         return khachHangRepository.existsById(id);
@@ -69,5 +77,16 @@ public class KhachHangService {
     public KhachHang findById(Long id) {
         Optional<KhachHang> optional = khachHangRepository.findById(id);
         return optional.orElse(null);
+    }
+    public List<KhachHang> search(String keyword) {
+        List<KhachHang> allKhachHangs = khachHangRepository.findAll();
+
+        return allKhachHangs.stream()
+                .filter(kh ->
+                                kh.getTen().toLowerCase().contains(keyword.toLowerCase()) ||
+                                        kh.getMa().toLowerCase().contains(keyword.toLowerCase()) ||
+                                        kh.getSdt().toLowerCase().contains(keyword.toLowerCase())
+                )
+                .collect(Collectors.toList());
     }
 }
