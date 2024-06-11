@@ -16,16 +16,28 @@ const ModalBanHang = ({ idHoaDon }) => {
             return;
         }
         try {
-            const response = await BanHangService.updateHoaDonChiTiet(idHoaDon, record.id, record.giaBan);
-            console.log('Update response:', response);
+            const response = await BanHangService.addSPChiTietToHDChiTiet(idHoaDon, record.id, record.giaBan);
+            console.log('response:', response);
         } catch (error) {
             console.error(error);
         }
     };
 
+    const buildCloudinaryUrl = (publicId) => {
+        const cloudName = 'deapopcoc';  // Thay bằng tên cloud của bạn
+        return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+    };
+
     const chiTietColumns = [
         { title: "ID", dataIndex: "id", key: "id" },
-        { title: "Ảnh", dataIndex: "url", key: "url" },
+        {
+            title: "Ảnh",
+            dataIndex: "tenAnh",
+            key: "tenAnh",
+            render: (text, record) => (
+                <img src={buildCloudinaryUrl(record.tenAnh)} alt={record.moTa} style={{ width: 50, height: 50 }} />
+            )
+        },
         { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
         { title: "Giá Bán", dataIndex: "giaBan", key: "giaBan" },
         { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },

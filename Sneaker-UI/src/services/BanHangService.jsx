@@ -11,29 +11,39 @@ class BanHangService {
         return request.post("/hoa-don-chi-tiet/add", data);
     }
 
-    static updateHoaDonChiTiet = async (idHoaDon, idSanPham, giaBan) => {
+    static addSPChiTietToHDChiTiet = async (idHoaDon, idSanPham, giaBan) => {
         try {
             const hoaDonChiTietRequest = {
-                idChiTietSanPham: idSanPham,
-                donGia: giaBan,
+                sanPhamChiTiet: {
+                    id: idSanPham,
+                },
                 soLuong: 1,
-                trangThai: 1, // Mặc định số lượng là 1
+                gia: giaBan,
+                trangThai: 1,
             };
 
-            console.log("Request data:", hoaDonChiTietRequest);
-
-            const res = await request.put(
-                `/ban-hang-tai-quay/update/${idHoaDon}`,
+            const res = await request.post(
+                `/ban-hang-tai-quay/add-to-cart/${idHoaDon}`,
                 hoaDonChiTietRequest
             );
-
-            console.log("Response data:", res.data);
             return res.data;
         } catch (error) {
             console.error("Error updating hoa don chi tiet:", error);
-            throw error; // Re-throw the error for handling in the component
+            throw error;
         }
     };
+
+    static updateTrangThaiHD(idHoaDon, trangThai) {
+        try {
+            const HoaDonRequest = {
+                trangThai: 0,
+            };
+            return request.put("/hoa-don/update/${idHoaDon}", HoaDonRequest);
+        } catch (error) {
+            console.error("Error updating hoa don:", error);
+            throw error;
+        }
+    }
 }
 
 export default BanHangService;

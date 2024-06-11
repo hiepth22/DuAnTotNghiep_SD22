@@ -15,7 +15,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
     @Query(value = "\tSELECT \n" +
             "\tspct.id,\n" +
-            "    anh.url AS url,\n" +
+            "    anh.ten AS url,\n" +
             "    sp.ten AS TenSanPham,\n" +
             "    spct.giaBan,\n" +
             "    spct.soLuong,\n" +

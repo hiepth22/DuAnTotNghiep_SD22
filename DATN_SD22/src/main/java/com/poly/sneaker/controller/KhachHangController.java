@@ -66,8 +66,8 @@ public class KhachHangController {
         return ResponseEntity.ok(service.update(id, nv));
     }
 
-    @GetMapping("/page")
-    public Page<KhachHang> getKH(@RequestParam(defaultValue = "0") int page) {
-        return service.phanTrang(page);
-    }
+//    @GetMapping("/page")
+//    public Page<KhachHang> getKH(@RequestParam(defaultValue = "0") int page) {
+//        return service.phanTrang(page);
+//    }
 }

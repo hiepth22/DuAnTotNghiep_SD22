@@ -16,6 +16,7 @@
     "antd": "^5.17.3",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
+    "cloudinary": "^2.2.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
     "moment": "^2.30.1",
