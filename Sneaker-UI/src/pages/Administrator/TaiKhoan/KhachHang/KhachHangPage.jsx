@@ -92,7 +92,9 @@ function KhachHangPage() {
                     </div>
                 </div>
             </form>
-            <h1 className=" p-3 mb-2 bg-secondary text-white" ><i className="fa-solid fa-list .bg-dark"></i> Danh Sách Khách Hàng </h1>
+            <div className="h6">
+                <h1 className=" p-3 mb-2 bg-secondary text-white" ><i className="fa-solid fa-list .bg-dark"></i> Danh Sách Khách Hàng </h1>
+            </div>
             <br />
             <button className="btn btn-dark" onClick={addKH}><i class="bi bi-plus-square-fill"></i></button>
             <table className="table table-hover text-center">

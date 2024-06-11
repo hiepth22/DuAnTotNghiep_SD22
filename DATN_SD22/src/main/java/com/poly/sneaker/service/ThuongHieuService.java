@@ -38,10 +38,7 @@ public class ThuongHieuService {
         Optional<ThuongHieu> optional = repository.findById(id);
         return optional.map(o -> {
             o.setTen(newThuongHieu.getTen());
-<<<<<<< HEAD
-=======
 //            o.setMoTa(newThuongHieu.getMoTa());
->>>>>>> 2bacfdd3d5c9f90e10c65a74563064d21de3f85a
             o.setNgayTao(newThuongHieu.getNgayTao());
             o.setNgayCapNhat(newThuongHieu.getNgayCapNhat());
             o.setNguoiTao(newThuongHieu.getNguoiTao());
