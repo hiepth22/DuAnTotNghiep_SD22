@@ -16,8 +16,8 @@ const ModalBanHang = ({ idHoaDon }) => {
             return;
         }
         try {
-            const response = await BanHangService.updateHoaDonChiTiet(idHoaDon, record.id, record.giaBan);
-            console.log('Update response:', response);
+            const response = await BanHangService.addSPChiTietToHDChiTiet(idHoaDon, record.id, record.giaBan);
+            console.log('response:', response);
         } catch (error) {
             console.error(error);
         }
@@ -25,7 +25,7 @@ const ModalBanHang = ({ idHoaDon }) => {
 
     const chiTietColumns = [
         { title: "ID", dataIndex: "id", key: "id" },
-        { title: "Ảnh", dataIndex: "url", key: "url" },
+        { title: "Ảnh", dataIndex: "tenAnh", key: "tenAnh" },
         { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
         { title: "Giá Bán", dataIndex: "giaBan", key: "giaBan" },
         { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },

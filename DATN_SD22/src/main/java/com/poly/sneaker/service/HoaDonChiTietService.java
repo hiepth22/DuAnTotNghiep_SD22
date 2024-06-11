@@ -40,9 +40,10 @@ public class HoaDonChiTietService {
             String tenSanPham = (String) result[2];
             String kichCo = (String) result[3];
             String mauSac = (String) result[4];
-            int soLuong = (int) result[5];
+            Integer soLuong = (Integer) result[5];
+            int soLuongValue = (soLuong != null) ?  soLuong : 0;
             BigDecimal gia = (BigDecimal) result[6];
-            return new HoaDonChiTietCustom(id, url, tenSanPham, kichCo, mauSac, soLuong, gia);
+            return new HoaDonChiTietCustom(id, url, tenSanPham, kichCo, mauSac, soLuongValue, gia);
         }).collect(Collectors.toList());
     }
 
@@ -60,6 +61,7 @@ public class HoaDonChiTietService {
         hdctChiTiet.setGia(hdct.getGia());
         hdctChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
         hdctChiTiet.setHoaDon(hoaDon);
+        hdctChiTiet.setTrangThai(hdct.getTrangThai());
 
         return hoaDonChiTietRepository.save(hdctChiTiet);
     }

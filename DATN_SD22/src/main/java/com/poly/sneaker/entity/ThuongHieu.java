@@ -33,10 +33,8 @@ public class ThuongHieu {
     @Column(name = "ten")
     private String ten;
 
-<<<<<<< HEAD
-=======
+
 //    private String moTa;
->>>>>>> f04127593e30cfcc580f6b40062f8daedb2f6831
 
     private String nguoiTao;
 

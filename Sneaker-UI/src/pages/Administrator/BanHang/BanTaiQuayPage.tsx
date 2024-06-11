@@ -3,7 +3,6 @@ import { Button, Tabs, Table } from "antd";
 import BanHangService, {
   hoaDonData,
   hoaDonChiTietDataByIdHD,
-  sanPhamCTData
 } from "../../../services/BanHangService";
 import { toast } from "react-toastify";
 import ModalBanHang from "../../../components/modal/ModalBanHangThemSP";
@@ -11,20 +10,17 @@ import ModalBanHang from "../../../components/modal/ModalBanHangThemSP";
 const { TabPane } = Tabs;
 
 const chiTietColumns = [
-  { title: "ID", dataIndex: "id", key: "id" },
+  { title: "STT", dataIndex: "stt", key: "stt" },
   { title: "Ảnh", dataIndex: "url", key: "url" },
   { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
-  { title: "Kích Cỡ", dataIndex: "tenKichCo", key: "tenKichCo" },
-  { title: "Màu Sắc", dataIndex: "tenMauSac", key: "tenMauSac" },
+  { title: "Kích Cỡ", dataIndex: "kichCo", key: "kichCo" },
+  { title: "Màu Sắc", dataIndex: "mauSac", key: "mauSac" },
   { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },
-  { title: "Giá Bán", dataIndex: "giaBan", key: "giaBan" },
+  { title: "Giá Bán", dataIndex: "gia", key: "gia" },
   { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" }
 ];
 
 const BanTaiQuayPage: React.FC = () => {
-  const [idHoaDon, setIdHoaDon] = useState<number | null>(null);
-  const [currentTabId, setCurrentTabId] = useState<number | null>(null);
-  const [hoaDonData1, setHoaDonData] = useState([]);
   const [tabState, setTabState] = useState<{
     activeKey: string;
     items: { label: string; key: string; children: JSX.Element }[];
@@ -47,12 +43,10 @@ const BanTaiQuayPage: React.FC = () => {
         activeKey: tabs[0].key,
         items: tabs,
       });
-      setHoaDonData(initialHoaDonData);
     }
   }, [initialHoaDonData]);
 
   const onChange = (key: string) => {
-    setCurrentTabId(parseInt(key));
     setTabState((prevState) => ({
       ...prevState,
       activeKey: key,
@@ -77,8 +71,6 @@ const BanTaiQuayPage: React.FC = () => {
         const newHoaDon = res.data;
         toast.success("Thêm hóa đơn thành công");
 
-        setIdHoaDon(newHoaDon.id);
-
         const newTab = {
           label: `Hóa Đơn ${newHoaDon.id}`,
           key: `${newHoaDon.id}`,
@@ -89,10 +81,7 @@ const BanTaiQuayPage: React.FC = () => {
           activeKey: `${newHoaDon.id}`,
           items: [...prevState.items, newTab],
         }));
-
-        return BanHangService.add2(newHoaDon);
       })
-      .then((res) => { })
       .catch((err) => {
         toast.warning("Thêm thất bại");
         console.log(err);
@@ -184,9 +173,25 @@ const BanTaiQuayPage: React.FC = () => {
 const HoaDonChiTietTab: React.FC<{ idHoaDon: number }> = ({ idHoaDon }) => {
   const { isPending, data } = hoaDonChiTietDataByIdHD(idHoaDon);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await hoaDonChiTietDataByIdHD(idHoaDon);
+  //     } catch (error) {
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [idHoaDon]);
+
+  const dataSource = data?.map((item, index) => ({
+    ...item,
+    stt: index + 1,
+  })) || [];
+
   return (
     <Table
-      dataSource={data}
+      dataSource={dataSource}
       columns={chiTietColumns}
       loading={isPending}
       rowKey="id"
