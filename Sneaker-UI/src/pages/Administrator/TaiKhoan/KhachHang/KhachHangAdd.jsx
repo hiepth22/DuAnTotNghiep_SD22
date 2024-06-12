@@ -24,7 +24,7 @@ const KhachHangAdd = () => {
     const [gioiTinh, setGioiTinh] = useState('');
     const [cccd, setCccd] = useState('');
     const [matKhau, setMatKhau] = useState('');
-    const [trangThai, setTrangThai] = useState('');
+    const [trangThai, setTrangThai] = useState('1'); // Trạng thái mặc định là 'Hoạt động'
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -37,12 +37,12 @@ const KhachHangAdd = () => {
                     setTen(kh.data.ten);
                     setMa(kh.data.ma);
                     setSdt(kh.data.sdt);
-                    setNgaySinh(convertDate(kh.data.ngaySinh)); 
+                    setNgaySinh(convertDate(kh.data.ngaySinh)); // Chuyển đổi ngày sinh
                     setMail(kh.data.email);
-                    setGioiTinh(kh.data.gioiTinh.toString()); 
+                    setGioiTinh(kh.data.gioiTinh.toString()); // Chuyển đổi giới tính thành chuỗi
                     setCccd(kh.data.cccd);
                     setMatKhau(kh.data.matKhau);
-                    setTrangThai(kh.data.trangThai.toString());
+                    setTrangThai(kh.data.trangThai.toString()); // Chuyển đổi trạng thái thành chuỗi
                 })
                 .catch((error) => {
                     console.log(error);
@@ -110,12 +110,12 @@ const KhachHangAdd = () => {
             <div className="row">
                 <div className="col-md-12">
                     <div className="card">
-                        <div className="p-3 mb-2 bg-info text-dark">
+                        <div className="p-3 mb-2 bg-info text-dark rounded">
                             <h2>
                                 <span className="h6">{id ? 'Cập Nhật Thông Tin Khách Hàng' : 'Thêm Mới Khách Hàng'}</span>
                             </h2>
                         </div>
-                        <br></br>
+                        <p></p>
                         <div className="card-body">
                             <form onSubmit={saveKhachHang}>
                                 <div className="row mb-3">
@@ -193,14 +193,14 @@ const KhachHangAdd = () => {
                                                     />
                                                 </div>
                                                 <div className="form-group">
+
                                                     <label className="form-label">Ngày Sinh:</label>
                                                     <input
                                                         type="date"
                                                         name="ngaySinh"
                                                         value={ngaySinh}
                                                         className="form-control"
-                                                        onChange={(e) => setNgaySinh(e.target
-                                                            .value)}
+                                                        onChange={(e) => setNgaySinh(e.target.value)}
                                                     />
                                                 </div>
                                                 <div className="form-group">
@@ -257,11 +257,10 @@ const KhachHangAdd = () => {
                                                         className="form-select"
                                                         aria-label="Trạng Thái"
                                                         value={trangThai}
+                                                        disabled // Không cho người dùng chọn
                                                         onChange={(e) => setTrangThai(e.target.value)}
                                                     >
-                                                        <option value="">Chọn Trạng Thái</option>
                                                         <option value="1">Hoạt động</option>
-                                                        <option value="0">Ngưng hoạt động</option>
                                                     </select>
                                                 </div>
                                             </div>

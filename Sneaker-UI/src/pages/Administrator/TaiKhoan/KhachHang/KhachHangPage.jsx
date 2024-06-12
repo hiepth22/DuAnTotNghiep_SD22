@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import moment from 'moment';
-import { getAll, detail } from "../../../../services/KhachHangService";
+import { getAll, detail, phantrangsevice, deleteKH } from "../../../../services/KhachHangService";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { de } from "date-fns/locale/de";
 
 function KhachHangPage() {
     const [khachHangs, setKH] = useState([]);
     const [selectedKH, setSelectedKH] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [originalData, setOriginalData] = useState([]);
     const nav = useNavigate();
+    const pageSize = 5;
 
     const gt = (gt) => {
         return gt ? "Nam" : "Nữ";
@@ -18,14 +23,30 @@ function KhachHangPage() {
         return tt ? "Hoạt Động" : "Ngưng Hoạt Động";
     };
 
+    const searchKH = (keyword) => {
+        const filteredKH = originalData.filter(kh => {
+            return (
+                kh.ten.toLowerCase().includes(keyword.toLowerCase()) ||
+                kh.ma.toLowerCase().includes(keyword.toLowerCase()) ||
+                kh.sdt.toLowerCase().includes(keyword.toLowerCase()) ||
+                kh.cccd.toLowerCase().includes(keyword.toLowerCase())
+            );
+        });
+        setKH(filteredKH);
+    };
+
+    const fetchAndSaveOriginalData = async () => {
+        try {
+            const response = await getAll();
+            setOriginalData(response.data);
+            setKH(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
-        getAll()
-            .then((response) => {
-                setKH(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        fetchAndSaveOriginalData();
     }, []);
 
     const addKH = () => {
@@ -35,7 +56,6 @@ function KhachHangPage() {
     const updateKH = (id) => {
         nav(`/admin/khachhang-add/${id}`);
     };
-
     const openDetailModal = (id) => {
         detail(id).then((response) => {
             setSelectedKH(response.data);
@@ -50,56 +70,94 @@ function KhachHangPage() {
         setSelectedKH(null);
     };
 
-    const modalStyles = {
-        modalHeader: {
-            backgroundColor: '#007bff',
-            color: 'white'
-        },
-        modalTitle: {
-            fontWeight: 'bold'
-        },
-        modalBody: {
-            padding: '20px'
-        },
-        modalBodyP: {
-            margin: '10px 0'
-        },
-        modalFooter: {
-            padding: '10px'
-        },
-        imgThumbnail: {
-            objectFit: 'cover',
-            borderRadius: '50%'
-        },
-        imgFluid: {
-            width: '100px',
-            height: '100px',
-            borderRadius: '50%',
-            objectFit: 'cover'
+    const pre = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
         }
     };
 
+    const next = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    useEffect(() => {
+        phantrangsevice(currentPage)
+            .then((response) => {
+                if (response.data.length === 0) {
+                    console.error('Dữ liệu không có sẵn');
+                } else {
+                    setKH(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [currentPage]);
+
+    useEffect(() => {
+        searchKH(searchKeyword);
+    }, [searchKeyword]);
+
+    const modalStyles = {
+        modalHeader: {
+            backgroundColor: '#007bff',
+            color: '#fff',
+            padding: '15px',
+            borderRadius: '5px 5px 0 0',
+        },
+        modalTitle: {
+            marginBottom: '0',
+        },
+        modalBody: {
+            padding: '20px',
+        },
+        modalBodyP: {
+            margin: '5px 0',
+        },
+        modalFooter: {
+            backgroundColor: '#f2f2f2',
+            padding: '10px',
+            textAlign: 'right',
+            borderRadius: '0 0 5px 5px',
+        },
+        imgFluid: {
+            maxWidth: '100%',
+            height: 'auto',
+        }
+    };
     return (
         <div className="container mt-4">
             <form className="d-flex">
                 <div className="cot1">
                     <div className="input-group mb-2">
-                        <input type="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                        <button type="button" className="btn btn-outline-primary" data-mdb-ripple-init>Search</button>
+                        <input
+                            type="search"
+                            className="form-control rounded"
+                            placeholder="Tìm kiếm"
+                            aria-label="Tìm kiếm"
+                            aria-describedby="search-addon"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                        />
+                        <button type="button" className="btn btn-outline-primary">Tìm kiếm</button>
                     </div>
                     <div className="combo mb-3">
-                        {/* Additional filters can be added here */}
+                        {/* Các bộ lọc bổ sung có thể được thêm ở đây */}
                     </div>
                 </div>
             </form>
             <div className="h6">
-                <h1 className=" p-3 mb-2 bg-secondary text-white" ><i className="fa-solid fa-list .bg-dark"></i> Danh Sách Khách Hàng </h1>
+                <h1 className="p-3 mb-2 bg-secondary text-white" style={{ borderRadius: '10px', padding: '15px', marginBottom: '20px' }}>
+                    <i className="fa-solid fa-list bg-dark" ></i> Danh Sách Khách Hàng
+                </h1>
             </div>
             <br />
-            <button className="btn btn-dark" onClick={addKH}><i class="bi bi-plus-square-fill"></i></button>
+            <button className="btn btn-primary" onClick={addKH} style={{ display: 'block', marginBottom: '20px' }}>
+                <i className="bi bi-file-plus"></i> Thêm
+            </button>
             <table className="table table-hover text-center">
-                <thead className="thead-dark">
-                    <tr className="text-center">
+                <thead className="thead-dark" >
+                    <tr className="text-center" >
                         <th scope="col">STT</th>
                         <th scope="col">Ảnh</th>
                         <th scope="col">Tên</th>
@@ -117,7 +175,7 @@ function KhachHangPage() {
                         khachHangs.map((khachHang, index) => (
                             <tr key={khachHang.id}>
                                 <td>{index + 1}</td>
-                                <td><img src={khachHang.anh} alt="Avatar" style={modalStyles.imgThumbnail} width="50" height="50" /></td>
+                                <td><img src={khachHang.anh} alt="Avatar" width="50" height="50" /></td>
                                 <td>{khachHang.ten}</td>
                                 <td>{khachHang.ma}</td>
                                 <td>{khachHang.sdt}</td>
@@ -127,7 +185,9 @@ function KhachHangPage() {
                                 <td>{trangThai(khachHang.trangThai)}</td>
                                 <td className="text-center">
                                     <button className="btn btn-success me-2" onClick={() => updateKH(khachHang.id)}><i className="fa-solid fa-pen"></i></button>
-                                    <button type="button" className="btn btn-warning" onClick={() => openDetailModal(khachHang.id)}><i className="fa-solid fa-eye"></i></button>
+                                    <button type="button" className="btn btn-warning me-2" onClick={() => openDetailModal(khachHang.id)}><i className="fa-solid fa-eye"></i></button>
+                                    <button type="button" className="btn btn-info me-2" ><i className="bi bi-geo-alt-fill"></i></button>
+                                    <button type="button" className="btn btn-danger"> <i className="bi bi-trash3"></i> </button>
                                 </td>
                             </tr>
                         ))
@@ -135,14 +195,14 @@ function KhachHangPage() {
                 </tbody>
             </table>
             <div className="text-center">
-                <button type="button" className="btn btn-light me-2">
+                <button type="button" className="btn btn-light" onClick={pre}>
                     <i className="fa-solid fa-angles-left"></i>
                 </button>
-                <button type="button" className="btn btn-light">
+                <span className="mx-2"> {currentPage + 1}</span>
+                <button type="button" className="btn btn-light" onClick={next}>
                     <i className="fa-solid fa-angles-right"></i>
                 </button>
             </div>
-
             {/* Modal */}
             {selectedKH && (
                 <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} tabIndex="-1">
@@ -169,7 +229,7 @@ function KhachHangPage() {
                                 </div>
                             </div>
                             <div className="modal-footer" style={modalStyles.modalFooter}>
-                                <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
+                                <button type="button" className="btn btn-secondary" onClick={closeModal}>Đóng</button>
                             </div>
                         </div>
                     </div>
@@ -180,3 +240,4 @@ function KhachHangPage() {
 }
 
 export default KhachHangPage;
+
