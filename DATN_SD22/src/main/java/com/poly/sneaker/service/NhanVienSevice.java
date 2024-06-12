@@ -2,10 +2,12 @@ package com.poly.sneaker.service;
 
 import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.repository.NhanVienRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,18 @@ public class NhanVienSevice {
         return nhanVienRepository.findByTrangThai(tt);
     }
     public Page<NhanVien> page(Pageable pageable,int tt) {
+
+
         return nhanVienRepository.findByTrangThai(tt,pageable);
+    }
+    public List<NhanVien> search(String text) {
+        Specification<NhanVien> specification = (root, query, criteriaBuilder) -> {
+            Predicate likeTen = criteriaBuilder.like(root.get("ten"),"%"+text+"%");
+            Predicate likesdt = criteriaBuilder.like(root.get("sdt"),"%"+text+"%");
+
+            return  criteriaBuilder.or(likeTen,likesdt);
+        };
+        return nhanVienRepository.findAll(specification);
     }
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
@@ -65,6 +78,7 @@ public class NhanVienSevice {
             return nhanVienRepository.save(o);
         }).orElse(null);
     }
+
     public Boolean existsById(Long id) {
         return nhanVienRepository.existsById(id);
     }

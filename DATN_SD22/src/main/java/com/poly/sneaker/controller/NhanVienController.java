@@ -29,8 +29,7 @@ public class NhanVienController {
     private NhanVienSevice sevice;
     private NhanVienRepository repo;
 
-    @Value("${upload.path}")
-    private String fileUpload;
+
 
     @GetMapping("")
     public List<NhanVien> HienThi() {
@@ -56,9 +55,6 @@ public class NhanVienController {
         sevice.Add(nv);
         return ResponseEntity.ok("thêm thành công");
     }
-public void anḥ̣̣̣(){
-
-}
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {

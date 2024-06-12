@@ -8,10 +8,8 @@ import {
     detailNhanvien,
     updateNhanvien,
 } from "../../../../services/NhanVienSevice";
-import { Spin } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { set } from "date-fns";
-import { SoundTwoTone } from "@ant-design/icons";
+
 
 const getDateNow = () => {
     return moment().format("YYYY-MM-DD HH:mm:ss");
@@ -130,8 +128,6 @@ const NhanVienAdd = () => {
                 setImagePreview(null);
                 publicID = imgData.public_id;
             }
-
-            // alert(imageURL);
         } catch (error) {
             console.log(error);
         } finally {
