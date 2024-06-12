@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Input, Table } from 'antd';
 import { sanPhamCTData } from '../../services/BanHangService';
 import BanHangService from '../../services/BanHangService';
+import { toast } from 'react-toastify';
 
 const ModalBanHang = ({ idHoaDon }) => {
     const [open, setOpen] = useState(false);
@@ -17,19 +18,20 @@ const ModalBanHang = ({ idHoaDon }) => {
         }
         try {
             const response = await BanHangService.addSPChiTietToHDChiTiet(idHoaDon, record.id, record.giaBan);
-            console.log('response:', response);
+            toast.success('Thêm sản phẩm thành công');
+
         } catch (error) {
             console.error(error);
         }
     };
 
     const buildCloudinaryUrl = (publicId) => {
-        const cloudName = 'deapopcoc';  // Thay bằng tên cloud của bạn
+        const cloudName = 'deapopcoc';
         return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
     };
 
     const chiTietColumns = [
-        { title: "ID", dataIndex: "id", key: "id" },
+        { title: "STT", dataIndex: "id", key: "id" },
         {
             title: "Ảnh",
             dataIndex: "tenAnh",
