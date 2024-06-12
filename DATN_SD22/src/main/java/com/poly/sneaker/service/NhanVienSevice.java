@@ -4,7 +4,6 @@ import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.repository.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,7 @@ public class NhanVienSevice {
     public Page<NhanVien> page(Pageable pageable,int tt) {
         return nhanVienRepository.findByTrangThai(tt,pageable);
     }
+
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
     }
