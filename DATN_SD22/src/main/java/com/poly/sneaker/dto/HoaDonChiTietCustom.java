@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class HoaDonChiTietCustom {
 
     private Long id;
-    private String url;
+    private String tenAnh;
     private String tenSanPham;
     private String kichCo;
     private String mauSac;

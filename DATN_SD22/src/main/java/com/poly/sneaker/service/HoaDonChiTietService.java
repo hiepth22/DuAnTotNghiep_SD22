@@ -36,33 +36,35 @@ public class HoaDonChiTietService {
 
         return results.stream().map(result -> {
             Long id = (Long) result[0];
-            String url = (String) result[1];
+            String tenAnh = (String) result[1];
             String tenSanPham = (String) result[2];
             String kichCo = (String) result[3];
             String mauSac = (String) result[4];
             Integer soLuong = (Integer) result[5];
             int soLuongValue = (soLuong != null) ?  soLuong : 0;
             BigDecimal gia = (BigDecimal) result[6];
-            return new HoaDonChiTietCustom(id, url, tenSanPham, kichCo, mauSac, soLuongValue, gia);
+            return new HoaDonChiTietCustom(id, tenAnh, tenSanPham, kichCo, mauSac, soLuongValue, gia);
         }).collect(Collectors.toList());
     }
 
 
     public HoaDonChiTiet addSPToHDCT(HoaDonChiTiet hdct, Long id) {
         Optional<HoaDon> getHDByID = hoaDonRepository.findById(id);
-        Optional<SanPhamChiTiet> getHDbyID = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId());
+        Optional<SanPhamChiTiet> getSPbyID = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId());
+        Long sanPhamChiTietId = hoaDonChiTietRepository.findBySanPhamCTId(hdct.getSanPhamChiTiet().getId());
+        if(!sanPhamChiTietId.equals(id)) {
 
-        HoaDon hoaDon = getHDByID.get();
-        SanPhamChiTiet sanPhamChiTiet = getHDbyID.get();
+            HoaDon hoaDon = getHDByID.get();
+            SanPhamChiTiet sanPhamChiTiet = getSPbyID.get();
 
-        HoaDonChiTiet hdctChiTiet = new HoaDonChiTiet();
-
-        hdctChiTiet.setSoLuong(hdct.getSoLuong());
-        hdctChiTiet.setGia(hdct.getGia());
-        hdctChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
-        hdctChiTiet.setHoaDon(hoaDon);
-        hdctChiTiet.setTrangThai(hdct.getTrangThai());
-
-        return hoaDonChiTietRepository.save(hdctChiTiet);
+            HoaDonChiTiet hdctChiTiet = new HoaDonChiTiet();
+            hdctChiTiet.setSoLuong(hdct.getSoLuong());
+            hdctChiTiet.setGia(hdct.getGia());
+            hdctChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
+            hdctChiTiet.setHoaDon(hoaDon);
+            hdctChiTiet.setTrangThai(hdct.getTrangThai());
+            return hoaDonChiTietRepository.save(hdctChiTiet);
+        }
+        return null;
     }
 }
