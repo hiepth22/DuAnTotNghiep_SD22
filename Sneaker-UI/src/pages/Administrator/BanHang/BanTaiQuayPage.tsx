@@ -11,7 +11,14 @@ const { TabPane } = Tabs;
 
 const chiTietColumns = [
   { title: "STT", dataIndex: "stt", key: "stt" },
-  { title: "Ảnh", dataIndex: "url", key: "url" },
+  {
+    title: "Ảnh",
+    dataIndex: "tenAnh",
+    key: "tenAnh",
+    render: (text, record) => (
+      <img src={buildCloudinaryUrl(record.tenAnh)} style={{ width: 50, height: 50 }} />
+    )
+  },
   { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
   { title: "Kích Cỡ", dataIndex: "kichCo", key: "kichCo" },
   { title: "Màu Sắc", dataIndex: "mauSac", key: "mauSac" },
@@ -19,6 +26,12 @@ const chiTietColumns = [
   { title: "Giá Bán", dataIndex: "gia", key: "gia" },
   { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" }
 ];
+
+const buildCloudinaryUrl = (publicId) => {
+  const cloudName = 'deapopcoc';  // Thay bằng tên cloud của bạn
+  return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+};
+
 
 const BanTaiQuayPage: React.FC = () => {
   const [tabState, setTabState] = useState<{
@@ -60,7 +73,7 @@ const BanTaiQuayPage: React.FC = () => {
     }
 
     const hoaDonDataAdd = {
-      nhanVien: { id: 1 },
+      // nhanVien: { id: 1 },
       khachHang: { id: 1 },
       nguoiTao: "system",
       trangThai: "1"
