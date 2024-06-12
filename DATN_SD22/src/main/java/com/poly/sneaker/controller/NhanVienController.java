@@ -31,11 +31,11 @@ public class NhanVienController {
 
 
 
-    @GetMapping("")
-    public List<NhanVien> HienThi() {
-        List<NhanVien> lst = sevice.getall1(1);
-       return lst;
-    }
+//    @GetMapping("")
+//    public List<NhanVien> HienThi() {
+//        List<NhanVien> lst = sevice.getall1(1);
+//       return lst;
+//    }
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {

@@ -8,8 +8,10 @@ import {
     detailNhanvien,
     updateNhanvien,
 } from "../../../../services/NhanVienSevice";
+import { Spin } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { set } from "date-fns";
+import { SoundTwoTone } from "@ant-design/icons";
 
 const getDateNow = () => {
     return moment().format("YYYY-MM-DD HH:mm:ss");
@@ -18,7 +20,10 @@ const getDateNow = () => {
 export const convertDate = (date) => {
     return moment(date).format("YYYY-MM-DD");
 };
-
+const buildCloudinaryUrl = (publicId) => {
+    const cloudName = "deapopcoc"; // Thay bằng tên cloud của bạn
+    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+};
 const NhanVienAdd = () => {
     const [anh, setAnh] = useState("");
     const [preview, setPreview] = useState(null);
@@ -45,7 +50,7 @@ const NhanVienAdd = () => {
 
         setProfileImage(e.target.files[0]);
         setImagePreview(URL.createObjectURL(e.target.files[0]));
-        console.log(e.target.files[0]);
+        
     };
 
     const uploadImage = async (e) => {
@@ -90,6 +95,13 @@ const NhanVienAdd = () => {
                     setVaiTro(nv.data.vaiTro);
                     setTrangThai(nv.data.trangThai);
                     setdiachi(nv.data.diachi);
+
+                    if (nv.data.anh) {
+                        setPreview(buildCloudinaryUrl(nv.data.anh)); 
+                        setProfileImage(nv.data.anh)
+         
+                    }
+                    
                 })
                 .catch((error) => {
                     console.log(error);
@@ -100,11 +112,11 @@ const NhanVienAdd = () => {
     const saveNhanVien = async (e) => {
         e.preventDefault();
         let publicID = "";
-
+    
         setItLoading(true);
         try {
             let imageURL;
-
+    
             if (
                 profileImage &&
                 (profileImage.type === "image/png" ||
@@ -115,7 +127,7 @@ const NhanVienAdd = () => {
                 image.append("file", profileImage);
                 image.append("cloud_name", "deapopcoc");
                 image.append("upload_preset", "hwsotqf9");
-
+    
                 const response = await fetch(
                     "https://api.cloudinary.com/v1_1/deapopcoc/image/upload",
                     {
@@ -128,18 +140,20 @@ const NhanVienAdd = () => {
                 setImagePreview(null);
                 publicID = imgData.public_id;
             }
+    
+            // alert(imageURL);
         } catch (error) {
             console.log(error);
         } finally {
             setItLoading(false);
         }
-
+    
         const ngaytao = getDateNow();
         const ngaycapnhap = getDateNow();
         const trangThai = 1;
-
+    
         const nhanVienData = {
-            anh: publicID,
+            anh: publicID || anh, // Sử dụng giá trị mới nếu có, nếu không sử dụng giá trị cũ
             ten,
             ma,
             sdt,
@@ -154,7 +168,7 @@ const NhanVienAdd = () => {
             ngaycapnhap,
             diachi,
         };
-
+    
         console.log(nhanVienData);
         if (id) {
             try {
@@ -179,6 +193,7 @@ const NhanVienAdd = () => {
             }
         }
     };
+    
 
     return (
         <div className="container mt-4">
