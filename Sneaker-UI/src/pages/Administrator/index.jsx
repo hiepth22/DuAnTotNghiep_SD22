@@ -4,6 +4,8 @@ export { default as PhieuGiamGiaPage } from "./PhieuGiamGia/PhieuGiamGiaPage";
 
 export { default as SanPhamPage } from "./SanPham/SanPhamPage";
 
+export { default as SanPhamAddPage } from "./SanPham/SanPhamAddPage";
+
 export { default as ThongKePage } from "./ThongKe/ThongKePage";
 
 export { default as ChatLieuPage } from "./ThuocTinhSanPham/ChatLieuPage";
