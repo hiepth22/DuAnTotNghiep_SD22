@@ -22,14 +22,14 @@ public class BanHangTaiQuayService {
 
         return results.stream().map(result -> {
             Long id = (Long) result[0];
-            String url = (String) result[1];
+            String ten = (String) result[1];
             String tenSanPham = (String) result[2];
             BigDecimal gia = (BigDecimal) result[3];
             int soLuong = (int) result[4];
             String kichCo = (String) result[5];
             String mauSac = (String) result[6];
             int trangThai = (int) result[7];
-            return new SanPhamChiTietCustom(id, url, tenSanPham, gia, soLuong, kichCo, mauSac, trangThai);
+            return new SanPhamChiTietCustom(id, ten, tenSanPham, gia, soLuong, kichCo, mauSac, trangThai);
         }).collect(Collectors.toList());
     }
 

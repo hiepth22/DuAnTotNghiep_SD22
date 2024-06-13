@@ -5,6 +5,7 @@ import com.poly.sneaker.repository.NhanVienRepository;
 import com.poly.sneaker.service.NhanVienSevice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -24,13 +27,15 @@ import java.util.List;
 public class NhanVienController {
     @Autowired
     private NhanVienSevice sevice;
+    private NhanVienRepository repo;
 
 
-    @GetMapping("")
-    public List<NhanVien> HienThi() {
-        List<NhanVien> lst = sevice.getall();
-        return lst;
-    }
+
+//    @GetMapping("")
+//    public List<NhanVien> HienThi() {
+//        List<NhanVien> lst = sevice.getall1(1);
+//       return lst;
+//    }
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {
@@ -47,14 +52,9 @@ public class NhanVienController {
             List<ObjectError> lst = rs.getAllErrors();
             return ResponseEntity.ok(lst);
         }
-        if (sevice.existsByTen(nv.getTen())) {
-            return ResponseEntity.ok("tên đã tồn tại");
-        }
-
         sevice.Add(nv);
         return ResponseEntity.ok("thêm thành công");
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {
@@ -75,8 +75,25 @@ public class NhanVienController {
         }
         return ResponseEntity.ok(sevice.update(id, nv));
     }
-    @GetMapping ("page")
-    public Page<NhanVien> getNhanViens(@RequestParam(defaultValue = "0") int page) {
-        return sevice.phantrang(page);
+    @PutMapping("tt/{id}")
+    public ResponseEntity<?> updateTT(@PathVariable("id") Long id
+             ) {
+        if (!sevice.existsById(id)) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy"
+            );
+        }
+        return ResponseEntity.ok(sevice.updateTrangThai(id));
+    }
+    @GetMapping("page")
+    public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NhanVien> nhanVienPage = sevice.page( pageable,1);
+
+        List<NhanVien> lst = nhanVienPage.getContent()
+                .stream()
+                .sorted(Comparator.comparing(NhanVien::getNgaytao))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lst);
     }
 }

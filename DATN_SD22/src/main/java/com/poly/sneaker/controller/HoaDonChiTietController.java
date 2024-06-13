@@ -21,12 +21,8 @@ public class HoaDonChiTietController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<HoaDonChiTietCustom>> getHoaDonChiTietByHoaDonId(@PathVariable Long id) {
-        List<HoaDonChiTietCustom> hoaDonChiTietCustoms = hoaDonChiTietService.getAllByHoaDonId(id);
-        if (hoaDonChiTietCustoms.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(hoaDonChiTietCustoms);
-        }
+        List<HoaDonChiTietCustom> hoaDonChiTiets = hoaDonChiTietService.getAllByHoaDonId(id);
+        return ResponseEntity.ok(hoaDonChiTiets);
     }
 
     @PostMapping("/add")

@@ -8,32 +8,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HoaDonService {
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
-//    @Autowired
-//    private Nhanvienre nhanVienRepository;
-//
-//    @Autowired
-//    private KhachHangRepository khachHangRepository;
 
     public List<HoaDon> getAll(){
-        return hoaDonRepository.findAll();
+        return hoaDonRepository.findAllbyTrangThai();
     }
 
 
     public HoaDon add(HoaDon hoaDon) {
-//        NhanVien nhanVien = nhanVienRepository.findById(hoaDon.getNhanVien().getId()).orElse(null);
-//        KhachHang khachHang = khachHangRepository.findById(hoaDon.getKhachHang().getId()).orElse(null);
-//
-//        hoaDon.setNgayTao(LocalDateTime.now());
-//
-//        hoaDon.setNhanVien(nhanVien);
-//        hoaDon.setKhachHang(khachHang);
-
         return hoaDonRepository.save(hoaDon);
+    }
+
+
+    public HoaDon updateTrangThai(Long id, HoaDon hoaDon) {
+        Optional<HoaDon> optional = hoaDonRepository.findById(id);
+        return optional.map(o -> {
+            o.setTrangThai(hoaDon.getTrangThai());
+            return hoaDonRepository.save(o);
+        }).orElse(null);
     }
 }

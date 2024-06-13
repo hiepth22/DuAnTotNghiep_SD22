@@ -2,9 +2,11 @@ package com.poly.sneaker.service;
 
 import com.poly.sneaker.dto.HoaDonChiTietCustom;
 import com.poly.sneaker.dto.HoaDonChiTietReqest;
+import com.poly.sneaker.entity.HoaDon;
 import com.poly.sneaker.entity.HoaDonChiTiet;
 import com.poly.sneaker.entity.SanPhamChiTiet;
 import com.poly.sneaker.repository.HoaDonChiTietRepository;
+import com.poly.sneaker.repository.HoaDonRepository;
 import com.poly.sneaker.repository.SanPhamChiTietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class HoaDonChiTietService {
 
     @Autowired
     private SanPhamChiTietRepository sanPhamChiTietRepository;
+    @Autowired
+    private HoaDonRepository hoaDonRepository;
 
     public HoaDonChiTiet addHoaDonChiTiet (HoaDonChiTiet hoaDonChiTiet) {
         return hoaDonChiTietRepository.save(hoaDonChiTiet);
@@ -32,28 +36,35 @@ public class HoaDonChiTietService {
 
         return results.stream().map(result -> {
             Long id = (Long) result[0];
-            String url = (String) result[1];
+            String tenAnh = (String) result[1];
             String tenSanPham = (String) result[2];
             String kichCo = (String) result[3];
             String mauSac = (String) result[4];
-            int soLuong = (int) result[5];
+            Integer soLuong = (Integer) result[5];
+            int soLuongValue = (soLuong != null) ?  soLuong : 0;
             BigDecimal gia = (BigDecimal) result[6];
-            return new HoaDonChiTietCustom(id, url, tenSanPham, kichCo, mauSac, soLuong, gia);
+            return new HoaDonChiTietCustom(id, tenAnh, tenSanPham, kichCo, mauSac, soLuongValue, gia);
         }).collect(Collectors.toList());
     }
 
 
-    public HoaDonChiTiet updateSanPham(HoaDonChiTietReqest hdct, Long id) {
-        Optional<HoaDonChiTiet> optional = hoaDonChiTietRepository.findById(id);
-        Optional<SanPhamChiTiet> optional1 = sanPhamChiTietRepository.findById(hdct.getIdChiTietSanPham());
+    public HoaDonChiTiet addSPToHDCT(HoaDonChiTiet hdct, Long id) {
+        Optional<HoaDon> getHDByID = hoaDonRepository.findById(id);
+        Optional<SanPhamChiTiet> getSPbyID = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId());
+        Long sanPhamChiTietId = hoaDonChiTietRepository.findBySanPhamCTId(hdct.getSanPhamChiTiet().getId());
+        if(!sanPhamChiTietId.equals(id)) {
 
-        HoaDonChiTiet hoaDonChiTiet = optional.get();
-        SanPhamChiTiet sanPhamChiTiet = optional1.get();
+            HoaDon hoaDon = getHDByID.get();
+            SanPhamChiTiet sanPhamChiTiet = getSPbyID.get();
 
-        hoaDonChiTiet.setSoLuong(hdct.getSoLuong());
-        hoaDonChiTiet.setGia(hdct.getDonGia());
-        hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
-
-        return hoaDonChiTietRepository.save(hoaDonChiTiet);
+            HoaDonChiTiet hdctChiTiet = new HoaDonChiTiet();
+            hdctChiTiet.setSoLuong(hdct.getSoLuong());
+            hdctChiTiet.setGia(hdct.getGia());
+            hdctChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
+            hdctChiTiet.setHoaDon(hoaDon);
+            hdctChiTiet.setTrangThai(hdct.getTrangThai());
+            return hoaDonChiTietRepository.save(hdctChiTiet);
+        }
+        return null;
     }
 }

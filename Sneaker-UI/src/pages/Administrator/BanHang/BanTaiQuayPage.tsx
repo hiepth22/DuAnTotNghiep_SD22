@@ -1,29 +1,39 @@
-import React, { useRef, useState, useEffect, MouseEvent } from "react";
-import { Button, Tabs, Modal, Table } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Tabs, Table } from "antd";
 import BanHangService, {
   hoaDonData,
   hoaDonChiTietDataByIdHD,
-  sanPhamCTData
 } from "../../../services/BanHangService";
 import { toast } from "react-toastify";
-import getDateNow from "../../../utils/GetDateNow";
 import ModalBanHang from "../../../components/modal/ModalBanHangThemSP";
 
 const { TabPane } = Tabs;
 
 const chiTietColumns = [
-  { title: "ID", dataIndex: "id", key: "id" },
-  { title: "Ảnh", dataIndex: "url", key: "url" },
-  { title: "Tên Sản Phẩm", dataIndex: "ten", key: "ten" },
-  { title: "Kích Cỡ", dataIndex: "kich_co", key: "kich_co" },
-  { title: "Màu Sắc", dataIndex: "mau_sac", key: "mau_sac" },
+  { title: "STT", dataIndex: "stt", key: "stt" },
+  {
+    title: "Ảnh",
+    dataIndex: "tenAnh",
+    key: "tenAnh",
+    render: (text, record) => (
+      <img src={buildCloudinaryUrl(record.tenAnh)} style={{ width: 50, height: 50 }} />
+    )
+  },
+  { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
+  { title: "Kích Cỡ", dataIndex: "kichCo", key: "kichCo" },
+  { title: "Màu Sắc", dataIndex: "mauSac", key: "mauSac" },
   { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },
-  { title: "Giá Bán", dataIndex: "giaBan", key: "giaBan" },
+  { title: "Giá Bán", dataIndex: "gia", key: "gia" },
   { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" }
 ];
 
+const buildCloudinaryUrl = (publicId) => {
+  const cloudName = 'deapopcoc';  // Thay bằng tên cloud của bạn
+  return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+};
+
+
 const BanTaiQuayPage: React.FC = () => {
-  const [hoaDonData1, setHoaDonData] = useState([]);
   const [tabState, setTabState] = useState<{
     activeKey: string;
     items: { label: string; key: string; children: JSX.Element }[];
@@ -31,25 +41,23 @@ const BanTaiQuayPage: React.FC = () => {
     activeKey: "1",
     items: [],
   });
-  const { isPending, data: initialHoaDonData } = hoaDonData();
 
+  const { isPending, data: initialHoaDonData } = hoaDonData();
 
   useEffect(() => {
     if (initialHoaDonData && initialHoaDonData.length > 0) {
       const tabs = initialHoaDonData.slice(0, 10).map((hoaDon, index) => ({
         label: `Hóa Đơn ${index + 1}`,
-        key: `${index + 1}`,
+        key: `${hoaDon.id}`,
         children: <HoaDonChiTietTab idHoaDon={hoaDon.id} />,
       }));
 
       setTabState({
-        activeKey: "1",
+        activeKey: tabs[0].key,
         items: tabs,
       });
-      setHoaDonData(initialHoaDonData);
     }
   }, [initialHoaDonData]);
-
 
   const onChange = (key: string) => {
     setTabState((prevState) => ({
@@ -58,7 +66,6 @@ const BanTaiQuayPage: React.FC = () => {
     }));
   };
 
-
   const CreateHD = () => {
     if (tabState.items.length >= 10) {
       toast.warning("Không thể tạo thêm hóa đơn. Số lượng hóa đơn đã đạt tối đa.");
@@ -66,12 +73,8 @@ const BanTaiQuayPage: React.FC = () => {
     }
 
     const hoaDonDataAdd = {
-      nhanVien: {
-        id: 1
-      },
-      khachHang: {
-        id: 1
-      },
+      // nhanVien: { id: 1 },
+      khachHang: { id: 1 },
       nguoiTao: "system",
       trangThai: "1"
     };
@@ -80,29 +83,23 @@ const BanTaiQuayPage: React.FC = () => {
       .then((res) => {
         const newHoaDon = res.data;
         toast.success("Thêm hóa đơn thành công");
-        console.log(newHoaDon.id);
 
         const newTab = {
-          label: `Hóa Đơn ${tabState.items.length + 1}`,
-          key: `${tabState.items.length + 1}`,
+          label: `Hóa Đơn ${newHoaDon.id}`,
+          key: `${newHoaDon.id}`,
           children: <HoaDonChiTietTab idHoaDon={newHoaDon.id} />,
         };
 
         setTabState(prevState => ({
-          activeKey: `${tabState.items.length + 1}`,
+          activeKey: `${newHoaDon.id}`,
           items: [...prevState.items, newTab],
         }));
-
-        return BanHangService.add2(newHoaDon);
-      })
-      .then((res) => {
       })
       .catch((err) => {
         toast.warning("Thêm thất bại");
         console.log(err);
       });
   };
-
 
   const remove = (targetKey: string) => {
     let newActiveKey = tabState.activeKey;
@@ -141,7 +138,6 @@ const BanTaiQuayPage: React.FC = () => {
     }
   };
 
-
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -153,8 +149,7 @@ const BanTaiQuayPage: React.FC = () => {
         </div>
       </div>
 
-
-      <div >
+      <div>
         <Tabs
           hideAdd
           onChange={onChange}
@@ -175,7 +170,7 @@ const BanTaiQuayPage: React.FC = () => {
                   </p>
                 </div>
                 <div className="mb-3 flex justify-end">
-                  <ModalBanHang />
+                  <ModalBanHang idHoaDon={parseInt(item.key)} />
                 </div>
               </div>
               {item.children}
@@ -191,9 +186,15 @@ const BanTaiQuayPage: React.FC = () => {
 const HoaDonChiTietTab: React.FC<{ idHoaDon: number }> = ({ idHoaDon }) => {
   const { isPending, data } = hoaDonChiTietDataByIdHD(idHoaDon);
 
+
+  const dataSource = data?.map((item, index) => ({
+    ...item,
+    stt: index + 1,
+  })) || [];
+
   return (
     <Table
-      dataSource={data}
+      dataSource={dataSource}
       columns={chiTietColumns}
       loading={isPending}
       rowKey="id"

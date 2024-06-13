@@ -1,34 +1,61 @@
-// src/components/modal/ModalBanHangThemSP.js
 import React, { useState } from 'react';
 import { Button, Modal, Input, Table } from 'antd';
 import { sanPhamCTData } from '../../services/BanHangService';
+import BanHangService from '../../services/BanHangService';
+import { toast } from 'react-toastify';
 
-const chiTietColumns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Ảnh", dataIndex: "url", key: "url" },
-    { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
-    { title: "Giá Bán", dataIndex: "giaBan", key: "giaBan" },
-    { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },
-    { title: "Kích Cỡ", dataIndex: "tenKichCo", key: "tenKichCo" },
-    { title: "Màu Sắc", dataIndex: "tenMauSac", key: "tenMauSac" },
-    { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" },
-    {
-        title: "Action",
-        key: "action",
-        render: (text, record) => (
-            <Button type="primary" >
-                Thêm
-            </Button>
-        ),
-    }
-];
-
-const ModalBanHang = () => {
+const ModalBanHang = ({ idHoaDon }) => {
     const [open, setOpen] = useState(false);
-    const { data: spctData, isLoading } = sanPhamCTData();
+    const { data: spctData, isLoading: spctLoading } = sanPhamCTData();
 
     const showModal = () => setOpen(true);
     const hideModal = () => setOpen(false);
+
+    const handleAddToCart = async (record) => {
+        if (!idHoaDon) {
+            console.error('idHoaDon is not provided');
+            return;
+        }
+        try {
+            const response = await BanHangService.addSPChiTietToHDChiTiet(idHoaDon, record.id, record.giaBan);
+            toast.success('Thêm sản phẩm thành công');
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const buildCloudinaryUrl = (publicId) => {
+        const cloudName = 'deapopcoc';
+        return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+    };
+
+    const chiTietColumns = [
+        { title: "STT", dataIndex: "id", key: "id" },
+        {
+            title: "Ảnh",
+            dataIndex: "tenAnh",
+            key: "tenAnh",
+            render: (text, record) => (
+                <img src={buildCloudinaryUrl(record.tenAnh)} alt={record.moTa} style={{ width: 50, height: 50 }} />
+            )
+        },
+        { title: "Tên Sản Phẩm", dataIndex: "tenSanPham", key: "tenSanPham" },
+        { title: "Giá Bán", dataIndex: "giaBan", key: "giaBan" },
+        { title: "Số Lượng", dataIndex: "soLuong", key: "soLuong" },
+        { title: "Kích Cỡ", dataIndex: "tenKichCo", key: "tenKichCo" },
+        { title: "Màu Sắc", dataIndex: "tenMauSac", key: "tenMauSac" },
+        { title: "Trạng Thái", dataIndex: "trangThai", key: "trangThai" },
+        {
+            title: "Action",
+            key: "action",
+            render: (text, record) => (
+                <Button type="primary" onClick={() => handleAddToCart(record)}>
+                    Thêm
+                </Button>
+            ),
+        }
+    ];
 
     return (
         <>
@@ -43,7 +70,7 @@ const ModalBanHang = () => {
                 footer={null}
                 maskClosable={true}
                 onCancel={hideModal}
-                bodyStyle={{ height: '80vh', overflowY: 'auto' }} // Tăng chiều cao của modal
+                bodyStyle={{ height: '80vh', overflowY: 'auto' }}
             >
                 <div className='h-[500px]'>
                     <div className='flex gap-5 mb-4'>
@@ -54,14 +81,11 @@ const ModalBanHang = () => {
                     <Table
                         columns={chiTietColumns}
                         dataSource={spctData}
-                        loading={isLoading}
+                        loading={spctLoading}
                         rowKey="id"
                     />
                 </div>
             </Modal>
-
-
-
         </>
     );
 }
