@@ -15,6 +15,7 @@ export const convertDate = (date) => {
 };
 
 const KhachHangAdd = () => {
+    const [anh, setAnh] = useState("");
     const [preview, setPreview] = useState(null);
     const [ten, setTen] = useState('');
     const [ma, setMa] = useState('');
@@ -25,9 +26,16 @@ const KhachHangAdd = () => {
     const [cccd, setCccd] = useState('');
     const [matKhau, setMatKhau] = useState('');
     const [trangThai, setTrangThai] = useState('1'); // Trạng thái mặc định là 'Hoạt động'
-
+    const [profileImage, setProfileImage] = useState("");
     const { id } = useParams();
+    const [isloading, setItLoading] = useState(false);
     const navigate = useNavigate();
+
+    const handleImageChange = (e) => {
+        const file2 = e.target.files[0];
+        setPreview(URL.createObjectURL(file2));
+        setProfileImage(file2);
+    };
 
     useEffect(() => {
         if (id) {
@@ -43,6 +51,8 @@ const KhachHangAdd = () => {
                     setCccd(kh.data.cccd);
                     setMatKhau(kh.data.matKhau);
                     setTrangThai(kh.data.trangThai.toString()); // Chuyển đổi trạng thái thành chuỗi
+                    setAnh(kh.data.anh); // Đặt ảnh từ API
+                    setPreview(`https://res.cloudinary.com/deapopcoc/image/upload/${kh.data.anh}`); // Hiển thị ảnh
                 })
                 .catch((error) => {
                     console.log(error);
@@ -50,25 +60,47 @@ const KhachHangAdd = () => {
         }
     }, [id]);
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setPreview(URL.createObjectURL(file));
-    };
-
-    const triggerFileInput = () => {
-        document.getElementById('fileInput').click();
-    };
-
     const cancel = () => {
         navigate('/admin/khach-hang');
     };
 
     const saveKhachHang = async (e) => {
         e.preventDefault();
+        let publicId = "";
+        setItLoading(true);
+        try {
+            if (profileImage &&
+                (profileImage.type === "image/png" ||
+                    profileImage.type === "image/jpg" ||
+                    profileImage.type === "image/jpeg")
+            ) {
+                const img = new FormData();
+                img.append("file", profileImage);
+                img.append("cloud_name", "deapopcoc");
+                img.append("upload_preset", "hwsotqf9");
+
+                const response = await fetch(
+                    "https://api.cloudinary.com/v1_1/deapopcoc/image/upload",
+                    {
+                        method: "POST",
+                        body: img,
+                    }
+                );
+                const imgData = await response.json();
+                publicId = imgData.public_id;
+                setPreview(null);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setItLoading(false);
+        }
+
         const ngaytao = getDateNow();
         const ngaycapnhap = getDateNow();
 
         const khData = {
+            anh: publicId || anh,
             ten,
             ma,
             sdt,
@@ -81,21 +113,19 @@ const KhachHangAdd = () => {
             ngaytao,
             ngaycapnhap,
         };
-
+        console.log(khData);
         if (id) {
             try {
-                update(id, khData).then((response) => {
-                    toast.success('Thành công!!!');
-                    navigate('/admin/khach-hang');
-                })
+                await update(id, khData);
+                toast.success('Thành công!!!');
+                navigate('/admin/khach-hang');
             } catch (error) {
                 console.log(error);
                 toast.warning('Thất bại!!');
             }
         } else {
             try {
-                const response = await add(khData);
-                console.log(response)
+                await add(khData);
                 toast.success('Thành công!');
                 navigate('/admin/khach-hang');
             } catch (error) {
@@ -103,6 +133,10 @@ const KhachHangAdd = () => {
                 toast.warning('Thất bại!!!');
             }
         }
+    };
+
+    const triggerFileInput = () => {
+        document.getElementById("fileInput").click();
     };
 
     return (
@@ -115,7 +149,6 @@ const KhachHangAdd = () => {
                                 <span className="h6">{id ? 'Cập Nhật Thông Tin Khách Hàng' : 'Thêm Mới Khách Hàng'}</span>
                             </h2>
                         </div>
-                        <p></p>
                         <div className="card-body">
                             <form onSubmit={saveKhachHang}>
                                 <div className="row mb-3">
@@ -193,7 +226,6 @@ const KhachHangAdd = () => {
                                                     />
                                                 </div>
                                                 <div className="form-group">
-
                                                     <label className="form-label">Ngày Sinh:</label>
                                                     <input
                                                         type="date"
@@ -216,8 +248,6 @@ const KhachHangAdd = () => {
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
-
-
                                                 <div className="form-group">
                                                     <label className="form-label">Giới Tính:</label>
                                                     <select

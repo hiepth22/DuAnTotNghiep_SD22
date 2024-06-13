@@ -48,3 +48,4 @@ export const deleteKH = async (id) => {
         throw error;
     }
 };
+export const updatett=  (khachHangid) => axios.put(API_BASE_URL+'/tt/'+khachHangid);

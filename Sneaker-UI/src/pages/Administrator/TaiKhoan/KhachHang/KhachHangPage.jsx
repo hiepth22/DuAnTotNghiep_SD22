@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import moment from 'moment';
-import { getAll, detail, phantrangsevice, deleteKH } from "../../../../services/KhachHangService";
-import { useNavigate } from "react-router-dom";
+import { getAll, detail, phantrangsevice, updatett } from "../../../../services/KhachHangService";
+import { useNavigate, useParams } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { de } from "date-fns/locale/de";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function KhachHangPage() {
     const [khachHangs, setKH] = useState([]);
@@ -14,6 +16,11 @@ function KhachHangPage() {
     const [originalData, setOriginalData] = useState([]);
     const nav = useNavigate();
     const pageSize = 5;
+
+    const buildCloudinaryUrl = (publicId) => {
+        const cloudName = "deapopcoc"; // Thay bằng tên cloud của bạn
+        return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+    };
 
     const gt = (gt) => {
         return gt ? "Nam" : "Nữ";
@@ -56,6 +63,18 @@ function KhachHangPage() {
     const updateKH = (id) => {
         nav(`/admin/khachhang-add/${id}`);
     };
+    const updatetrangthai = async (id, ten) => {
+        try {
+            await updatett(id);
+            toast.success(`Đã đổi trạng thái Khách Hàng: ${ten}`);
+            setTimeout(() => {
+                window.location.reload(); // Reload trang sau khi cập nhật thành công
+            }, 1500);
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái:', error);
+            toast.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
+        }
+    };
     const openDetailModal = (id) => {
         detail(id).then((response) => {
             setSelectedKH(response.data);
@@ -80,19 +99,19 @@ function KhachHangPage() {
         setCurrentPage(currentPage + 1);
     };
 
-    useEffect(() => {
-        phantrangsevice(currentPage)
-            .then((response) => {
-                if (response.data.length === 0) {
-                    console.error('Dữ liệu không có sẵn');
-                } else {
-                    setKH(response.data);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, [currentPage]);
+    // useEffect(() => {
+    //     phantrangsevice(currentPage)
+    //         .then((response) => {
+    //             if (response.data.length === 0) {
+    //                 console.error('Dữ liệu không có sẵn');
+    //             } else {
+    //                 setKH(response.data);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    // }, [currentPage]);
 
     useEffect(() => {
         searchKH(searchKeyword);
@@ -139,10 +158,8 @@ function KhachHangPage() {
                             value={searchKeyword}
                             onChange={(e) => setSearchKeyword(e.target.value)}
                         />
-                        <button type="button" className="btn btn-outline-primary">Tìm kiếm</button>
                     </div>
                     <div className="combo mb-3">
-                        {/* Các bộ lọc bổ sung có thể được thêm ở đây */}
                     </div>
                 </div>
             </form>
@@ -175,7 +192,10 @@ function KhachHangPage() {
                         khachHangs.map((khachHang, index) => (
                             <tr key={khachHang.id}>
                                 <td>{index + 1}</td>
-                                <td><img src={khachHang.anh} alt="Avatar" width="50" height="50" /></td>
+                                <td><img
+                                    src={buildCloudinaryUrl(khachHang.anh)}
+                                    style={{ width: 70, height: 70 }} />
+                                </td>
                                 <td>{khachHang.ten}</td>
                                 <td>{khachHang.ma}</td>
                                 <td>{khachHang.sdt}</td>
@@ -187,7 +207,8 @@ function KhachHangPage() {
                                     <button className="btn btn-success me-2" onClick={() => updateKH(khachHang.id)}><i className="fa-solid fa-pen"></i></button>
                                     <button type="button" className="btn btn-warning me-2" onClick={() => openDetailModal(khachHang.id)}><i className="fa-solid fa-eye"></i></button>
                                     <button type="button" className="btn btn-info me-2" ><i className="bi bi-geo-alt-fill"></i></button>
-                                    <button type="button" className="btn btn-danger"> <i className="bi bi-trash3"></i> </button>
+                                    <button type="button" className="btn btn-danger"> <i className="bi bi-trash3"
+                                        onClick={() => updatetrangthai(khachHang.id, khachHang.ten)}></i> </button>
                                 </td>
                             </tr>
                         ))
