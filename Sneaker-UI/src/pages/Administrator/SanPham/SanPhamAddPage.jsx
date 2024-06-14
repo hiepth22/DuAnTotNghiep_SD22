@@ -18,12 +18,15 @@ import {
   Select,
   Button,
   Input,
+  InputNumber,
 } from "antd";
+import { v4 as uuidv4 } from "uuid";
 
 function SanPhamAddPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
   const [loadData, setLoadData] = useState(false);
   const [disabledThongTin, setDisabledThongTin] = useState(false);
-  const [dataListTable, setDataListTable] = useState([]);
 
   const [sanPhams, setSanPhams] = useState([]);
   const [chatLieus, setChatLieus] = useState([]);
@@ -33,6 +36,11 @@ function SanPhamAddPage() {
   const [mauSacs, setMauSacs] = useState([]);
   const [nhaSanXuats, setNhaSanXuats] = useState([]);
   const [thuongHieus, setThuongHieus] = useState([]);
+
+  const randomChuoi = () => {
+    const randomString = uuidv4().replace(/-/g, "").substring(0, 6);
+    return randomString;
+  };
 
   const [defaultChiTietSP, setDefaultChiTietSP] = useState({
     giaBan: 100000,
@@ -50,6 +58,27 @@ function SanPhamAddPage() {
     nhaSanXuat: { id: null },
     thuongHieu: { id: null },
   });
+
+  const [selectMauSac, setSelectMauSac] = useState([]);
+  const [selectKichCo, setSelectKichCo] = useState([]);
+  const [danhSachSanPhamChiTiet, setDanhSachSanPhamChiTiet] = useState([]);
+  const [dataListTable, setDataListTable] = useState([]);
+
+  useEffect(() => {
+    let ds = nhomTheoMau([...danhSachSanPhamChiTiet]);
+    setDataListTable([...ds]);
+  }, [danhSachSanPhamChiTiet]);
+
+  const nhomTheoMau = (ds) => {
+    const groups = ds.reduce((acc, object) => {
+      const group = (acc[object?.mauSac?.id] ??= []);
+      group.push(object);
+      return acc;
+    }, {});
+
+    const groupArray = Object.values(groups);
+    return groupArray;
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -73,6 +102,97 @@ function SanPhamAddPage() {
     };
     getData();
   }, [loadData]);
+
+  const findMauSacById = (id) => {
+    let mau = mauSacs.find((o) => o.id === id);
+    return mau?.ten;
+  };
+
+  const themSanPham = () => {
+    setDisabledThongTin(true);
+
+    let sanPham = sanPhams.find((o) => o.id == defaultChiTietSP.sanPham.id);
+
+    const danhSachSPCT = [];
+
+    let danhSachKichCo = [...selectKichCo];
+    let danhSachMauSac = [...selectMauSac];
+
+    for (const color of danhSachMauSac) {
+      for (const size of danhSachKichCo) {
+        let mauSac = mauSacs.find((o) => o.id == color);
+        let kichCo = kichCos.find((o) => o.id == size);
+        let check = danhSachSanPhamChiTiet.find(
+          (o) => o.mauSac.id == color && o.kichCo.id == size
+        );
+        if (check) {
+          continue;
+        }
+
+        danhSachSPCT.push({
+          ...defaultChiTietSP,
+          key: uuidv4().substring(0, 3),
+          ten: `${sanPham.ten} (color : ${mauSac.ten} - size : ${kichCo.ten})`,
+          ma: `SP00${sanPham.id}${mauSac.id}${kichCo.id}${randomChuoi()}`,
+          mauSac: { id: color },
+          kichCo: { id: size },
+        });
+      }
+    }
+
+    let ds = [...danhSachSPCT, ...danhSachSanPhamChiTiet];
+    setDanhSachSanPhamChiTiet([...ds]);
+  };
+
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "stt",
+      render: (_, __, index) => (currentPage - 1) * pageSize + index + 1,
+    },
+    {
+      title: "Tên sản phẩm",
+      dataIndex: "ten",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "soLuong",
+      width: 150,
+      render: (text, record, index) => (
+        <InputNumber
+          style={{ width: "100%" }}
+          min={0}
+          defaultValue={record?.soLuong}
+          onChange={(e) => updateSoLuong(record, index, e)}
+        />
+      ),
+    },
+    {
+      title: "Đơn giá",
+      dataIndex: "giaBan",
+      width: 150,
+      render: (text, record, index) => (
+        <>
+          <InputNumber
+            style={{ width: "100%" }}
+            min={0}
+            defaultValue={record?.giaBan}
+            onChange={(e) => updateGiaBan(record, index, e)}
+          />
+        </>
+      ),
+    },
+    {
+      title: "Hành động",
+      render: (_, record) => (
+        <Space>
+          <Button>Sửa</Button>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
@@ -93,7 +213,6 @@ function SanPhamAddPage() {
                         <Col span={24}>
                           <Select
                             disabled={disabledThongTin}
-                            mode="tags"
                             style={{ width: "100%" }}
                             placeholder="Chọn tên sản phẩm"
                             onChange={(e) =>
@@ -313,7 +432,7 @@ function SanPhamAddPage() {
             </Col>
           </Row>
           <Flex justify="end">
-            <Button onClick={() => ThemSanPham()}>Tạo</Button>
+            <Button onClick={() => themSanPham()}>Tạo</Button>
           </Flex>
         </Card>
         <Card size="small" title={"Danh sách biến thể"}>
@@ -321,7 +440,7 @@ function SanPhamAddPage() {
             <Flex vertical key={index}>
               <Flex style={{ backgroundColor: "#d9dbdd" }} justify="start">
                 <Typography.Title className="m-1" level={4}>
-                  Các sản phẩm màu {findTenMauById(o[0]?.mauSac?.id)}
+                  Các sản phẩm màu {findMauSacById(o[0]?.mauSac?.id)}
                 </Typography.Title>
               </Flex>
               <Table
@@ -331,14 +450,7 @@ function SanPhamAddPage() {
                 pagination={false}
                 bordered
               />
-
               <br />
-
-              <Flex justify="center">
-                <Flex>
-                  <UpLoadAnhSP lstCTSP={o} />
-                </Flex>
-              </Flex>
             </Flex>
           ))}
 

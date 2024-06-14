@@ -15,7 +15,7 @@ class SanPhamService {
 
   // Thêm mới
   static add(data) {
-    return request.post("http://localhost:8080/san-pham", data);
+    return request.post("san-pham", data);
   }
 
   // Sửa
