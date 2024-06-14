@@ -35,6 +35,11 @@ function SanPhamPage() {
       render: (text, record) => <a>{record.thuongHieu.ten}</a>,
     },
     {
+      title: "Số lượng",
+      dataIndex: "soLuong",
+      render: (text) => <a>{text}</a>,
+    },
+    {
       title: "Trạng thái",
       dataIndex: "trangThai",
       render: (trangThai) => {
@@ -49,6 +54,7 @@ function SanPhamPage() {
       render: (_, record) => (
         <Space>
           <Button>Sửa</Button>
+          <Button>Chi tiết</Button>
         </Space>
       ),
     },

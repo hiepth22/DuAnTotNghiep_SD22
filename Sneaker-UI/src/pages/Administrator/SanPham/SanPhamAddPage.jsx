@@ -59,6 +59,11 @@ function SanPhamAddPage() {
     thuongHieu: { id: null },
   });
 
+  const xoaChiTietSanPham = (record, index) => {
+    let ds = danhSachSanPhamChiTiet.filter((o, ind) => o.key != record.key);
+    setDanhSachSanPhamChiTiet([...ds]);
+  };
+
   const [selectMauSac, setSelectMauSac] = useState([]);
   const [selectKichCo, setSelectKichCo] = useState([]);
   const [danhSachSanPhamChiTiet, setDanhSachSanPhamChiTiet] = useState([]);
@@ -185,9 +190,14 @@ function SanPhamAddPage() {
     },
     {
       title: "Hành động",
-      render: (_, record) => (
+      render: (_, record, index) => (
         <Space>
-          <Button>Sửa</Button>
+          <Button type="text">
+            <i className="fa-regular fa-pen-to-square"></i>
+          </Button>
+          <Button type="text" onClick={() => xoaChiTietSanPham(record, index)}>
+            <i className="fa-solid fa-trash"></i>
+          </Button>
         </Space>
       ),
     },
