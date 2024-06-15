@@ -55,9 +55,6 @@ public class KhachHangController {
             List<ObjectError> list = rs.getAllErrors();
             return ResponseEntity.ok(list);
         }
-        if (service.existsByTen(kh.getTen())) {
-            return ResponseEntity.ok("Tên đã tồn tại");
-        }
 
         service.add(kh);
         return ResponseEntity.ok("Thành Công!!!");
@@ -86,6 +83,16 @@ public class KhachHangController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(resultList);
+    }
+    @PutMapping("tt/{id}")
+    public ResponseEntity<?> updateTT(@PathVariable("id") Long id
+    ) {
+        if (!service.existsById(id)) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy"
+            );
+        }
+        return ResponseEntity.ok(service.deleteTrangThai(id));
     }
 
 }

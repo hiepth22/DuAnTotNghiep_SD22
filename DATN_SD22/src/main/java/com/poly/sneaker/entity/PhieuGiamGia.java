@@ -20,7 +20,8 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 
-public class PhieuGiamGia {
+public class
+PhieuGiamGia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,4 +71,6 @@ public class PhieuGiamGia {
 
     @Column(name = "trangThai")
     private Integer trangThai;
+
+
 }

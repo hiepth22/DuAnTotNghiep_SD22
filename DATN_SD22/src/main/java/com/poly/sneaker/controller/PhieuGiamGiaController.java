@@ -2,10 +2,20 @@ package com.poly.sneaker.controller;
 
 import com.poly.sneaker.entity.PhieuGiamGia;
 import com.poly.sneaker.service.PhieuGiamGiaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/phieu-giam-gia")
@@ -16,41 +26,70 @@ public class PhieuGiamGiaController {
     @Autowired
     PhieuGiamGiaService phieuGiamGiaService;
 
-    public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(phieuGiamGiaService.getAll());
+    @GetMapping("")
+    public List<PhieuGiamGia> HienThi() {
+        List<PhieuGiamGia> lst = phieuGiamGiaService.getall(1);
+        return lst;
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable(name = "id") Long id) {
-        if (!phieuGiamGiaService.existingById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy");
+        if (!phieuGiamGiaService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy id"
+            );
         }
-        return ResponseEntity.ok(phieuGiamGiaService.finById(id));
+        return ResponseEntity.ok(phieuGiamGiaService.findById(id));
     }
 
     @PostMapping("")
-    public ResponseEntity<?> add(@RequestBody PhieuGiamGia phieuGiamGia) {
-        if (phieuGiamGiaService.existingByTen(phieuGiamGia.getTen())) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Tên đã tồn tại");
+    public ResponseEntity<?> add(@RequestBody @Valid PhieuGiamGia pgg, BindingResult rs) {
+        if (rs.hasErrors()) {
+            List<ObjectError> lst = rs.getAllErrors();
+            return ResponseEntity.ok(lst);
         }
-        return ResponseEntity.ok(phieuGiamGiaService.add(phieuGiamGia));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id,
-                                    @RequestBody PhieuGiamGia phieuGiamGia) {
-        if (!phieuGiamGiaService.existingById(id)) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy cập nhật");
-        }
-        return ResponseEntity.ok(phieuGiamGiaService.update(id, phieuGiamGia));
+        phieuGiamGiaService.Add(pgg);
+        return ResponseEntity.ok("thêm thành công");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
-        if (!phieuGiamGiaService.existingById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy xóa");
+        if (!phieuGiamGiaService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy id"
+            );
         }
         return ResponseEntity.ok(phieuGiamGiaService.deleteById(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id
+            , @RequestBody PhieuGiamGia pgg) {
+        if (!phieuGiamGiaService.existsById(id)) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy"
+            );
+        }
+        return ResponseEntity.ok(phieuGiamGiaService.update(id, pgg));
+    }
+    @PutMapping("tt/{id}")
+    public ResponseEntity<?> updateTT(@PathVariable("id") Long id
+    ) {
+        if (!phieuGiamGiaService.existsById(id)) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Không tìm thấy"
+            );
+        }
+        return ResponseEntity.ok(phieuGiamGiaService.updateTrangThai(id));
+    }
+    @GetMapping("page")
+    public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PhieuGiamGia> phieuGiamGiaPage = phieuGiamGiaService.page( pageable,1);
+
+        List<PhieuGiamGia> lst = phieuGiamGiaPage.getContent()
+                .stream()
+                .sorted(Comparator.comparing(PhieuGiamGia::getId))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lst);
+    }
 }

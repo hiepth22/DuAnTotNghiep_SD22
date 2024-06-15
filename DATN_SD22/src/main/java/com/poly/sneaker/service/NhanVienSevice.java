@@ -4,7 +4,6 @@ import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.repository.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,19 @@ public class NhanVienSevice {
     public Page<NhanVien> page(Pageable pageable,int tt) {
         return nhanVienRepository.findByTrangThai(tt,pageable);
     }
+<<<<<<< HEAD
+=======
+
+    public List<NhanVien> search(String text) {
+        Specification<NhanVien> specification = (root, query, criteriaBuilder) -> {
+            Predicate likeTen = criteriaBuilder.like(root.get("ten"),"%"+text+"%");
+            Predicate likesdt = criteriaBuilder.like(root.get("sdt"),"%"+text+"%");
+
+            return  criteriaBuilder.or(likeTen,likesdt);
+        };
+        return nhanVienRepository.findAll(specification);
+    }
+>>>>>>> 97c8cbf27b410102b5834b454c4f20ce64b41589
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
     }

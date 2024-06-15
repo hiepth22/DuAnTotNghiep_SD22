@@ -1,129 +1,252 @@
+// import React, { useEffect, useState } from "react";
+// import moment from 'moment';
+// import { getAll, detail, phantrangservice, deletePGG } from "../../../../services/PhieuGiamGiaService";
+// import { useNavigate } from "react-router-dom";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+// function PhieuGiamGiaPage() {
+//     const [phieuGiamGias, setPGG] = useState([]);
+//     const [selectedPGG, setSelectedPGG] = useState(null);
+//     const [showModal, setShowModal] = useState(false);
+//     const [currentPage, setCurrentPage] = useState(0);
+//     const [originalData, setOriginalData] = useState([]);
+//     const nav = useNavigate();
+//     const pageSize = 5;
+
+//     const hinhThucGiam = (htg) => {
+//         return htg ? "Giảm theo %" : "Giảm tiền";
+//     };
+
+//     const trangThai = (tt) => {
+//         return tt ? "Hoạt Động" : "Ngưng Hoạt Động";
+//     };
 
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+//     const fetchAndSaveOriginalData = async () => {
+//         try {
+//             const response = await getAll();
+//             setOriginalData(response.data);
+//             setPGG(response.data);
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     };
 
-const PhieuGiamGiaPage = () => {
-  const [phieuGiamGiaList, setPhieuGiamGiaList] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedPhieuGiamGia, setSelectedPhieuGiamGia] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+//     useEffect(() => {
+//         fetchAndSaveOriginalData();
+//     }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/phieu-giam-gia`);
-        setPhieuGiamGiaList(response.data);
-      } catch (error) {
-        console.error('Error fetching vouchers:', error);
-      }
-    };
+//     const addPGG = () => {
+//         nav('/admin/phieugiamgia-add');
+//     };
 
-    fetchData();
-  }, []);
-  const handleAddPhieuGiamGia = () => {
-    setShowForm(true);
-    setSelectedPhieuGiamGia(null);
-  };
+//     const updatePGG = (id) => {
+//         nav(`/admin/phieugiamgia-add/${id}`);
+//     };
+//     const openDetailModal = (id) => {
+//         detail(id).then((response) => {
+//             setSelectedPGG(response.data);
+//             setShowModal(true);
+//         }).catch((error) => {
+//             console.log(error);
+//         });
+//     };
 
-  const handleEditPhieuGiamGia = (phieuGiamGia) => {
-    setShowForm(true);
-    setSelectedPhieuGiamGia(phieuGiamGia);
-  };
-  const handleDeletePhieuGiamGia = async (id) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa phiếu giảm giá này?')) {
-      try {
-        await axios.delete(`<span class="math-inline">\{API\_URL\}/phieu\-giam\-gia/</span>{id}`);
-        const updatedList = phieuGiamGiaList.filter((phieu) => phieu.id !== id);
-        setPhieuGiamGiaList(updatedList);
-      } catch (error) {
-        console.error('Error deleting voucher:', error);
-      }
-    }
-  };
-  // const handleSavePhieuGiamGia = (data) => {
+//     const closeModal = () => {
+//         setShowModal(false);
+//         setSelectedPGG(null);
+//     };
 
-  //   setShowForm(false);
-  // };
+//     const prev = () => {
+//         if (currentPage > 0) {
+//             setCurrentPage(currentPage - 1);
+//         }
+//     };
 
-  // const handleCancel = () => {
-  //   setShowForm(false);
-  // };
+//     const next = () => {
+//         setCurrentPage(currentPage + 1);
+//     };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
-
-  const filteredPhieuGiamGiaList = phieuGiamGiaList.filter((phieu) => {
-    return (
-      phieu.ma.toLowerCase().includes(searchTerm) ||
-      phieu.ten.toLowerCase().includes(searchTerm) ||
-      phieu.dieuKienGiam.toLowerCase().includes(searchTerm)
-    );
-  });
-
-  const renderPhieuGiamGiaList = () => {
-    return (
-      <div className="phieu-giam-gia-list">
-        <input type="text" placeholder="Tìm kiếm..." onChange={handleSearch} />
-        <table>
-          <thead>
-            <tr>
-              <th>Mã</th>
-              <th>Tên</th>
-              <th>Số lượng </th>
-              <th>Hình thức giảm</th>
-              <th>Điều kiện giảm </th>
-              <th>Giá trị giảm </th>
-              <th> Giảm tối đa </th>
-              <th>Ngày bắt đầu</th>
-              <th>Ngày kết thúc</th>
-              <th>Ngày tạo </th>
-              <th>Ngày cập nhật </th>
-              <th>Người tạo </th>
-              <th>Người cập nhật </th>
-              <th>Trạng thái </th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          {filteredPhieuGiamGiaList &&<tbody>
-            {filteredPhieuGiamGiaList.map((phieuGiamGia) => (
-              <tr key={phieuGiamGia.id}>
-                <td>{phieuGiamGia.ma}</td>
-                <td>{phieuGiamGia.ten}</td>
-                <td>{phieuGiamGia.hinhThucGiam}</td>
-                <td>{phieuGiamGia.giaTriGiam}</td>
-                <td>{phieuGiamGia.dieuKienGiam}</td>
-                <td>{phieuGiamGia.ngayBatDau}</td>
-                <td>{phieuGiamGia.ngayKetThuc}</td>
-                <td>{phieuGiamGia.ngayTao} </td>
-                <td>{phieuGiamGia.ngayCapNhat} </td>
-                <td>{phieuGiamGia.nguoiTao} </td>
-                <td>{phieuGiamGia.nguoiCapNhat} </td>
-                <td>{phieuGiamGia.isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}</td>
-
-                <td>
-                  <button onClick={() => handleEditPhieuGiamGia(phieuGiamGia)}>Sửa</button>
-                  <button onClick={() => handleDeletePhieuGiamGia(phieuGiamGia.id)}>Xóa</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>}
-        </table>
-      </div>
-    );
-  };
+//     useEffect(() => {
+//         phantrangservice(currentPage)
+//             .then((response) => {
+//                 if (response.data.length === 0) {
+//                     console.error('Dữ liệu không có sẵn');
+//                 } else {
+//                     setKH(response.data);
+//                 }
+//             })
+//             .catch((error) => {
+//                 console.error(error);
+//             });
+//     }, [currentPage]);
 
 
-  return (
-    <div className="phieu-giam-gia-page">
-      <h1>Quản lý phiếu giảm giá</h1>
-      <button onClick={handleAddPhieuGiamGia}>Thêm phiếu giảm giá</button>
-      {showForm && renderForm()}
-      {renderPhieuGiamGiaList()}
-    </div>
-  );
-};
 
+//     const modalStyles = {
+//         modalHeader: {
+//             backgroundColor: '#007bff',
+//             color: '#fff',
+//             padding: '15px',
+//             borderRadius: '5px 5px 0 0',
+//         },
+//         modalTitle: {
+//             marginBottom: '0',
+//         },
+//         modalBody: {
+//             padding: '20px',
+//         },
+//         modalBodyP: {
+//             margin: '5px 0',
+//         },
+//         modalFooter: {
+//             backgroundColor: '#f2f2f2',
+//             padding: '10px',
+//             textAlign: 'right',
+//             borderRadius: '0 0 5px 5px',
+//         },
+//         imgFluid: {
+//             maxWidth: '100%',
+//             height: 'auto',
+//         }
+//     };
+//     return (
+//         <div className="container mt-4">
+//             <form className="d-flex">
+//                 <div className="cot1">
+//                     <div className="input-group mb-2">
+//                         <input
+//                             type="search"
+//                             className="form-control rounded"
+//                             placeholder="Tìm kiếm"
+//                             aria-label="Tìm kiếm"
+//                             aria-describedby="search-addon"
+
+
+//                         />
+//                         <button type="button" className="btn btn-outline-primary">Tìm kiếm</button>
+//                     </div>
+//                     <div className="combo mb-3">
+//                     </div>
+//                 </div>
+//             </form>
+//             <div className="h6">
+//                 <h1 className="p-3 mb-2 bg-secondary text-white" style={{ borderRadius: '10px', padding: '15px', marginBottom: '20px' }}>
+//                     <i className="fa-solid fa-list bg-dark" ></i> Danh Sách Phiếu Giảm Giá
+//                 </h1>
+//             </div>
+//             <br />
+//             <button className="btn btn-primary" onClick={addPGG} style={{ display: 'block', marginBottom: '20px' }}>
+//                 <i className="bi bi-file-plus"></i> Thêm
+//             </button>
+//             <table className="table table-hover text-center">
+//                 <thead className="thead-dark" >
+//                     <tr className="text-center" >
+//                         <th scope="col">STT</th>
+//                         <th scope="col">Mã </th>
+//                         <th scope="col">Tên</th>
+//                         <th scope="col">Số lượng </th>
+//                         <th scope="col">Hình Thức Giảm </th>
+//                         <th scope="col">Điều Kiện Giảm </th>
+//                         <th scope="col">Giảm Tối Đa </th>
+//                         <th scope="col">Giá Trị Giảm </th>
+//                         <th scope="col">Ngày Bắt Đầu </th>
+//                         <th scope="col">Ngày Kết Thúc </th>
+//                         <th scope="col">Ngày Tạo </th>
+//                         <th scope="col">Ngày Cập Nhật </th>
+//                         <th scope="col">Người Tạo </th>
+//                         <th scope="col">Người Cập Nhật </th>
+//                         <th scope="col">Trạng Thái</th>
+//                         <th scope="col" className="text-center">Hành Động</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody className="text-center">
+//                     {
+//                         phieuGiamGias.map((phieuGiamGia, index) => (
+//                             <tr key={phieuGiamGia.id}>
+//                                 <td>{index + 1}</td>
+//                                 <td>{phieuGiamGia.ma}</td>
+//                                 <td>{phieuGiamGia.ten}</td>
+//                                 <td>{phieuGiamGia.soLuong}</td>
+//                                 <td>{htg(phieuGiamGia.hinhThucGiam)}</td>
+//                                 <td>{phieuGiamGia.dieuKienGiam}</td>
+//                                 <td>{phieuGiamGia.giamToiDa}</td>
+//                                 <td>{phieuGiamGia.giaTriGiam}</td>
+//                                 <td>{moment(phieuGiamGia.ngayBatDau).format('YYYY-MM-DD')}</td>
+//                                 <td>{moment(phieuGiamGia.ngayKetThuc).format('YYYY-MM-DD')}</td>
+//                                 <td>{moment(phieuGiamGia.ngayTao).format('YYYY-MM-DD')}</td>
+//                                 <td>{moment(phieuGiamGia.ngayCapNhat).format('YYYY-MM-DD')}</td>
+//                                 <td>{phieuGiamGia.nguoiTao}</td>
+//                                 <td>{phieuGiamGia.nguoiCapNhat}</td>
+//                                 <td>{trangThai(phieuGiamGia.trangThai)}</td>
+//                                 <td className="text-center">
+//                                     <button className="btn btn-success me-2" onClick={() => updatePGG(phieuGiamGia.id)}><i className="fa-solid fa-pen"></i></button>
+//                                     <button type="button" className="btn btn-warning me-2" onClick={() => openDetailModal(phieuGiamGia.id)}><i className="fa-solid fa-eye"></i></button>
+//                                     <button type="button" className="btn btn-info me-2" ><i className="bi bi-geo-alt-fill"></i></button>
+//                                     <button type="button" className="btn btn-danger"> <i className="bi bi-trash3"></i> </button>
+//                                 </td>
+//                             </tr>
+//                         ))
+//                     }
+//                 </tbody>
+//             </table>
+//             <div className="text-center">
+//                 <button type="button" className="btn btn-light" onClick={prev}>
+//                     <i className="fa-solid fa-angles-left"></i>
+//                 </button>
+//                 <span className="mx-2"> {currentPage + 1}</span>
+//                 <button type="button" className="btn btn-light" onClick={next}>
+//                     <i className="fa-solid fa-angles-right"></i>
+//                 </button>
+//             </div>
+//             {/* Modal */}
+//             {selectedPGG && (
+//                 <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} tabIndex="-1">
+//                     <div className="modal-dialog modal-dialog-centered">
+//                         <div className="modal-content">
+//                             <div className="modal-header" style={modalStyles.modalHeader}>
+//                                 <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> </h5>
+//                                 <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
+//                             </div>
+//                             <div className="modal-body" style={modalStyles.modalBody}>
+//                                 <div className="row">
+
+//                                     <div className="col-8">
+
+//                                         <p style={modalStyles.modalBodyP}><strong>Mã Phiếu Giảm Giá:</strong> {selectedPGG.ma}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Tên:</strong> {selectedPGG.ten}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Số Lượng:</strong> {selectedPGG.soLuong}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Hình Thức Giảm:</strong> {htg(selectedPGG.hinhThucGiam)}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Điều Kiện Giảm:</strong> {selectedPGG.dieuKienGiam}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Giảm Tối Đa:</strong> {selectedPGG.giamToiDa}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Giá Trị Giảm:</strong> {selectedPGG.giaTriGiam}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Ngày Bắt Đầu:</strong> {moment(selectedPGG.ngayBatDau).format('YYYY-MM-DD')}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Ngày Kết Thúc:</strong> {moment(selectedPGG.ngayKetThuc).format('YYYY-MM-DD')}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Ngày Tạo:</strong> {moment(selectedPGG.ngayTao).format('YYYY-MM-DD')}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Ngày Cập Nhật:</strong> {moment(selectedPGG.ngayCapNhat).format('YYYY-MM-DD')}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Người Tạo:</strong> {moment(selectedPGG.nguoiTao).format('YYYY-MM-DD')}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Người Cập Nhật:</strong> {moment(selectedPGG.nguoiCapNhat).format('YYYY-MM-DD')}</p>
+//                                         <p style={modalStyles.modalBodyP}><strong>Trạng Thái:</strong> {trangThai(selectedPGG.trangThai)}</p>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                             <div className="modal-footer" style={modalStyles.modalFooter}>
+//                                 <button type="button" className="btn btn-secondary" onClick={closeModal}>Đóng</button>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             )}
+//         </div>
+//     );
+// }
+
+// export default PhieuGiamGiaPage;
+
+import React from "react";
+
+function PhieuGiamGiaPage() {
+    return <div>PhieuGiamGiaPage</div>;
+}
 
 export default PhieuGiamGiaPage;

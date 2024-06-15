@@ -37,7 +37,7 @@ public class DeGiayController {
         return ResponseEntity.ok(service.finById(id));
     }
 
-    @PostMapping("")
+    @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody DeGiay deGiay) {
         if (service.existingByTen(deGiay.getTen())) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Tên đã tồn tại");

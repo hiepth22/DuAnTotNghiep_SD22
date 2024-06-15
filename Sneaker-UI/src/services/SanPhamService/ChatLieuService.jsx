@@ -15,7 +15,7 @@ class ChatLieuService {
 
   // Thêm mới
   static add(data) {
-    return request.post("http://localhost:8080/chat-lieu", data);
+    return request.post("chat-lieu", data);
   }
 
   // Sửa

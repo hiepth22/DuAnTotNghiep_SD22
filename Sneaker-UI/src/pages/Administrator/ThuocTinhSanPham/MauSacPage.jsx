@@ -69,7 +69,7 @@ function MauSacPage() {
 
   return (
     <div>
-      <h1>Quản lý chất liệu</h1>
+      <h1>Quản lý màu sắc</h1>
       {dataSource.length > 0 ? (
         <Table
           columns={columns}

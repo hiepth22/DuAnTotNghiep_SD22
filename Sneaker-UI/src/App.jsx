@@ -18,13 +18,13 @@ import {
   ThongKePage,
   CoGiayPage,
   // BanTaiQuayPage,
+  SanPhamAddPage,
 } from "./pages/Administrator";
 import BanTaiQuayPage from "./pages/Administrator/BanHang/BanTaiQuayPage";
 import NhanVienPage from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienPage";
 import NhanVienAdd from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienAdd";
 import KhachHangPage from "./pages/Administrator/TaiKhoan/KhachHang/KhachHangPage";
 import KhachHangAdd from "./pages/Administrator/TaiKhoan/KhachHang/KhachHangAdd";
-
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +47,7 @@ function App() {
           <Route path="/admin" element={<LayoutAdmin />}>
             <Route index path="/admin" element={<SanPhamPage />}></Route>
             <Route path="san-pham" element={<SanPhamPage />}></Route>
+            <Route path="san-pham/add" element={<SanPhamAddPage />}></Route>
 
             <Route path="ban-tai-quay" element={<BanTaiQuayPage />}></Route>
 
