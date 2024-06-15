@@ -67,4 +67,12 @@ public class HoaDonChiTietService {
         }
         return null;
     }
+
+
+    public HoaDonChiTiet updateSoLuongSanPham(HoaDonChiTiet hdct, Long id){
+        Optional<HoaDonChiTiet> getHDByID = hoaDonChiTietRepository.findById(id);
+
+
+        return hoaDonChiTietRepository.save(hdct);
+    }
 }
