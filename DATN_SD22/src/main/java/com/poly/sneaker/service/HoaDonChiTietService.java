@@ -51,8 +51,8 @@ public class HoaDonChiTietService {
     public HoaDonChiTiet addSPToHDCT(HoaDonChiTiet hdct, Long id) {
         Optional<HoaDon> getHDByID = hoaDonRepository.findById(id);
         Optional<SanPhamChiTiet> getSPbyID = sanPhamChiTietRepository.findById(hdct.getSanPhamChiTiet().getId());
-        Long sanPhamChiTietId = hoaDonChiTietRepository.findBySanPhamCTId(hdct.getSanPhamChiTiet().getId());
-        if(!sanPhamChiTietId.equals(id)) {
+//        Long sanPhamChiTietId = hoaDonChiTietRepository.findBySanPhamCTId(hdct.getSanPhamChiTiet().getId());
+//        if(!sanPhamChiTietId.equals(id)) {
 
             HoaDon hoaDon = getHDByID.get();
             SanPhamChiTiet sanPhamChiTiet = getSPbyID.get();
@@ -64,7 +64,15 @@ public class HoaDonChiTietService {
             hdctChiTiet.setHoaDon(hoaDon);
             hdctChiTiet.setTrangThai(hdct.getTrangThai());
             return hoaDonChiTietRepository.save(hdctChiTiet);
-        }
-        return null;
+//        }
+//        return null;
+    }
+
+
+    public HoaDonChiTiet updateSoLuongSanPham(HoaDonChiTiet hdct, Long id){
+        Optional<HoaDonChiTiet> getHDByID = hoaDonChiTietRepository.findById(id);
+        int soluong = 1;
+        hdct.setSoLuong(soluong);
+        return hoaDonChiTietRepository.save(hdct);
     }
 }

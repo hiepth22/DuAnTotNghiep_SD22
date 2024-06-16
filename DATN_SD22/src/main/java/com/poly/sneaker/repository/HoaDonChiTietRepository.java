@@ -24,7 +24,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, Lo
     List<Object[]> findByHoaDonId(@Param("idHoaDon") Long idHoaDon);
 
 
-    @Query(value = "select idHoaDon from hoa_don_chi_tiet where idSanPhamChiTiet =: idSanPhamChiTiet", nativeQuery = true)
-    Long findBySanPhamCTId(@Param("idSanPhamChiTiet") Long idSanPhamChiTiet);
+    @Query(value = "select count(idHoaDon) from hoa_don_chi_tiet where idSanPhamChiTiet = :idSanPhamChiTiet", nativeQuery = true)
+    Long findIDHDByIDSPCT(@Param("idSanPhamChiTiet") Long idSanPhamChiTiet);
 
 }
