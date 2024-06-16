@@ -182,7 +182,7 @@ const NhanVienAdd = () => {
             }
         } else {
             try {
-                if (!anh || !ten || !ma || !sdt || !ngaySinh || !email || !gioiTinh || !cccd || !matKhau || !vaiTro || !trangThai || !diachi) {
+                if ( !ten || !ma || !sdt || !ngaySinh || !email || !gioiTinh || !cccd || !matKhau || !vaiTro || !trangThai || !diachi) {
                     toast.error("Vui lòng điền đầy đủ thông tin.");
                     setError("Vui lòng điền đầy đủ thông tin.");
                     return;

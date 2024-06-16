@@ -310,6 +310,8 @@ CREATE TABLE [dbo].[khach_hang](
 	[anh] [nvarchar](100) NULL,
 	[matKhau] [nvarchar](30) NULL,
 	[trangThai] [int] NULL,
+	[ngaytao] [datetime] NULL,
+	[ngaycapnhat] [datetime] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

@@ -5,7 +5,6 @@ import com.poly.sneaker.repository.KhachHangRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class KhachHangService {
     }
 
     public Page<KhachHang> phanTrang(Pageable pageable, int tt) {
-        return khachHangRepository.findByTrangThai(tt,pageable);
+        return khachHangRepository.findByTrangThai(tt, pageable);
     }
 
     public KhachHang add(KhachHang kh) {
@@ -55,12 +54,14 @@ public class KhachHangService {
             o.setNgaySinh(kh.getNgaySinh());
             o.setSdt(kh.getSdt());
             o.setTrangThai(kh.getTrangThai());
+            o.setNgaycapnhap(java.time.LocalDateTime.now());
             return khachHangRepository.save(o);
         }).orElse(null);
     }
-    public KhachHang deleteTrangThai(Long id){
+
+    public KhachHang updateTrangThaiToInactive(Long id) {
         Optional<KhachHang> optional = khachHangRepository.findById(id);
-        return optional.map(o-> {
+        return optional.map(o -> {
             o.setTrangThai(0);
             return khachHangRepository.save(o);
         }).orElse(null);
@@ -70,22 +71,19 @@ public class KhachHangService {
         return khachHangRepository.existsById(id);
     }
 
-    public Boolean existsByTen(String ten) {
-        return khachHangRepository.findByTen(ten).size() > 0;
-    }
-
     public KhachHang findById(Long id) {
         Optional<KhachHang> optional = khachHangRepository.findById(id);
         return optional.orElse(null);
     }
+
     public List<KhachHang> search(String keyword) {
         List<KhachHang> allKhachHangs = khachHangRepository.findAll();
 
         return allKhachHangs.stream()
                 .filter(kh ->
-                                kh.getTen().toLowerCase().contains(keyword.toLowerCase()) ||
-                                        kh.getMa().toLowerCase().contains(keyword.toLowerCase()) ||
-                                        kh.getSdt().toLowerCase().contains(keyword.toLowerCase())
+                        kh.getTen().toLowerCase().contains(keyword.toLowerCase()) ||
+                                kh.getMa().toLowerCase().contains(keyword.toLowerCase()) ||
+                                kh.getSdt().toLowerCase().contains(keyword.toLowerCase())
                 )
                 .collect(Collectors.toList());
     }
