@@ -28,9 +28,6 @@ public class NhanVienSevice {
 
         return nhanVienRepository.findByTrangThai(tt,pageable);
     }
-<<<<<<< HEAD
-
-=======
     public List<NhanVien> search(String text) {
         Specification<NhanVien> specification = (root, query, criteriaBuilder) -> {
             Predicate likeTen = criteriaBuilder.like(root.get("ten"),"%"+text+"%");
@@ -40,7 +37,6 @@ public class NhanVienSevice {
         };
         return nhanVienRepository.findAll(specification);
     }
->>>>>>> 5980dc5d58a5b09f20c36a81514226b2a5f3a9d4
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
     }

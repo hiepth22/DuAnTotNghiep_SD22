@@ -28,7 +28,7 @@ public class PhieuGiamGiaController {
 
     @GetMapping("")
     public List<PhieuGiamGia> HienThi() {
-        List<PhieuGiamGia> lst = phieuGiamGiaService.getall(1);
+        List<PhieuGiamGia> lst = phieuGiamGiaService.getall();
         return lst;
     }
     @GetMapping("/{id}")
