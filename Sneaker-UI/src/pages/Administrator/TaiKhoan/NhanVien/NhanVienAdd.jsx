@@ -99,9 +99,9 @@ const NhanVienAdd = () => {
                     if (nv.data.anh) {
                         setPreview(buildCloudinaryUrl(nv.data.anh));
                         setProfileImage(nv.data.anh)
-
+                   
                     }
-
+                console.log(buildCloudinaryUrl(nv.data.anh));
                 })
                 .catch((error) => {
                     console.log(error);
@@ -141,9 +141,9 @@ const NhanVienAdd = () => {
         if (!vaiTro.trim()) {
             newErrors.vaiTro = "Vai trò không được để trống";
         }
-        // if (errors || !profileImage) {
-        //     newErrors.anh = "vui lòng chọn ảnh";
-        // }
+        if (errors || !profileImage) {
+            newErrors.anh = "vui lòng chọn ảnh";
+        }
         if (!matKhau.trim()) {
             newErrors.matKhau = "Mật khẩu không được để trống";
         } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(matKhau)) {
@@ -280,9 +280,9 @@ const NhanVienAdd = () => {
                                     position: "relative",
                                 }}
                             >
-                                {imagePreview ? (
+                                {preview ? (
                                     <img
-                                        src={imagePreview}
+                                        src={preview}
                                         alt="Preview"
                                         style={{
                                             width: "100%",
