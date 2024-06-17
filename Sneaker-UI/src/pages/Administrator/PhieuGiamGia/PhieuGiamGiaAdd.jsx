@@ -6,12 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { add, update, detail } from '../../../services/PhieuGiamGiaService';
 import { useNavigate, useParams } from 'react-router-dom';
 
+
 const getDateNow = () => {
     return moment().format("YYYY-MM-DD");
 };
 
 export const convertDate = (date) => {
-    return moment(date).format("YYYY-MM-DD");
+    return moment(date).format("YYYY-MM-DD HH:mm:ss");
 };
 
 const PhieuGiamGiaAdd = () => {
@@ -36,7 +37,6 @@ const PhieuGiamGiaAdd = () => {
         if (id) {
             detail(id)
                 .then((pgg) => {
-                    console.log("Data from API:", pgg.data);
                     setMa(pgg.data.ma);
                     setTen(pgg.data.ten);
                     setSoLuong(pgg.data.soLuong);
@@ -44,10 +44,14 @@ const PhieuGiamGiaAdd = () => {
                     setDieuKienGiam(pgg.data.dieuKienGiam);
                     setGiamToiDa(pgg.data.giamToiDa);
                     setGiaTriGiam(pgg.data.giaTriGiam);
-                    setNgayBatDau(convertDate(pgg.data.ngayBatDau));
-                    setNgayKetThuc(convertDate(pgg.data.setNgayKetThuc));
-                    setNgayTao(convertDate(pgg.data.ngayTao));
-                    setNgayCapNhat(convertDate(pgg.data.setngayCapNhat));
+                    setNgayBatDau(moment(pgg.data.ngayBatDau).format('YYYY-MM-DDTHH:mm'));
+                    setNgayKetThuc(moment(pgg.data.ngayKetThuc).format('YYYY-MM-DDTHH:mm'));
+                    setNgayTao(moment(pgg.data.ngayTao).format('YYYY-MM-DDTHH:mm'));
+                    setNgayCapNhat(moment(pgg.data.ngayCapNhat).format('YYYY-MM-DDTHH:mm'));
+                    // setNgayBatDau(convertDate(pgg.data.ngayBatDau));
+                    // setNgayKetThuc(convertDate(pgg.data.setNgayKetThuc));
+                    // setNgayTao(convertDate(pgg.data.ngayTao));
+                    // setNgayCapNhat(convertDate(pgg.data.setngayCapNhat));
                     setNguoiTao(pgg.data.nguoiTao);
                     setNguoiCapNhat(pgg.data.nguoiCapNhat);
                     setTrangThai(pgg.data.trangThai.toString());
@@ -59,21 +63,18 @@ const PhieuGiamGiaAdd = () => {
     },);
 
 
-    const triggerFileInput = () => {
-        document.getElementById('fileInput').click();
-    };
-
     const cancel = () => {
         navigate('/admin/phieu-giam-gia');
     };
 
     const savePhieuGiamGia = async (p) => {
         p.preventDefault();
-        const ngayTao = getDateNow();
-        const ngayCapNhat = getDateNow();
-        const ngayBatDau = getDateNow();
-        const ngayKetThuc = getDateNow();
-
+      
+        const formattedNgayBatDau = moment(ngayBatDau).format('YYYY-MM-DD HH:mm:ss');
+        const formattedNgayKetThuc = moment(ngayKetThuc).format('YYYY-MM-DD HH:mm:ss');
+        const formattedNgayTao = moment(ngayTao).format('YYYY-MM-DD HH:mm:ss');
+        const formattedNgayCapNhat = moment(ngayCapNhat).format('YYYY-MM-DD HH:mm:ss');
+      
         const pggData = {
             ma,
             ten,
@@ -82,12 +83,13 @@ const PhieuGiamGiaAdd = () => {
             dieuKienGiam,
             giamToiDa,
             giaTriGiam,
-            ngayBatDau,
-            ngayKetThuc,
-            ngayTao,
-            ngayCapNhat,
+            ngayBatDau: formattedNgayBatDau,
+            ngayKetThuc: formattedNgayKetThuc,
+            ngayTao: formattedNgayTao,
+            ngayCapNhat: formattedNgayCapNhat,
             nguoiTao,
             nguoiCapNhat,
+            trangThai,
         };
 
         if (id) {
@@ -106,6 +108,7 @@ const PhieuGiamGiaAdd = () => {
                 console.log(response)
                 toast.success('Thêm Thành công!');
                 navigate('/admin/phieu-giam-gia');
+                console.log(pggData)
             } catch (error) {
                 console.error('Error:', error);
                 toast.warning('Thêm Thất bại!!!');
@@ -216,7 +219,7 @@ const PhieuGiamGiaAdd = () => {
                                                 <div className="form-group">
                                                     <label className="form-label"> Ngày Bắt Đầu :</label>
                                                     <input
-                                                        type="date"
+                                                        type="datetime-local"
                                                         placeholder="Nhập ngày bắt đầu"
                                                         name="ngayBatDau"
                                                         value={ngayBatDau}
@@ -228,7 +231,7 @@ const PhieuGiamGiaAdd = () => {
                                                 <div className="form-group">
                                                     <label className="form-label"> Ngày Kết Thúc:</label>
                                                     <input
-                                                        type="date"
+                                                        type="datetime-local"
                                                         placeholder="Nhập ngày kết thúc"
                                                         name="ngayKetThuc"
                                                         value={ngayKetThuc}
@@ -240,7 +243,7 @@ const PhieuGiamGiaAdd = () => {
                                                 <div className="form-group">
                                                     <label className="form-label"> Ngày Tạo :</label>
                                                     <input
-                                                        type="date"
+                                                        type="datetime-local"
                                                         placeholder="Nhập ngày tạo"
                                                         name="ngayTao"
                                                         value={ngayTao}
@@ -252,7 +255,7 @@ const PhieuGiamGiaAdd = () => {
                                                 <div className="form-group">
                                                     <label className="form-label"> Ngày Cập Nhật :</label>
                                                     <input
-                                                        type="date"
+                                                        type="datetime-local"
                                                         placeholder="Nhập ngày cập nhật"
                                                         name="ngayCapNhat"
                                                         value={ngayCapNhat}
