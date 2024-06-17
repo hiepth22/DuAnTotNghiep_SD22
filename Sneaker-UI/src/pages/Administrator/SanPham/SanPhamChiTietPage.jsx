@@ -4,6 +4,7 @@ import SanPhamChiTietService from "../../../services/SanPhamService/SanPhamChiTi
 import { useParams } from "react-router-dom";
 import { Space, Table, Tag, Typography, Card, Button } from "antd";
 import formatPrice from "../../../utils/FormatPrice";
+import moment from "moment";
 
 function SanPhamChiTietPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,12 +50,24 @@ function SanPhamChiTietPage() {
       render: (_, __, index) => (currentPage - 1) * pageSize + index + 1,
     },
     {
+      title: "Mã",
+      dataIndex: "ma",
+      render: (text) => <Typography>{text}</Typography>,
+    },
+    {
       title: "Tên",
       dataIndex: "ten",
       render: (text, record) => (
         <>
           <Typography.Text>Giày {record.sanPham.ten}</Typography.Text>
         </>
+      ),
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "ngayTao",
+      render: (text) => (
+        <Typography>{moment(text).format("DD-MM-yyyy")}</Typography>
       ),
     },
     {
@@ -128,7 +141,7 @@ function SanPhamChiTietPage() {
           <Table
             columns={columns}
             dataSource={sanPhamChiTiet}
-            key={"key"}
+            rowKey={(record) => record.id}
             pagination={{
               pageSize,
               onChange: (page) => setCurrentPage(page),

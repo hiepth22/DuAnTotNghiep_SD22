@@ -26,6 +26,7 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import formatPrice from "../../../utils/FormatPrice";
+import getDateNow from "../../../utils/GetDateNow";
 
 function SanPhamAddPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -148,6 +149,7 @@ function SanPhamAddPage() {
           ma: `SP00${sanPham.id}${mauSac.id}${kichCo.id}${randomChuoi()}`,
           mauSac: { id: color },
           kichCo: { id: size },
+          ngayTao: getDateNow(),
         });
       }
     }
