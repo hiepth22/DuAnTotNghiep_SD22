@@ -32,7 +32,6 @@ const buildCloudinaryUrl = (publicId) => {
   return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
 };
 
-
 const BanTaiQuayPage: React.FC = () => {
   const [tabState, setTabState] = useState<{
     activeKey: string;
@@ -185,7 +184,6 @@ const BanTaiQuayPage: React.FC = () => {
 
 const HoaDonChiTietTab: React.FC<{ idHoaDon: number }> = ({ idHoaDon }) => {
   const { isPending, data } = hoaDonChiTietDataByIdHD(idHoaDon);
-
 
   const dataSource = data?.map((item, index) => ({
     ...item,

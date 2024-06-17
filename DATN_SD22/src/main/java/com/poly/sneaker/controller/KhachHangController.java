@@ -1,12 +1,14 @@
 package com.poly.sneaker.controller;
 
 import com.poly.sneaker.entity.KhachHang;
+import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.service.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -44,8 +46,9 @@ public class KhachHangController {
     public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<KhachHang> khachHangPage = service.phanTrang(pageable, 1);
-        List<KhachHang> list = khachHangPage.getContent().stream().sorted(Comparator.comparing(KhachHang::getId)).collect(Collectors.toList());
-        Collectors.toList();
+        List<KhachHang> list = khachHangPage.getContent().stream()
+                .sorted(Comparator.comparing(KhachHang::getId))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
 
@@ -53,10 +56,7 @@ public class KhachHangController {
     public ResponseEntity<?> add(@RequestBody @Valid KhachHang kh, BindingResult rs) {
         if (rs.hasErrors()) {
             List<ObjectError> list = rs.getAllErrors();
-            return ResponseEntity.ok(list);
-        }
-        if (service.existsByTen(kh.getTen())) {
-            return ResponseEntity.ok("Tên đã tồn tại");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(list);
         }
 
         service.add(kh);
@@ -83,9 +83,17 @@ public class KhachHangController {
     public ResponseEntity<?> search(@RequestParam String keyword) {
         List<KhachHang> resultList = service.search(keyword);
         if (resultList.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(resultList);
     }
 
+
+    @PutMapping("tt/{id}")
+    public ResponseEntity<?> updateTT(@PathVariable("id") Long id) {
+        if (!service.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy");
+        }
+        return ResponseEntity.ok(service.updateTrangThaiToInactive(id));
+    }
 }

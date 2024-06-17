@@ -4,11 +4,13 @@ import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.repository.NhanVienRepository;
 import com.poly.sneaker.service.NhanVienSevice;
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,17 +27,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/nhan-vien")
 @CrossOrigin("*")
 public class NhanVienController {
+
     @Autowired
     private NhanVienSevice sevice;
-    private NhanVienRepository repo;
 
+    @Autowired
+    private NhanVienRepository rpo;
 
-
-//    @GetMapping("")
-//    public List<NhanVien> HienThi() {
-//        List<NhanVien> lst = sevice.getall1(1);
-//       return lst;
-//    }
+    @GetMapping("/")
+    public List<NhanVien> HienThi() {
+        List<NhanVien> lst = sevice.getall1(1);
+       return lst;
+    }
+    @GetMapping("")
+    public ResponseEntity<?> searchNhanViens(@RequestParam("keyword") String keyword, Pageable pageable) {
+        Page<NhanVien> resultPage = sevice.findByTen(keyword, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id")));
+        return ResponseEntity.ok(resultPage.getContent());
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {
@@ -55,6 +63,9 @@ public class NhanVienController {
         sevice.Add(nv);
         return ResponseEntity.ok("thêm thành công");
     }
+public void anḥ̣̣̣(){
+
+}
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         if (!sevice.existsById(id)) {

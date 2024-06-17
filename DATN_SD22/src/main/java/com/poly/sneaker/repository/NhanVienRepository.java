@@ -3,16 +3,25 @@ package com.poly.sneaker.repository;
 import com.poly.sneaker.entity.NhanVien;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface NhanVienRepository extends JpaRepository<NhanVien,Long> {
-    List<NhanVien> findByTen(String ten);
+    @Query(value = "select * from nhan_vien n where " +
+            "n.ten collate SQL_Latin1_General_CP1_CI_AI like %:keyword% " +
+            "or n.ma collate SQL_Latin1_General_CP1_CI_AI like %:keyword% " +
+            "or n.sdt collate SQL_Latin1_General_CP1_CI_AI like %:keyword% " +
+            "or n.diachi collate SQL_Latin1_General_CP1_CI_AI like %:keyword% " +
+            "or n.cccd collate SQL_Latin1_General_CP1_CI_AI like %:keyword% " +
+            "or n.email collate SQL_Latin1_General_CP1_CI_AI like %:keyword%", nativeQuery = true)
+    Page<NhanVien> findByTen(@Param("keyword") String ten, Pageable pageable);
+
     List<NhanVien> findByTrangThai(int tt);
     Page<NhanVien> findByTrangThai(int trangThai, Pageable pageable);
-    List<NhanVien> findAll(Specification<NhanVien> spec);
+
 }

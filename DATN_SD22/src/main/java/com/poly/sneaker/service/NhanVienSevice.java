@@ -2,11 +2,9 @@ package com.poly.sneaker.service;
 
 import com.poly.sneaker.entity.NhanVien;
 import com.poly.sneaker.repository.NhanVienRepository;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +22,9 @@ public class NhanVienSevice {
         return nhanVienRepository.findByTrangThai(tt);
     }
     public Page<NhanVien> page(Pageable pageable,int tt) {
-
-
         return nhanVienRepository.findByTrangThai(tt,pageable);
     }
+<<<<<<< HEAD
     public List<NhanVien> search(String text) {
         Specification<NhanVien> specification = (root, query, criteriaBuilder) -> {
             Predicate likeTen = criteriaBuilder.like(root.get("ten"),"%"+text+"%");
@@ -37,6 +34,9 @@ public class NhanVienSevice {
         };
         return nhanVienRepository.findAll(specification);
     }
+=======
+
+>>>>>>> 0abb6bed0692c1b1bf9839106819a926e41ad6db
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
     }
@@ -77,13 +77,12 @@ public class NhanVienSevice {
             return nhanVienRepository.save(o);
         }).orElse(null);
     }
-
     public Boolean existsById(Long id) {
         return nhanVienRepository.existsById(id);
     }
 
-    public Boolean existsByTen(String tt) {
-        return nhanVienRepository.findByTen(tt).size() > 0;
+     public Page<NhanVien> findByTen(String keyword, Pageable pageable) {
+        return nhanVienRepository.findByTen(keyword, pageable);
     }
     public Boolean trangthai(int tt) {
         return nhanVienRepository.findByTrangThai(tt).size() > 0;

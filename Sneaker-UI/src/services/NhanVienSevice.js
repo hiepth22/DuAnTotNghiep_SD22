@@ -18,3 +18,8 @@ export const addNhanVien = async (nhanVien) => {
   export const updateNhanvien=  (nhanVienid,nhanVien) => axios.put(API_BASE_URL+'/'+nhanVienid,nhanVien);
   export const updatett=  (nhanVienid) => axios.put(API_BASE_URL+'/tt/'+nhanVienid);
   export const phantrangsevice = (page) => axios.get(API_BASE_URL + '/page?page=' + page);
+  export const phantrangSearch = (kyword, page) => {
+    const url = `http://localhost:3000/nhan-vien?keyword=${kyword}&page=${page}`;
+    return axios.get(url);
+  };
+  

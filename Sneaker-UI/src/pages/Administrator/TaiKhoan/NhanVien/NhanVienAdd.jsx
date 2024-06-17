@@ -8,10 +8,9 @@ import {
     detailNhanvien,
     updateNhanvien,
 } from "../../../../services/NhanVienSevice";
-import { Spin } from "antd";
+
 import { useNavigate, useParams } from "react-router-dom";
-import { set } from "date-fns";
-import { SoundTwoTone } from "@ant-design/icons";
+;
 
 const getDateNow = () => {
     return moment().format("YYYY-MM-DD HH:mm:ss");
@@ -38,7 +37,7 @@ const NhanVienAdd = () => {
     const [vaiTro, setVaiTro] = useState("");
     const [trangThai, setTrangThai] = useState("");
     const [diachi, setdiachi] = useState("");
-
+    const [error, setError] = useState(null);
     const [profileImage, setProfileImage] = useState("");
     const [imagePreview, setImagePreview] = useState(null);
     const [isloading, setItLoading] = useState(false);
@@ -183,10 +182,20 @@ const NhanVienAdd = () => {
             }
         } else {
             try {
-                const response = await addNhanVien(nhanVienData);
-                console.log(response);
-                navigate("/admin/nhan-vien");
-                toast.success("Nhân viên được thêm thành công!");
+                if ( !ten || !ma || !sdt || !ngaySinh || !email || !gioiTinh || !cccd || !matKhau || !vaiTro || !trangThai || !diachi) {
+
+
+                    toast.error("Vui lòng điền đầy đủ thông tin.");
+                    setError("Vui lòng điền đầy đủ thông tin.");
+                    return;
+                }
+                else{
+                    const response = await addNhanVien(nhanVienData);
+                    console.log(response);
+                    navigate("/admin/nhan-vien");
+                    toast.success("Nhân viên được thêm thành công!");
+                }
+                
             } catch (error) {
                 console.error("Error:", error);
                 toast.warning("Thêm thất bại");
