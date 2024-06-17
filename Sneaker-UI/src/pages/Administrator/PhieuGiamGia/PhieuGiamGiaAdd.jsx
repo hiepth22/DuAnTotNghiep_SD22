@@ -28,8 +28,7 @@ const PhieuGiamGiaAdd = () => {
     const [ngayCapNhat, setNgayCapNhat] = useState('');
     const [nguoiTao, setNguoiTao] = useState('');
     const [nguoiCapNhat, setNguoiCapNhat] = useState('');
-    const [trangThai, setTrangThai] = useState(''); 
-
+    const [trangThai, setTrangThai] = useState('');
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -49,8 +48,8 @@ const PhieuGiamGiaAdd = () => {
                     setNgayKetThuc(convertDate(pgg.data.setNgayKetThuc));
                     setNgayTao(convertDate(pgg.data.ngayTao));
                     setNgayCapNhat(convertDate(pgg.data.setngayCapNhat));
-                    setNguoiTao(convertDate(pgg.data.nguoiTao));
-                    setNguoiCapNhat(convertDate(pgg.data.nguoiCapNhat));
+                    setNguoiTao(pgg.data.nguoiTao);
+                    setNguoiCapNhat(pgg.data.nguoiCapNhat);
                     setTrangThai(pgg.data.trangThai.toString());
                 })
                 .catch((error) => {
@@ -127,7 +126,7 @@ const PhieuGiamGiaAdd = () => {
                         <p></p>
                         <div className="card-body">
                             <form onSubmit={savePhieuGiamGia}>
-                                <div className="row mb-3">                                  
+                                <div className="row mb-3">
                                     <div className="col-md-12">
                                         <div className="row">
                                             <div className="col-md-6">
@@ -176,7 +175,7 @@ const PhieuGiamGiaAdd = () => {
                                                         <option value="true">Giảm theo %</option>
                                                         <option value="false">Giảm tiền </option>
                                                     </select>
-                                                </div>                                               
+                                                </div>
                                                 <div className="form-group">
                                                     <label className="form-label">Điều Kiện Giảm :</label>
                                                     <input
@@ -187,8 +186,8 @@ const PhieuGiamGiaAdd = () => {
                                                         className="form-control"
                                                         onChange={(p) => setDieuKienGiam(p.target.value)}
                                                     />
-                                                </div>    
-                                                 <div className="form-group">
+                                                </div>
+                                                <div className="form-group">
                                                     <label className="form-label"> Giảm Tối Đa :</label>
                                                     <input
                                                         type="number"
@@ -213,7 +212,7 @@ const PhieuGiamGiaAdd = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="col-md-6">                                                                                                                                  
+                                            <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="form-label"> Ngày Bắt Đầu :</label>
                                                     <input
@@ -296,7 +295,6 @@ const PhieuGiamGiaAdd = () => {
                                                     >
                                                         <option value="1">Hoạt động</option>
                                                         <option value="0"> Ngừng Hoạt động</option>
-                                                        <option value="2">Sắp diễn ra </option>
                                                     </select>
                                                 </div>
                                             </div>

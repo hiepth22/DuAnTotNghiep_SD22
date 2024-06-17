@@ -19,7 +19,11 @@ function PhieuGiamGiaPage() {
     };
 
     const trangThai = (tt) => {
-        return tt ? "Hoạt Động" : "Ngưng Hoạt Động";
+        return (
+            <span className={tt ? 'status-active' : 'status-inactive'}>
+                {tt ? "Hoạt Động" : "Ngưng Hoạt Động"}
+            </span>
+        );
     };
 
 
@@ -114,6 +118,22 @@ function PhieuGiamGiaPage() {
     };
     return (
         <div className="container mt-4">
+            <style>
+                {`
+                    .status-active {
+                        background-color: green;
+                        color: white;
+                        padding: 5px;
+                        border-radius: 5px;
+                    }
+                    .status-inactive {
+                        background-color: red;
+                        color: white;
+                        padding: 5px;
+                        border-radius: 5px;
+                    }
+                `}
+            </style>
             <form className="d-flex">
                 <div className="row">
                     <div className="col-md-4 mb-3">
@@ -124,9 +144,8 @@ function PhieuGiamGiaPage() {
                             aria-label="Tìm kiếm"
                             aria-describedby="search-addon"
                         />
-                        
-                    </div>
 
+                    </div>
                     <div className="col-md-4 mb-3">
                         <div className="combo d-flex align-items-center">
                             <label className="mr-2">Trạng Thái:</label>
@@ -134,11 +153,9 @@ function PhieuGiamGiaPage() {
                                 <option>Chọn trạng thái  ..... </option>
                                 <option value="1">Hoạt Động</option>
                                 <option value="0">Không Hoạt Động</option>
-                                <option value="2">Sắp diễn ra </option>
 
                             </select>
                         </div>
-
                     </div>
 
                     <div className="col-md-4 mb-3">
@@ -170,7 +187,7 @@ function PhieuGiamGiaPage() {
             </form>
             <div className="h6">
                 <h1 className="p-3 mb-2 bg-info text-white" style={{ borderRadius: '20px', padding: '25px', marginBottom: '25px' }}>
-                    <i className="fa-solid fa-list bg-primary" ></i> 
+                    <i className="fa-solid fa-list bg-primary" ></i>
                     Danh Sách Phiếu Giảm Giá
                 </h1>
             </div>
@@ -181,7 +198,7 @@ function PhieuGiamGiaPage() {
                 style={{
                     display: 'block',
                     marginBottom: '20px'
-                }}> Thêm  </button>
+                }}> +  Thêm  </button>
 
             <table className="table table-hover text-center">
                 <thead className="thead-dark" >
@@ -226,8 +243,7 @@ function PhieuGiamGiaPage() {
                                 <td className="text-center">
                                     <button className="btn btn-success me-2" onClick={() => updatePGG(phieuGiamGia.id)}><i className="fa-solid fa-pen"></i></button>
                                     <button type="button" className="btn btn-warning me-2" onClick={() => openDetailModal(phieuGiamGia.id)}><i className="fa-solid fa-eye"></i></button>
-                                    <button type="button" className="btn btn-info me-2" ><i className="bi bi-geo-alt-fill"></i></button>
-                                    <button type="button" className="btn btn-danger"> <i className="bi bi-trash3"></i> </button>
+                                    <button type="button" className="btn btn-danger" onClick={() => deletePGG(phieuGiamGia.id)}>  <i className="bi bi-trash3"></i> </button>
                                 </td>
                             </tr>
                         ))
@@ -267,8 +283,8 @@ function PhieuGiamGiaPage() {
                                         <p style={modalStyles.modalBodyP}><strong>Ngày Kết Thúc:</strong> {moment(selectedPGG.ngayKetThuc).format('YYYY-MM-DD')}</p>
                                         <p style={modalStyles.modalBodyP}><strong>Ngày Tạo:</strong> {moment(selectedPGG.ngayTao).format('YYYY-MM-DD')}</p>
                                         <p style={modalStyles.modalBodyP}><strong>Ngày Cập Nhật:</strong> {moment(selectedPGG.ngayCapNhat).format('YYYY-MM-DD')}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Người Tạo:</strong> {moment(selectedPGG.nguoiTao).format('YYYY-MM-DD')}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Người Cập Nhật:</strong> {moment(selectedPGG.nguoiCapNhat).format('YYYY-MM-DD')}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Người Tạo:</strong> {selectedPGG.nguoiTao}</p>
+                                        <p style={modalStyles.modalBodyP}><strong>Người Cập Nhật:</strong> {selectedPGG.nguoiCapNhat}</p>
                                         <p style={modalStyles.modalBodyP}><strong>Trạng Thái:</strong> {trangThai(selectedPGG.trangThai)}</p>
                                     </div>
                                 </div>

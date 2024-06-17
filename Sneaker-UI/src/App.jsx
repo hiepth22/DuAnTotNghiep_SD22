@@ -68,6 +68,14 @@ function App() {
             <Route path="co-giay" element={<CoGiayPage />}></Route>
 
             <Route path="phieu-giam-gia" element={<PhieuGiamGiaPage />}></Route>
+            <Route
+              path="phieugiamgia-add"
+              element={<PhieuGiamGiaAdd />}
+            ></Route>
+            <Route
+              path="phieugiamgia-add/:id"
+              element={<PhieuGiamGiaAdd />}
+            ></Route>
 
             <Route path="hoa-don" element={<HoaDonPage />}></Route>
 
