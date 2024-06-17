@@ -431,7 +431,7 @@ const NhanVienAdd = () => {
                                                     name="gioiTinh"
                                                     id="nam"
                                                     value="true"
-                                                    checked={gioiTinh === "true"}
+                                                    checked={gioiTinh === true}
                                                     onChange={(e) => setGioiTinh(e.target.value)}
                                                 />
                                                 <label className="form-check-label" htmlFor="nam">Nam</label>
@@ -443,7 +443,7 @@ const NhanVienAdd = () => {
                                                     name="gioiTinh"
                                                     id="nu"
                                                     value="false"
-                                                    checked={gioiTinh === "false"}
+                                                    checked={gioiTinh === false}
                                                     onChange={(e) => setGioiTinh(e.target.value)}
                                                 />
                                                 <label className="form-check-label" htmlFor="nu">Nữ</label>
