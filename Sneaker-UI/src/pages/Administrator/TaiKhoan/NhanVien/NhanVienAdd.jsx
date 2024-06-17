@@ -138,12 +138,12 @@ const NhanVienAdd = () => {
         if (!diachi.trim()) {
             newErrors.diachi = "Địa chỉ không được để trống";
         }
-        if (!vaiTro.trim()) {
-            newErrors.vaiTro = "Vai trò không được để trống";
-        }
-        if (errors || !profileImage) {
-            newErrors.anh = "vui lòng chọn ảnh";
-        }
+        // if (!vaiTro.trim()) {
+        //     newErrors.vaiTro = "Vai trò không được để trống";
+        // }
+        // if (errors || !profileImage) {
+        //     newErrors.anh = "vui lòng chọn ảnh";
+        // }
         if (!matKhau.trim()) {
             newErrors.matKhau = "Mật khẩu không được để trống";
         } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(matKhau)) {
@@ -432,7 +432,7 @@ const NhanVienAdd = () => {
                                                     id="nam"
                                                     value="true"
                                                     checked={gioiTinh === true}
-                                                    onChange={(e) => setGioiTinh(e.target.value)}
+                                                    onChange={(e) => setGioiTinh(true)}
                                                 />
                                                 <label className="form-check-label" htmlFor="nam">Nam</label>
                                             </div>
@@ -444,7 +444,7 @@ const NhanVienAdd = () => {
                                                     id="nu"
                                                     value="false"
                                                     checked={gioiTinh === false}
-                                                    onChange={(e) => setGioiTinh(e.target.value)}
+                                                    onChange={(e) => setGioiTinh(false)}
                                                 />
                                                 <label className="form-check-label" htmlFor="nu">Nữ</label>
                                             </div>
