@@ -45,7 +45,7 @@ function SanPhamAddPage() {
   const [thuongHieus, setThuongHieus] = useState([]);
 
   const randomChuoi = () => {
-    const randomString = uuidv4().replace(/-/g, "").substring(0, 5);
+    const randomString = uuidv4().replace(/-/g, "").substring(0, 7);
     return randomString;
   };
 
@@ -65,6 +65,7 @@ function SanPhamAddPage() {
     mauSac: { id: null },
     nhaSanXuat: { id: null },
     thuongHieu: { id: null },
+    ngayTao: getDateNow(),
   });
 
   const xoaChiTietSanPham = (record, index) => {
@@ -146,7 +147,7 @@ function SanPhamAddPage() {
           ...defaultChiTietSP,
           key: uuidv4().substring(0, 3),
           ten: `${sanPham.ten} (color : ${mauSac.ten} - size : ${kichCo.ten})`,
-          ma: `SP00${sanPham.id}${mauSac.id}${kichCo.id}${randomChuoi()}`,
+          ma: `SP${sanPham.id}${mauSac.id}${kichCo.id}${randomChuoi()}`,
           mauSac: { id: color },
           kichCo: { id: size },
         });
@@ -162,7 +163,6 @@ function SanPhamAddPage() {
       toast.warning("Thiếu dữ liệu");
       return;
     }
-
     Modal.confirm({
       title: "Xác nhận",
       content: "Thêm mới sản phẩm?",
@@ -173,7 +173,6 @@ function SanPhamAddPage() {
             object.sanPham = { id: defaultChiTietSP.sanPham.id };
             object.mauSac = { id: object.mauSac.id };
             object.kichCo = { id: object.kichCo.id };
-            object.ngayTao = getDateNow();
 
             await SanPhamChiTietService.add(object);
           });
@@ -216,6 +215,26 @@ function SanPhamAddPage() {
       pre.splice(index, 1, record);
       return pre;
     });
+  };
+
+  const handleXoaBienThe = (mauSacId) => {
+    try {
+      // Tìm kiếm và loại bỏ các biến thể có mauSacId từ danh sách dataListTable
+      const updatedDataList = dataListTable.filter(
+        (item) => item[0]?.mauSac?.id !== mauSacId
+      );
+
+      // Cập nhật lại state với danh sách đã được loại bỏ các biến thể
+      setDataListTable(updatedDataList);
+
+      // Hiển thị thông báo cho người dùng
+      toast.success(
+        `Đã xóa toàn bộ biến thể của sản phẩm màu ${findMauSacById(mauSacId)}`
+      );
+    } catch (error) {
+      console.error("Lỗi khi xóa biến thể:", error);
+      toast.error("Đã xảy ra lỗi khi xóa biến thể.");
+    }
   };
 
   const columns = [
@@ -539,10 +558,31 @@ function SanPhamAddPage() {
         <Card size="small" title={"Danh sách biến thể"}>
           {dataListTable.map((o, index) => (
             <Flex vertical key={index}>
-              <Flex style={{ backgroundColor: "#d9dbdd" }} justify="start">
+              <Flex
+                style={{
+                  backgroundColor: "#d9dbdd",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "8px 16px",
+                }}
+              >
                 <Typography.Title className="m-1" level={4}>
                   Các sản phẩm màu {findMauSacById(o[0]?.mauSac?.id)}
                 </Typography.Title>
+                <div>
+                  <Button
+                    type="text"
+                    onClick={() => {
+                      handleXoaBienThe(o[0]?.mauSac?.id);
+                    }}
+                    style={{ marginRight: 8 }}
+                  >
+                    <i className="fa-regular fa-trash-can"></i>
+                  </Button>
+                  <Button type="text">
+                    <i className="fa-solid fa-file-pen"></i>
+                  </Button>
+                </div>
               </Flex>
               <Table
                 columns={columns}

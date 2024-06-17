@@ -1,5 +1,6 @@
 package com.poly.sneaker.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "san_pham_chi_tiet")
@@ -81,4 +83,14 @@ public class SanPhamChiTiet {
     @ManyToOne
     @JoinColumn(name = "idDanhMuc", referencedColumnName = "id")
     private DanhMuc danhMuc;
+
+    private String nguoiTao;
+
+    private String nguoiCapNhat;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    private Timestamp ngayTao;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    private Timestamp ngayCapNhat;
 }

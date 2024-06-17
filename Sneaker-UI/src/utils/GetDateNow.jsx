@@ -5,7 +5,7 @@ const getDateNow = () => {
 };
 
 export const convertDate = (date) => {
-  return moment(date).format("YYYY-MM-DD hh:mm:ss");
+  return moment(date).format("YYYY-MM-DD");
 };
 
 export default getDateNow;
