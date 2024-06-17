@@ -50,5 +50,10 @@ public class KhachHang {
 
     @Column(name = "trangThai")
     private Integer trangThai;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    @Column(name = "ngaytao")
+    private LocalDateTime ngaytao;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    @Column(name = "ngaycapnhat")
+    private LocalDateTime ngaycapnhap;
 }

@@ -24,7 +24,19 @@ public class NhanVienSevice {
     public Page<NhanVien> page(Pageable pageable,int tt) {
         return nhanVienRepository.findByTrangThai(tt,pageable);
     }
+<<<<<<< HEAD
+    public List<NhanVien> search(String text) {
+        Specification<NhanVien> specification = (root, query, criteriaBuilder) -> {
+            Predicate likeTen = criteriaBuilder.like(root.get("ten"),"%"+text+"%");
+            Predicate likesdt = criteriaBuilder.like(root.get("sdt"),"%"+text+"%");
 
+            return  criteriaBuilder.or(likeTen,likesdt);
+        };
+        return nhanVienRepository.findAll(specification);
+    }
+=======
+
+>>>>>>> 0abb6bed0692c1b1bf9839106819a926e41ad6db
     public NhanVien Add(NhanVien Nv) {
         return nhanVienRepository.save(Nv);
     }

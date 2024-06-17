@@ -25,6 +25,7 @@ import NhanVienPage from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienPage";
 import NhanVienAdd from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienAdd";
 import KhachHangPage from "./pages/Administrator/TaiKhoan/KhachHang/KhachHangPage";
 import KhachHangAdd from "./pages/Administrator/TaiKhoan/KhachHang/KhachHangAdd";
+import PhieuGiamGiaAdd from "./pages/Administrator/PhieuGiamGia/PhieuGiamGiaAdd";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -69,10 +70,20 @@ function App() {
                         <Route path="mau-sac" element={<MauSacPage />} />
                         <Route path="co-giay" element={<CoGiayPage />} />
 
+<<<<<<< HEAD
                         <Route
                             path="phieu-giam-gia"
                             element={<PhieuGiamGiaPage />}
                         />
+=======
+
+            <Route path="phieu-giam-gia" element={<PhieuGiamGiaPage />}></Route>
+            {/* phiếu giảm giá  */}
+            <Route path="phieu-giam-gia" element={< PhieuGiamGiaPage />} ></Route>
+            <Route path="phieugiamgia-add" element={< PhieuGiamGiaAdd />}></Route>
+            <Route path="phieugiamgia-add/:id" element={< PhieuGiamGiaAdd />}></Route>
+
+>>>>>>> 31fffbfdf330ce56a66699386060847f66222ee7
 
                         <Route path="hoa-don" element={<HoaDonPage />} />
 
