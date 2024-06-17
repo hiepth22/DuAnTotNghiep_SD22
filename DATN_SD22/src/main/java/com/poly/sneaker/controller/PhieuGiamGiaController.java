@@ -45,7 +45,7 @@ public class PhieuGiamGiaController {
     public ResponseEntity<?> add(@RequestBody @Valid PhieuGiamGia pgg, BindingResult rs) {
         if (rs.hasErrors()) {
             List<ObjectError> lst = rs.getAllErrors();
-            return ResponseEntity.ok(lst);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(lst);
         }
         phieuGiamGiaService.Add(pgg);
         return ResponseEntity.ok("thêm thành công");

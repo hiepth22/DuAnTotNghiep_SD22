@@ -4,7 +4,7 @@ import SanPhamChiTietService from "../../../services/SanPhamService/SanPhamChiTi
 import { useParams } from "react-router-dom";
 import { Space, Table, Tag, Typography, Card, Button } from "antd";
 import formatPrice from "../../../utils/FormatPrice";
-import moment from "moment";
+import { convertDate } from "../../../utils/GetDateNow";
 
 function SanPhamChiTietPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,9 +66,7 @@ function SanPhamChiTietPage() {
     {
       title: "Ngày tạo",
       dataIndex: "ngayTao",
-      render: (text) => (
-        <Typography>{moment(text).format("DD-MM-yyyy")}</Typography>
-      ),
+      render: (text) => <Typography.Text>{convertDate(text)}</Typography.Text>,
     },
     {
       title: "Màu sắc",

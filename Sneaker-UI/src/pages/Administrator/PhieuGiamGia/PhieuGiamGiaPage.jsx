@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from 'moment';
 import { GetAllPhieugiamgia, detail, phantrangservice, deletePGG } from '../../../services/PhieuGiamGiaService';
-
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -9,7 +8,7 @@ function PhieuGiamGiaPage() {
     const [phieuGiamGias, setPGG] = useState([]);
     const [selectedPGG, setSelectedPGG] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [originalData, setOriginalData] = useState([]);
     const nav = useNavigate();
     const pageSize = 5;
@@ -48,6 +47,7 @@ function PhieuGiamGiaPage() {
     const updatePGG = (id) => {
         nav(`/admin/phieugiamgia-add/${id}`);
     };
+
     const openDetailModal = (id) => {
         detail(id).then((response) => {
             setSelectedPGG(response.data);
@@ -265,7 +265,7 @@ function PhieuGiamGiaPage() {
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header" style={modalStyles.modalHeader}>
-                                <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> </h5>
+                                <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> Chi Tiết Phiếu Giảm Giá </h5>
                                 <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
                             </div>
                             <div className="modal-body" style={modalStyles.modalBody}>

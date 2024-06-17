@@ -440,7 +440,6 @@ CREATE TABLE [dbo].[phieu_giam_gia](
 	[dieuKienGiam] [decimal](18, 0) NULL,
 	[giaTriGiam] [decimal](18, 0) NULL,
 	[giamToiDa] [decimal](18, 0) NULL,
-	[tongTien] [decimal](18, 0) NULL,
 	[ngayBatdau] [datetime] NULL,
 	[ngayKetThuc] [datetime] NULL,
 	[ngayTao] [datetime] NULL,
@@ -634,3 +633,7 @@ USE [master]
 GO
 ALTER DATABASE [DATN_PTPM_SD22] SET  READ_WRITE 
 GO
+
+
+select * from phieu_giam_gia
+ 

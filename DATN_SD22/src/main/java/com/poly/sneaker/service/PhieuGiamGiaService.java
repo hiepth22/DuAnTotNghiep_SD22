@@ -20,7 +20,8 @@ public class PhieuGiamGiaService {
     public List<PhieuGiamGia> getall() {
 
         return phieuGiamGiaRepository.findAll();
-    }public List<PhieuGiamGia> getall(int tt) {
+    }
+    public List<PhieuGiamGia> getall(int tt) {
         return phieuGiamGiaRepository.findByTrangThai(tt);
     }
     public Page<PhieuGiamGia> page(Pageable pageable,int tt) {
@@ -49,6 +50,8 @@ public class PhieuGiamGiaService {
             o.setDieuKienGiam(newpgg.getDieuKienGiam());
             o.setGiaTriGiam(newpgg.getGiaTriGiam());
             o.setGiamToiDa(newpgg.getGiamToiDa());
+            o.setNgayBatdau(newpgg.getNgayBatdau());
+            o.setNgayKetThuc(newpgg.getNgayKetThuc());
             o.setNgayTao(newpgg.getNgayTao());
             o.setNgayCapNhat(java.time.LocalDateTime.now());
             o.setNguoiTao(newpgg.getNguoiTao());
