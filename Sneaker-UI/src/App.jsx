@@ -52,9 +52,7 @@ function App() {
                             path="san-pham/add"
                             element={<SanPhamAddPage />}
                         />
-
                         <Route path="ban-tai-quay" element={<HomePage />} />
-
                         <Route path="chat-lieu" element={<ChatLieuPage />} />
                         <Route
                             path="nha-san-xuat"
@@ -69,26 +67,29 @@ function App() {
                         <Route path="kich-co" element={<KichCoPage />} />
                         <Route path="mau-sac" element={<MauSacPage />} />
                         <Route path="co-giay" element={<CoGiayPage />} />
-
-<<<<<<< HEAD
                         <Route
                             path="phieu-giam-gia"
                             element={<PhieuGiamGiaPage />}
                         />
-=======
-
-            <Route path="phieu-giam-gia" element={<PhieuGiamGiaPage />}></Route>
-            {/* phiếu giảm giá  */}
-            <Route path="phieu-giam-gia" element={< PhieuGiamGiaPage />} ></Route>
-            <Route path="phieugiamgia-add" element={< PhieuGiamGiaAdd />}></Route>
-            <Route path="phieugiamgia-add/:id" element={< PhieuGiamGiaAdd />}></Route>
-
->>>>>>> 31fffbfdf330ce56a66699386060847f66222ee7
-
+                        <Route
+                            path="phieu-giam-gia"
+                            element={<PhieuGiamGiaPage />}
+                        ></Route>
+                        {/* phiếu giảm giá  */}
+                        <Route
+                            path="phieu-giam-gia"
+                            element={<PhieuGiamGiaPage />}
+                        ></Route>
+                        <Route
+                            path="phieugiamgia-add"
+                            element={<PhieuGiamGiaAdd />}
+                        ></Route>
+                        <Route
+                            path="phieugiamgia-add/:id"
+                            element={<PhieuGiamGiaAdd />}
+                        ></Route>
                         <Route path="hoa-don" element={<HoaDonPage />} />
-
                         <Route path="thong-ke" element={<ThongKePage />} />
-
                         <Route path="nhan-vien" element={<NhanVienPage />} />
                         <Route path="nhanvien-add" element={<NhanVienAdd />} />
                         <Route
@@ -99,7 +100,6 @@ function App() {
                             path="nhan-vien/:id"
                             element={<NhanVienPage />}
                         />
-
                         <Route path="khach-hang" element={<KhachHangPage />} />
                         <Route
                             path="khachhang-add"
