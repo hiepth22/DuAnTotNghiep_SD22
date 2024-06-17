@@ -100,30 +100,6 @@ const BanTaiQuayPage: React.FC = () => {
       });
   };
 
-  const remove = (targetKey: string) => {
-    let newActiveKey = tabState.activeKey;
-    let lastIndex = -1;
-    tabState.items.forEach((item, i) => {
-      if (item.key === targetKey) {
-        lastIndex = i - 1;
-      }
-    });
-    const newPanes = tabState.items.filter(
-      (item) => item.key !== targetKey
-    );
-    if (newPanes.length && newActiveKey === targetKey) {
-      if (lastIndex >= 0) {
-        newActiveKey = newPanes[lastIndex].key;
-      } else {
-        newActiveKey = newPanes[0].key;
-      }
-    }
-    setTabState({
-      activeKey: newActiveKey,
-      items: newPanes,
-    });
-  };
-
   const onEdit = (
     e: any,
     action: "add" | "remove"
@@ -132,15 +108,15 @@ const BanTaiQuayPage: React.FC = () => {
       if (action === "add") {
         CreateHD();
       } else {
-        remove(e);
+        // remove(e);
       }
     }
   };
 
   return (
-    <div>
+    <div className="bg-white">
       <div className="flex justify-between items-center">
-        <div className="font-sans flex">
+        <div className="font-sans flex ml-5 text-xl">
           Bán Hàng Tại Quầy
         </div>
         <div className="mr-4 mt-6 flex">
@@ -160,11 +136,12 @@ const BanTaiQuayPage: React.FC = () => {
             <TabPane
               tab={item.label}
               key={item.key}
-              closable={item.key !== "1"}
+              // closable={item.key !== "1"}
+              closable={false}
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="flex justify-start items-start ">
+                  <p className="flex justify-start items-start ml-5 text-lg">
                     Danh sách sản phẩm
 
                   </p>
@@ -179,9 +156,7 @@ const BanTaiQuayPage: React.FC = () => {
             </TabPane>
           ))}
         </Tabs>
-        <div>
-          <p>Tài khoản</p>
-        </div>
+
       </div>
 
     </div>
@@ -201,6 +176,7 @@ const HoaDonChiTietTab: React.FC<{ idHoaDon: number }> = ({ idHoaDon }) => {
       dataSource={dataSource}
       columns={chiTietColumns}
       loading={isPending}
+      pagination={false}
       rowKey="id"
     />
   );

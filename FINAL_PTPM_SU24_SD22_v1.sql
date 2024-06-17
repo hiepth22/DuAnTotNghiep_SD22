@@ -503,6 +503,7 @@ GO
 CREATE TABLE [dbo].[san_pham_chi_tiet](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[ma] [nvarchar](30) NULL,
+	[ten] [nvarchar](50) null,
 	[barcode] [char](20) NULL,
 	[soLuong] [int] NULL,
 	[giaBan] [decimal](18, 0) NULL,
@@ -516,6 +517,11 @@ CREATE TABLE [dbo].[san_pham_chi_tiet](
 	[idNhaSanXuat] [bigint] NULL,
 	[idAnh] [bigint] NULL,
 	[idDanhMuc] [bigint] NULL,
+	[canNang] [int] NULL,
+	[nguoiTao] [nvarchar](50) NULL,
+	[nguoiCapNhat] [nvarchar](50) NULL, 
+	[ngayTao] [nvarchar](50) NULL,
+	[ngayCapNhat] [nvarchar](50) NULL,
 	[trangThai] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
