@@ -141,9 +141,9 @@ const NhanVienAdd = () => {
         if (!vaiTro.trim()) {
             newErrors.vaiTro = "Vai trò không được để trống";
         }
-        if (errors || !profileImage) {
-            newErrors.anh = "vui lòng chọn ảnh";
-        }
+        // if (errors || !profileImage) {
+        //     newErrors.anh = "vui lòng chọn ảnh";
+        // }
         if (!matKhau.trim()) {
             newErrors.matKhau = "Mật khẩu không được để trống";
         } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(matKhau)) {
@@ -399,7 +399,7 @@ const NhanVienAdd = () => {
                                                 name="mail"
                                                 value={email}
                                                 className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setEmail(e.target.value)}
+                                                onChange={(e) => setMail(e.target.value)}
                                             />
                                             {errors.email && (
                                                 <div className="text-danger">{errors.email}</div>
@@ -414,7 +414,7 @@ const NhanVienAdd = () => {
                                                 name="diachi"
                                                 value={diachi}
                                                 className={`form-control ${errors.diachi ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setDiachi(e.target.value)}
+                                                onChange={(e) => setdiachi(e.target.value)}
                                             />
                                             {errors.diachi && (
                                                 <div className="text-danger">{errors.diachi}</div>
