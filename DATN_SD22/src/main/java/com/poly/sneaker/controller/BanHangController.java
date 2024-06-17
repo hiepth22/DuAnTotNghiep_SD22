@@ -36,10 +36,7 @@ public class BanHangController {
 
     @PostMapping("/add-to-cart/{id}")
     public ResponseEntity<?> addCTSP(@PathVariable Long id, @RequestBody HoaDonChiTiet hoaDonChiTiet) {
-        if(hoaDonChiTietRepository.findIDHDByIDSPCT(hoaDonChiTiet.getSanPhamChiTiet().getId()) >= 1){
-//            hoaDonChiTietService.updateSoLuongSanPham(hoaDonChiTiet, id);
-            System.out.println("Có sản phẩm r");
-        }else{
+
             HoaDonChiTiet addCTSP = hoaDonChiTietService.addSPToHDCT(hoaDonChiTiet, id);
 
             if (addCTSP != null) {
@@ -47,8 +44,7 @@ public class BanHangController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn chi tiết hoặc chi tiết sản phẩm không tồn tại");
             }
-        }
-        return null;
+
 
     }
 

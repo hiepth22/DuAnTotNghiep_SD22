@@ -52,7 +52,12 @@ function App() {
                             path="san-pham/add"
                             element={<SanPhamAddPage />}
                         />
-                        <Route path="ban-tai-quay" element={<HomePage />} />
+                        {/* <Route path="ban-tai-quay" element={<HomePage />} /> */}
+                        <Route
+                            path="ban-tai-quay"
+                            element={<BanTaiQuayPage />}
+                        />
+
                         <Route path="chat-lieu" element={<ChatLieuPage />} />
                         <Route
                             path="nha-san-xuat"
