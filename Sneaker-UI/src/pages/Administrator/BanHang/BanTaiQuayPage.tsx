@@ -117,7 +117,7 @@ const BanTaiQuayPage: React.FC = () => {
     <div className="bg-white">
       <div className="flex justify-between items-center">
         <div className="font-sans flex ml-5 text-xl">
-          Bán Hàng Tại Quầy
+          Bán Hàng
         </div>
         <div className="mr-4 mt-6 flex">
           <Button onClick={CreateHD} >+ Tạo Hóa Đơn</Button>
