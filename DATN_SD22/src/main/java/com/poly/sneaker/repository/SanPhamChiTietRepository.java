@@ -37,9 +37,12 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     List<Object[]> findBySanPhamCT();
 
 
-    List<SanPham> findByMa(String ma);
+    List<SanPhamChiTiet> findByMa(String ma);
 
     @Query(value = "select * \n" +
-            "from [chi_tiet_san_pham] where idSanPham = ?1", nativeQuery = true)
+            "from [san_pham_chi_tiet] where idSanPham = ?1", nativeQuery = true)
     List<SanPhamChiTiet> findBySanPham(Long id);
+
+    @Query(value = "select top 1 * from [san_pham_chi_tiet] order by id desc", nativeQuery = true)
+    SanPhamChiTiet findTopMotCTSP();
 }

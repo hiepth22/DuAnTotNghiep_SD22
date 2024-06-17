@@ -32,6 +32,8 @@ public class SanPhamChiTiet {
 
     private String ma;
 
+    private String ten;
+
     private String barcode;
 
     private Integer soLuong;
@@ -41,6 +43,8 @@ public class SanPhamChiTiet {
     private String moTa;
 
     private Integer trangThai;
+
+    private Integer canNang;
 
     @ManyToOne
     @JoinColumn(name = "idKichCo", referencedColumnName = "id")

@@ -22,7 +22,17 @@ public class SanPhamChiTietService {
     }
 
     public SanPhamChiTiet add(SanPhamChiTiet sanPhamChiTiet) {
-        return repository.save(sanPhamChiTiet);
+        sanPhamChiTiet.setId(null);
+        SanPhamChiTiet spct = repository.findTopMotCTSP();
+        if (spct == null) {
+            String ma = "SPCT000" + 1;
+            sanPhamChiTiet.setMa(ma);
+            return repository.save(sanPhamChiTiet);
+        } else {
+            String maHD = "SPCT000" + (spct.getId() + 1);
+            sanPhamChiTiet.setMa(maHD);
+            return repository.save(sanPhamChiTiet);
+        }
     }
 
     public SanPhamChiTiet finById(Long id) {
@@ -45,6 +55,8 @@ public class SanPhamChiTietService {
             o.setGiaBan(newSPCT.getGiaBan());
             o.setMoTa(newSPCT.getMoTa());
             o.setTrangThai(newSPCT.getTrangThai());
+            o.setTen(newSPCT.getTen());
+            o.setCanNang(newSPCT.getCanNang());
 
             o.setAnh(Anh.builder().id(newSPCT.getAnh().getId()).build());
             o.setSanPham(SanPham.builder().id(newSPCT.getSanPham().getId()).build());
@@ -74,5 +86,10 @@ public class SanPhamChiTietService {
 
     public Boolean existingByMa(String ma) {
         return repository.findByMa(ma).size() > 0;
+    }
+
+    public List<SanPhamChiTiet> addToList(List<SanPhamChiTiet> sanPhamChiTiets) {
+        sanPhamChiTiets.stream().forEach(o -> System.out.println(o));
+        return repository.saveAll(sanPhamChiTiets);
     }
 }

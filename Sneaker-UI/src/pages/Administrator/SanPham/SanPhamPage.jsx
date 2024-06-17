@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SanPhamService from "../../../services/SanPhamService/SanPhamService";
+import SanPhamChiTietService from "../../../services/SanPhamService/SanPhamChiTietService";
 import { Empty, Table, Tag, Space, Button, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +14,13 @@ function SanPhamPage() {
   useEffect(() => {
     const getData = async () => {
       let response = await SanPhamService.getAll();
-      setData(response);
+      const tongSoLuong = await Promise.all(
+        response.map(async (item) => {
+          const soLuong = await SanPhamChiTietService.getAllBySP(item.id);
+          return { ...item, soLuongBienThe: soLuong.length };
+        })
+      );
+      setData(tongSoLuong);
     };
     getData();
   }, [loadData]);
@@ -31,13 +38,13 @@ function SanPhamPage() {
     },
     {
       title: "Thương hiệu",
-      dataIndex: "ten",
+      dataIndex: "thuongHieu",
       render: (text, record) => <a>{record.thuongHieu.ten}</a>,
     },
     {
-      title: "Số lượng",
-      dataIndex: "soLuong",
-      render: (text) => <a>{text}</a>,
+      title: "Số lượng biến thể",
+      dataIndex: "soLuongBienThe",
+      render: (soLuongBienThe) => <span>{soLuongBienThe}</span>,
     },
     {
       title: "Trạng thái",
@@ -53,8 +60,17 @@ function SanPhamPage() {
       title: "Hành động",
       render: (_, record) => (
         <Space>
-          <Button>Sửa</Button>
-          <Button>Chi tiết</Button>
+          <Button type="text">
+            <i className="fa-solid fa-eye"></i>
+          </Button>
+          <Button
+            type="text"
+            onClick={() => {
+              navigate("detail/" + record.id);
+            }}
+          >
+            <i className="fa-solid fa-pen-to-square"></i>
+          </Button>
         </Space>
       ),
     },

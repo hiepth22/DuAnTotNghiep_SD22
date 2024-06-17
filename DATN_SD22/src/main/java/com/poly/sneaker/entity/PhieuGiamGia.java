@@ -1,5 +1,6 @@
 package com.poly.sneaker.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,18 +49,19 @@ PhieuGiamGia {
     @Column(name = "giamToiDa")
     private BigDecimal giamToiDa;
 
-    @Column(name = "tongTien")
-    private BigDecimal tongTien;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "ngayBatdau")
     private LocalDateTime ngayBatdau;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "ngayKetThuc")
     private LocalDateTime ngayKetThuc;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "ngayTao")
     private LocalDateTime ngayTao;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "ngayCapNhat")
     private LocalDateTime ngayCapNhat;
 

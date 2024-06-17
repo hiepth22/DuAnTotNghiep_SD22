@@ -49,7 +49,6 @@ public class PhieuGiamGiaService {
             o.setDieuKienGiam(newpgg.getDieuKienGiam());
             o.setGiaTriGiam(newpgg.getGiaTriGiam());
             o.setGiamToiDa(newpgg.getGiamToiDa());
-            o.setTongTien(newpgg.getTongTien());
             o.setNgayTao(newpgg.getNgayTao());
             o.setNgayCapNhat(java.time.LocalDateTime.now());
             o.setNguoiTao(newpgg.getNguoiTao());

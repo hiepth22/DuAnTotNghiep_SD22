@@ -7,6 +7,7 @@ import KichCoService from "../../../services/SanPhamService/KichCoService";
 import MauSacService from "../../../services/SanPhamService/MauSacService";
 import NhaSanXuatService from "../../../services/SanPhamService/NhaSanXuatService";
 import ThuongHieuService from "../../../services/SanPhamService/ThuongHieuService";
+import SanPhamChiTietService from "../../../services/SanPhamService/SanPhamChiTietService";
 import {
   Table,
   Space,
@@ -19,14 +20,20 @@ import {
   Button,
   Input,
   InputNumber,
+  Modal,
 } from "antd";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import formatPrice from "../../../utils/FormatPrice";
+import getDateNow from "../../../utils/GetDateNow";
 
 function SanPhamAddPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
   const [loadData, setLoadData] = useState(false);
   const [disabledThongTin, setDisabledThongTin] = useState(false);
+  const navigate = useNavigate();
 
   const [sanPhams, setSanPhams] = useState([]);
   const [chatLieus, setChatLieus] = useState([]);
@@ -38,16 +45,17 @@ function SanPhamAddPage() {
   const [thuongHieus, setThuongHieus] = useState([]);
 
   const randomChuoi = () => {
-    const randomString = uuidv4().replace(/-/g, "").substring(0, 6);
+    const randomString = uuidv4().replace(/-/g, "").substring(0, 5);
     return randomString;
   };
 
   const [defaultChiTietSP, setDefaultChiTietSP] = useState({
-    giaBan: 100000,
-    soLuong: 10,
+    giaBan: 500000,
+    soLuong: 1,
     ma: "",
     moTa: "",
     trangThai: 1,
+    canNang: 400,
     anh: null,
     sanPham: { id: null },
     chatLieu: { id: null },
@@ -141,12 +149,73 @@ function SanPhamAddPage() {
           ma: `SP00${sanPham.id}${mauSac.id}${kichCo.id}${randomChuoi()}`,
           mauSac: { id: color },
           kichCo: { id: size },
+          ngayTao: getDateNow(),
         });
       }
     }
 
     let ds = [...danhSachSPCT, ...danhSachSanPhamChiTiet];
     setDanhSachSanPhamChiTiet([...ds]);
+  };
+
+  const handleSanPhamChiTiet = async () => {
+    if (danhSachSanPhamChiTiet.length < 1) {
+      toast.warning("Thiếu dữ liệu");
+      return;
+    }
+
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Thêm mới sản phẩm?",
+      onOk: async () => {
+        try {
+          const promises = danhSachSanPhamChiTiet.map(async (o) => {
+            let { key, ...object } = o;
+            object.sanPham = { id: defaultChiTietSP.sanPham.id };
+            object.mauSac = { id: object.mauSac.id };
+            object.kichCo = { id: object.kichCo.id };
+
+            await SanPhamChiTietService.add(object);
+          });
+
+          await Promise.all(promises);
+          toast.success("Thêm mới sản phẩm thành công");
+
+          setTimeout(() => {
+            navigate("/admin/san-pham");
+          }, 1000);
+        } catch (err) {
+          toast.error("Thất bại", err.message);
+        }
+      },
+      onCancel: () => {
+        console.log("Hủy bỏ hành động thêm sản phẩm");
+      },
+    });
+  };
+
+  const updateSoLuong = (record, index, e) => {
+    setDanhSachSanPhamChiTiet((pre) => {
+      record.soLuong = e;
+      pre.splice(index, 1, record);
+      return pre;
+    });
+  };
+
+  const updateGiaBan = (record, index, e) => {
+    setDanhSachSanPhamChiTiet((pre) => {
+      record.giaBan = e;
+      pre.splice(index, 1, record);
+      return pre;
+    });
+  };
+
+  const updateCanNang = (record, index, e) => {
+    setDanhSachSanPhamChiTiet((pre) => {
+      record.canNang = e;
+      pre.splice(index, 1, record);
+      return pre;
+    });
   };
 
   const columns = [
@@ -156,18 +225,43 @@ function SanPhamAddPage() {
       render: (_, __, index) => (currentPage - 1) * pageSize + index + 1,
     },
     {
+      title: "Mã",
+      dataIndex: "ma",
+      render: (text) => <a>{text}</a>,
+    },
+    {
       title: "Tên sản phẩm",
       dataIndex: "ten",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Số lượng",
-      dataIndex: "soLuong",
-      width: 150,
+      title: "Cân nặng",
+      dataIndex: "canNang",
+      width: 120,
       render: (text, record, index) => (
         <InputNumber
           style={{ width: "100%" }}
           min={0}
+          defaultValue={record?.canNang}
+          step={100}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "g"
+          }
+          parser={(value) => value.replace(/[^\d]/g, "")}
+          onChange={(value) => updateCanNang(record, index, value)}
+        />
+      ),
+    },
+
+    {
+      title: "Số lượng",
+      dataIndex: "soLuong",
+      width: 80,
+      render: (text, record, index) => (
+        <InputNumber
+          style={{ width: "100%" }}
+          min={0}
+          step={5}
           defaultValue={record?.soLuong}
           onChange={(e) => updateSoLuong(record, index, e)}
         />
@@ -182,7 +276,10 @@ function SanPhamAddPage() {
           <InputNumber
             style={{ width: "100%" }}
             min={0}
+            step={100000}
             defaultValue={record?.giaBan}
+            formatter={(value) => `${formatPrice(value)}`}
+            parser={(value) => value.replace(/\D/g, "")}
             onChange={(e) => updateGiaBan(record, index, e)}
           />
         </>
@@ -214,163 +311,158 @@ function SanPhamAddPage() {
             <Col span={24}>
               <Row gutter={[20, 20]}>
                 <Col span={24}>
-                  <Row gutter={[20, 20]}>
+                  <Row gutter={[5, 5]}>
                     <Col span={24}>
-                      <Row gutter={[5, 5]}>
-                        <Col span={24}>
-                          <Typography.Text>Tên sản phẩm: </Typography.Text>
-                        </Col>
-                        <Col span={24}>
-                          <Select
-                            disabled={disabledThongTin}
-                            style={{ width: "100%" }}
-                            placeholder="Chọn tên sản phẩm"
-                            onChange={(e) =>
-                              setDefaultChiTietSP({
-                                ...defaultChiTietSP,
-                                sanPham: { id: e },
-                              })
-                            }
-                          >
-                            {sanPhams?.map((de, index) => (
-                              <Select.Option key={index} value={de?.id}>
-                                {de?.ten}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
+                      <Typography.Text strong>Tên sản phẩm: </Typography.Text>
                     </Col>
-                  </Row>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={[20, 20]}>
-                    <Col span={12}>
-                      <Row gutter={[5, 5]}>
-                        <Col span={24}>
-                          <Typography.Text>Cổ giày: </Typography.Text>
-                        </Col>
-                        <Col span={24}>
-                          <Select
-                            disabled={disabledThongTin}
-                            style={{ width: "100%" }}
-                            placeholder="Cổ giày"
-                            onChange={(e) =>
-                              setDefaultChiTietSP({
-                                ...defaultChiTietSP,
-                                coGiay: { id: e },
-                              })
-                            }
-                          >
-                            {coGiays?.map((cg, index) => (
-                              <Select.Option key={index} value={cg?.id}>
-                                {cg?.ten}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col span={12}>
-                      <Row gutter={[5, 5]}>
-                        <Col span={24}>
-                          <Typography.Text>Đế giày: </Typography.Text>
-                        </Col>
-                        <Col span={24}>
-                          <Select
-                            disabled={disabledThongTin}
-                            style={{ width: "100%" }}
-                            placeholder="Chọn đế giày"
-                            onChange={(e) =>
-                              setDefaultChiTietSP({
-                                ...defaultChiTietSP,
-                                deGiay: { id: e },
-                              })
-                            }
-                          >
-                            {deGiays?.map((dg, index) => (
-                              <Select.Option key={index} value={dg?.id}>
-                                {dg?.ten}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={[20, 20]}>
-                    <Col span={12}>
-                      <Row gutter={[5, 5]}>
-                        <Col span={24}>
-                          <Typography.Text>Thương hiệu: </Typography.Text>
-                        </Col>
-                        <Col span={24}>
-                          <Select
-                            disabled={disabledThongTin}
-                            style={{ width: "100%" }}
-                            placeholder="Chọn thương hiệu"
-                            onChange={(e) =>
-                              setDefaultChiTietSP({
-                                ...defaultChiTietSP,
-                                thuongHieu: { id: e },
-                              })
-                            }
-                          >
-                            {thuongHieus?.map((th, index) => (
-                              <Select.Option key={index} value={th?.id}>
-                                {th?.ten}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col span={12}>
-                      <Row gutter={[5, 5]}>
-                        <Col span={24}>
-                          <Typography.Text>Chất liệu: </Typography.Text>
-                        </Col>
-                        <Col span={24}>
-                          <Select
-                            disabled={disabledThongTin}
-                            style={{ width: "100%" }}
-                            placeholder="Chọn chất liệu"
-                            onChange={(e) =>
-                              setDefaultChiTietSP({
-                                ...defaultChiTietSP,
-                                chatLieu: { id: e },
-                              })
-                            }
-                          >
-                            {chatLieus?.map((cl, index) => (
-                              <Select.Option key={index} value={cl?.id}>
-                                {cl?.ten}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
+                    <Col span={24}>
+                      <Select
+                        disabled={disabledThongTin}
+                        style={{ width: "100%" }}
+                        placeholder="Chọn tên sản phẩm"
+                        onChange={(e) =>
+                          setDefaultChiTietSP({
+                            ...defaultChiTietSP,
+                            sanPham: { id: e },
+                          })
+                        }
+                      >
+                        {sanPhams?.map((de, index) => (
+                          <Select.Option key={index} value={de?.id}>
+                            {de?.ten}
+                          </Select.Option>
+                        ))}
+                      </Select>
                     </Col>
                   </Row>
                 </Col>
               </Row>
-              <br />
-              <Row gutter={[5, 5]}>
-                <Col span={24}>
-                  <Typography.Text>Mô tả: </Typography.Text>
+              <Row gutter={[20, 20]}>
+                <Col span={12}>
+                  <Row gutter={[5, 5]}>
+                    <Col span={24}>
+                      <Typography.Text strong>Cổ giày: </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <Select
+                        disabled={disabledThongTin}
+                        style={{ width: "100%" }}
+                        placeholder="Cổ giày"
+                        onChange={(e) =>
+                          setDefaultChiTietSP({
+                            ...defaultChiTietSP,
+                            coGiay: { id: e },
+                          })
+                        }
+                      >
+                        {coGiays?.map((cg, index) => (
+                          <Select.Option key={index} value={cg?.id}>
+                            {cg?.ten}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Col>
+                  </Row>
                 </Col>
+                <Col span={12}>
+                  <Row gutter={[5, 5]}>
+                    <Col span={24}>
+                      <Typography.Text strong>Đế giày: </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <Select
+                        disabled={disabledThongTin}
+                        style={{ width: "100%" }}
+                        placeholder="Chọn đế giày"
+                        onChange={(e) =>
+                          setDefaultChiTietSP({
+                            ...defaultChiTietSP,
+                            deGiay: { id: e },
+                          })
+                        }
+                      >
+                        {deGiays?.map((dg, index) => (
+                          <Select.Option key={index} value={dg?.id}>
+                            {dg?.ten}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row gutter={[20, 20]}>
+                <Col span={12}>
+                  <Row gutter={[5, 5]}>
+                    <Col span={24}>
+                      <Typography.Text strong>Nhà sản xuất: </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <Select
+                        disabled={disabledThongTin}
+                        style={{ width: "100%" }}
+                        placeholder="Chọn thương hiệu"
+                        onChange={(e) =>
+                          setDefaultChiTietSP({
+                            ...defaultChiTietSP,
+                            nhaSanXuat: { id: e },
+                          })
+                        }
+                      >
+                        {nhaSanXuats?.map((nsx, index) => (
+                          <Select.Option key={index} value={nsx?.id}>
+                            {nsx?.ten}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={12}>
+                  <Row gutter={[5, 5]}>
+                    <Col span={24}>
+                      <Typography.Text strong>Chất liệu: </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <Select
+                        disabled={disabledThongTin}
+                        style={{ width: "100%" }}
+                        placeholder="Chọn chất liệu"
+                        onChange={(e) =>
+                          setDefaultChiTietSP({
+                            ...defaultChiTietSP,
+                            chatLieu: { id: e },
+                          })
+                        }
+                      >
+                        {chatLieus?.map((cl, index) => (
+                          <Select.Option key={index} value={cl?.id}>
+                            {cl?.ten}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row gutter={[20, 20]}>
                 <Col span={24}>
-                  <Input.TextArea
-                    value={defaultChiTietSP.moTa}
-                    onChange={(e) =>
-                      setDefaultChiTietSP({
-                        ...defaultChiTietSP,
-                        moTa: e.target.value,
-                      })
-                    }
-                  />
+                  <Row gutter={[5, 5]}>
+                    <Col span={24}>
+                      <Typography.Text strong>Mô tả: </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <Input.TextArea
+                        value={defaultChiTietSP.moTa}
+                        onChange={(e) =>
+                          setDefaultChiTietSP({
+                            ...defaultChiTietSP,
+                            moTa: e.target.value,
+                          })
+                        }
+                      />
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </Col>
@@ -438,7 +530,6 @@ function SanPhamAddPage() {
                   </Row>
                 </Col>
               </Row>
-              {/*  */}
             </Col>
           </Row>
           <Flex justify="end">
@@ -463,10 +554,11 @@ function SanPhamAddPage() {
               <br />
             </Flex>
           ))}
-
           <br />
           <Flex justify="end">
-            <Button>Thêm sản phẩm</Button>
+            <Button onClick={() => handleSanPhamChiTiet()}>
+              Thêm sản phẩm
+            </Button>
           </Flex>
         </Card>
       </Space>
