@@ -33,9 +33,13 @@ function MauSacPage() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Mô tả chi tiết",
+      title: "Màu",
       dataIndex: "moTa",
-      render: (text) => <a>{text}</a>,
+      render: (text) => (
+        <>
+          <Tag color={text == "white" ? "" : text}>{text}</Tag>
+        </>
+      ),
     },
     {
       title: "Ngày tạo",

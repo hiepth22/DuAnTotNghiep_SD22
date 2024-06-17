@@ -19,6 +19,7 @@ import {
   CoGiayPage,
   // BanTaiQuayPage,
   SanPhamAddPage,
+  SanPhamChiTietPage,
 } from "./pages/Administrator";
 import BanTaiQuayPage from "./pages/Administrator/BanHang/BanTaiQuayPage";
 import NhanVienPage from "./pages/Administrator/TaiKhoan/NhanVien/NhanVienPage";
@@ -48,6 +49,10 @@ function App() {
             <Route index path="/admin" element={<SanPhamPage />}></Route>
             <Route path="san-pham" element={<SanPhamPage />}></Route>
             <Route path="san-pham/add" element={<SanPhamAddPage />}></Route>
+            <Route
+              path="san-pham/detail/:id"
+              element={<SanPhamChiTietPage />}
+            ></Route>
 
             <Route path="ban-tai-quay" element={<BanTaiQuayPage />}></Route>
 

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/san-pham-chi-tiet")
 @CrossOrigin("*")
@@ -49,6 +51,11 @@ public class SanPhamChiTietController {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Mã đã tồn tại");
         }
         return ResponseEntity.ok(service.add(sanPhamChiTiet));
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> addProductDetailToList(@RequestBody List<SanPhamChiTiet> sanPhamChiTiet){
+        return ResponseEntity.ok(service.addToList(sanPhamChiTiet));
     }
 
     @PutMapping("/{id}")
