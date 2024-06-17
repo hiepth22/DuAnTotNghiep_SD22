@@ -32,7 +32,6 @@ const buildCloudinaryUrl = (publicId) => {
   return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
 };
 
-
 const BanTaiQuayPage: React.FC = () => {
   const [tabState, setTabState] = useState<{
     activeKey: string;
@@ -165,10 +164,13 @@ const BanTaiQuayPage: React.FC = () => {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="flex justify-start items-start">
+                  <p className="flex justify-start items-start ">
                     Danh sách sản phẩm
+
                   </p>
+
                 </div>
+
                 <div className="mb-3 flex justify-end">
                   <ModalBanHang idHoaDon={parseInt(item.key)} />
                 </div>
@@ -177,6 +179,9 @@ const BanTaiQuayPage: React.FC = () => {
             </TabPane>
           ))}
         </Tabs>
+        <div>
+          <p>Tài khoản</p>
+        </div>
       </div>
 
     </div>
@@ -185,7 +190,6 @@ const BanTaiQuayPage: React.FC = () => {
 
 const HoaDonChiTietTab: React.FC<{ idHoaDon: number }> = ({ idHoaDon }) => {
   const { isPending, data } = hoaDonChiTietDataByIdHD(idHoaDon);
-
 
   const dataSource = data?.map((item, index) => ({
     ...item,

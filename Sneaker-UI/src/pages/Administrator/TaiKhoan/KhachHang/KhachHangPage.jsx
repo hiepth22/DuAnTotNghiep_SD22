@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import moment from 'moment';
-import { getAll, detail, phantrangsevice, updatett } from "../../../../services/KhachHangService";
-import { useNavigate, useParams } from "react-router-dom";
+import { getAll, detail, updatett } from "../../../../services/KhachHangService";
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 function KhachHangPage() {
     const [khachHangs, setKH] = useState([]);
     const [selectedKH, setSelectedKH] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1); // Sửa từ 0 thành 1 để tính số trang chính xác
     const [searchKeyword, setSearchKeyword] = useState("");
     const [originalData, setOriginalData] = useState([]);
-    const nav = useNavigate();
-    const pageSize = 5;
+    const [showAddressModal, setShowAddressModal] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const recordPerPage = 5;
+
+    const navigate = useNavigate();
 
     const buildCloudinaryUrl = (publicId) => {
         const cloudName = "deapopcoc"; // Thay bằng tên cloud của bạn
@@ -36,7 +38,8 @@ function KhachHangPage() {
                 kh.ten.toLowerCase().includes(keyword.toLowerCase()) ||
                 kh.ma.toLowerCase().includes(keyword.toLowerCase()) ||
                 kh.sdt.toLowerCase().includes(keyword.toLowerCase()) ||
-                kh.cccd.toLowerCase().includes(keyword.toLowerCase())
+                kh.cccd.toLowerCase().includes(keyword.toLowerCase()) ||
+                kh.email.toLowerCase().includes(keyword.toLowerCase()) 
             );
         });
         setKH(filteredKH);
@@ -46,7 +49,7 @@ function KhachHangPage() {
         try {
             const response = await getAll();
             setOriginalData(response.data);
-            setKH(response.data);
+            setKH(response.data); // Khởi tạo khách hàng ban đầu
         } catch (error) {
             console.log(error);
         }
@@ -56,17 +59,22 @@ function KhachHangPage() {
         fetchAndSaveOriginalData();
     }, []);
 
+    useEffect(() => {
+        searchKH(searchKeyword);
+    }, [searchKeyword]);
+
     const addKH = () => {
-        nav('/admin/khachhang-add');
+        navigate('/admin/khachhang-add');
     };
 
     const updateKH = (id) => {
-        nav(`/admin/khachhang-add/${id}`);
+        navigate(`/admin/khachhang-add/${id}`);
     };
+
     const updatetrangthai = async (id, ten) => {
         try {
             await updatett(id);
-            toast.success(`Đã đổi trạng thái Khách Hàng: ${ten}`);
+            toast.success(`Đã ngừng hoạt động khách hàng: ${ten}`);
             setTimeout(() => {
                 window.location.reload(); // Reload trang sau khi cập nhật thành công
             }, 1500);
@@ -75,6 +83,7 @@ function KhachHangPage() {
             toast.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
         }
     };
+
     const openDetailModal = (id) => {
         detail(id).then((response) => {
             setSelectedKH(response.data);
@@ -84,38 +93,40 @@ function KhachHangPage() {
         });
     };
 
+    const openAddressModal = (address) => {
+        setSelectedAddress(address);
+        setShowAddressModal(true);
+    };
+
     const closeModal = () => {
         setShowModal(false);
         setSelectedKH(null);
+        setShowAddressModal(false);
+        setSelectedAddress(null);
     };
 
-    const pre = () => {
-        if (currentPage > 0) {
+    // Tính toán phân trang
+    const indexOfLastRecord = currentPage * recordPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordPerPage;
+    const currentRecords = khachHangs.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(khachHangs.length / recordPerPage);
+    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
     };
 
-    const next = () => {
-        setCurrentPage(currentPage + 1);
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
-
-    // useEffect(() => {
-    //     phantrangsevice(currentPage)
-    //         .then((response) => {
-    //             if (response.data.length === 0) {
-    //                 console.error('Dữ liệu không có sẵn');
-    //             } else {
-    //                 setKH(response.data);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // }, [currentPage]);
-
-    useEffect(() => {
-        searchKH(searchKeyword);
-    }, [searchKeyword]);
 
     const modalStyles = {
         modalHeader: {
@@ -144,6 +155,7 @@ function KhachHangPage() {
             height: 'auto',
         }
     };
+
     return (
         <div className="container mt-4">
             <form className="d-flex">
@@ -183,13 +195,14 @@ function KhachHangPage() {
                         <th scope="col">Ngày Sinh</th>
                         <th scope="col">Giới Tính</th>
                         <th scope="col">CCCD</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Trạng Thái</th>
                         <th scope="col" className="text-center">Hành Động</th>
                     </tr>
                 </thead>
                 <tbody className="text-center">
                     {
-                        khachHangs.map((khachHang, index) => (
+                        currentRecords.map((khachHang, index) => (
                             <tr key={khachHang.id}>
                                 <td>{index + 1}</td>
                                 <td><img
@@ -202,41 +215,49 @@ function KhachHangPage() {
                                 <td>{moment(khachHang.ngaySinh).format('YYYY-MM-DD')}</td>
                                 <td>{gt(khachHang.gioiTinh)}</td>
                                 <td>{khachHang.cccd}</td>
+                                <td>{khachHang.email}</td>
                                 <td>{trangThai(khachHang.trangThai)}</td>
                                 <td className="text-center">
                                     <button className="btn btn-success me-2" onClick={() => updateKH(khachHang.id)}><i className="fa-solid fa-pen"></i></button>
                                     <button type="button" className="btn btn-warning me-2" onClick={() => openDetailModal(khachHang.id)}><i className="fa-solid fa-eye"></i></button>
-                                    <button type="button" className="btn btn-info me-2" ><i className="bi bi-geo-alt-fill"></i></button>
-                                    <button type="button" className="btn btn-danger"> <i className="bi bi-trash3"
-                                        onClick={() => updatetrangthai(khachHang.id, khachHang.ten)}></i> </button>
+                                    <button type="button" className="btn btn-info me-2" onClick={() => openAddressModal(khachHang.diaChi)}><i className="bi bi-geo-alt-fill"></i></button>
+                                    <button type="button" className="btn btn-danger" onClick={() => updatetrangthai(khachHang.id, khachHang.ten)}> <i className="bi bi-trash3"></i> </button>
                                 </td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
-            <div className="text-center">
-                <button type="button" className="btn btn-light" onClick={pre}>
-                    <i className="fa-solid fa-angles-left"></i>
-                </button>
-                <span className="mx-2"> {currentPage + 1}</span>
-                <button type="button" className="btn btn-light" onClick={next}>
-                    <i className="fa-solid fa-angles-right"></i>
-                </button>
+            <div className="d-flex justify-content-center">
+                <nav>
+                    <ul className="pagination">
+                        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={handlePrevPage}>Previous</button>
+                        </li>
+                        {pageNumbers.map((number) => (
+                            <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => handlePageChange(number)}>{number}</button>
+                            </li>
+                        ))}
+                        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={handleNextPage}>Next</button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            {/* Modal */}
+            {/* Detail Modal */}
             {selectedKH && (
                 <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header" style={modalStyles.modalHeader}>
-                                <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> </h5>
+                                <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> Chi tiết khách hàng</h5>
                                 <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
                             </div>
                             <div className="modal-body" style={modalStyles.modalBody}>
                                 <div className="row">
                                     <div className="col-4 text-center">
-                                        <img src={selectedKH.anh} alt="Avatar" style={modalStyles.imgFluid} />
+                                        <img src={buildCloudinaryUrl(selectedKH.anh)} alt="Avatar" style={modalStyles.imgFluid} />
                                     </div>
                                     <div className="col-8">
                                         <p style={modalStyles.modalBodyP}><strong>Tên:</strong> {selectedKH.ten}</p>
@@ -256,9 +277,27 @@ function KhachHangPage() {
                     </div>
                 </div>
             )}
+            {/* Address Modal */}
+            {selectedAddress && (
+                <div className={`modal fade ${showAddressModal ? 'show' : ''}`} style={{ display: showAddressModal ? 'block' : 'none' }} tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header" style={modalStyles.modalHeader}>
+                                <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-geo-alt-fill"></i> Địa chỉ khách hàng</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
+                            </div>
+                            <div className="modal-body" style={modalStyles.modalBody}>
+                                <p>{selectedAddress}</p>
+                            </div>
+                            <div className="modal-footer" style={modalStyles.modalFooter}>
+                                <button type="button" className="btn btn-secondary" onClick={closeModal}>Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
 
 export default KhachHangPage;
-

@@ -34,11 +34,11 @@ public class NhanVienController {
     @Autowired
     private NhanVienRepository rpo;
 
-    @GetMapping("/")
-    public List<NhanVien> HienThi() {
-        List<NhanVien> lst = sevice.getall1(1);
-       return lst;
-    }
+//    @GetMapping("/")
+//    public List<NhanVien> HienThi() {
+//        List<NhanVien> lst = sevice.getall1(1);
+//       return lst;
+//    }
     @GetMapping("")
     public ResponseEntity<?> searchNhanViens(@RequestParam("keyword") String keyword, Pageable pageable) {
         Page<NhanVien> resultPage = sevice.findByTen(keyword, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id")));
@@ -96,15 +96,15 @@ public void anḥ̣̣̣(){
         }
         return ResponseEntity.ok(sevice.updateTrangThai(id));
     }
-    @GetMapping("page")
-    public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<NhanVien> nhanVienPage = sevice.page( pageable,1);
-
-        List<NhanVien> lst = nhanVienPage.getContent()
-                .stream()
-                .sorted(Comparator.comparing(NhanVien::getNgaytao))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lst);
-    }
+//    @GetMapping("page")
+//    public ResponseEntity<?> page(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<NhanVien> nhanVienPage = sevice.page( pageable,1);
+//
+//        List<NhanVien> lst = nhanVienPage.getContent()
+//                .stream()
+//                .sorted(Comparator.comparing(NhanVien::getNgaytao))
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(lst);
+//    }
 }
