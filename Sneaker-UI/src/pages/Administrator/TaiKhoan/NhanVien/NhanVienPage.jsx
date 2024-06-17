@@ -94,7 +94,7 @@ function NhanVienPage() {
 
     return (
         <div className="container mt-4">
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mb-5">
                 <div className="col-md-6">
                     <form onSubmit={(e) => e.preventDefault()} className="row align-items-center">
                         <div className="col-auto">
@@ -113,13 +113,14 @@ function NhanVienPage() {
                     </form>
                 </div>
             </div>
-            <h4 className="fs-5  p-3 mb-2 bg-light text-dark ">
-                <i class="fa-solid fa-filter"></i>
-                Bộ Lọc
-            </h4>
-            <div class="row justify-content-center ">
+            <div class="row justify-content-center mb- ">
                 <div class="col-8">
                     <div class="row">
+                        <div class="col">
+                            <select class="form-control mb-2">
+                                <option>Chọn trạng thái</option>
+                            </select>
+                        </div>
                         <div class="col">
                             <select class="form-control mb-2">
                                 <option>Chọn Vai Trò</option>
@@ -251,7 +252,7 @@ function NhanVienPage() {
 
             {selectedNhanVien && (
                 <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} tabIndex="-1">
-                    <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '1200px' }}>
                         <div className="modal-content">
                             <div className="modal-header" style={modalStyles.modalHeader}>
                                 <h5 className="modal-title" style={modalStyles.modalTitle}><i className="bi bi-eye-fill"></i> Chi Tiết Nhân Viên</h5>
@@ -260,19 +261,23 @@ function NhanVienPage() {
                             <div className="modal-body" style={modalStyles.modalBody}>
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <img src={buildCloudinaryUrl(selectedNhanVien.anh)} alt="Ảnh Đại Diện" style={modalStyles.modalBodyImage} />
+                                        <img src={buildCloudinaryUrl(selectedNhanVien.anh)} alt="Ảnh Đại Diện" style={{ ...modalStyles.modalBodyImage, width: '100%' }} />
                                     </div>
                                     <div className="col-md-6">
-                                        <p style={modalStyles.modalBodyP}><strong>Tên Nhân Viên:</strong> {selectedNhanVien.ten}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Mã Nhân Viên:</strong> {selectedNhanVien.ma}</p>
-
-                                        <p style={modalStyles.modalBodyP}><strong>Số Điện Thoại:</strong> {selectedNhanVien.sdt}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Ngày Sinh:</strong> {selectedNhanVien.ngaySinh ? moment(selectedNhanVien.ngaySinh).format('YYYY-MM-DD') : 'N/A'}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Giới Tính:</strong> {GioiTinh(selectedNhanVien.gioiTinh)}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>CCCD:</strong> {selectedNhanVien.cccd}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Ngày Tạo:</strong> {selectedNhanVien.ngaytao}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Ngày Cập Nhập:</strong> {selectedNhanVien.ngaycapnhap}</p>
-                                        <p style={modalStyles.modalBodyP}><strong>Mật Khẩu:</strong> {selectedNhanVien.matKhau}</p>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Tên Nhân Viên:</strong> {selectedNhanVien.ten}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Mã Nhân Viên:</strong> {selectedNhanVien.ma}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Mail:</strong> {selectedNhanVien.email}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Số Điện Thoại:</strong> {selectedNhanVien.sdt}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Ngày Sinh:</strong> {selectedNhanVien.ngaySinh ? moment(selectedNhanVien.ngaySinh).format('YYYY-MM-DD') : 'N/A'}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Giới Tính:</strong> {GioiTinh(selectedNhanVien.gioiTinh)}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>CCCD:</strong> {selectedNhanVien.cccd}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Ngày Tạo:</strong> {selectedNhanVien.ngaytao}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Ngày Cập Nhập:</strong> {selectedNhanVien.ngaycapnhap}</h2>
+                                        <div style={modalStyles.modalBodyP}>
+                                            <strong>Mật Khẩu:</strong> <input type="password" value={selectedNhanVien.matKhau} readOnly />
+                                        </div>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Vai Trò:</strong> {vaitro(selectedNhanVien.vaiTro)}</h2>
+                                        <h2 style={modalStyles.modalBodyP}><strong>Trạng Thái:</strong> {Trangthai(selectedNhanVien.trangThai)}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -283,18 +288,20 @@ function NhanVienPage() {
                     </div>
                 </div>
             )}
+
         </div>
 
     );
 }
-
 const modalStyles = {
-    modalHeader: { backgroundColor: '#343a40', color: '#fff' },
+    modalHeader: { backgroundColor: 'rgb(16, 111, 67)', color: '#fff' },
     modalTitle: { margin: 0 },
     modalBody: { padding: '20px' },
-    modalBodyImage: { width: '100%', height: 'auto', marginBottom: '10px' },
-    modalBodyP: { marginBottom: '10px' },
+    modalBodyImage: { width: '900px', height: '370px', marginBottom: '10px' },
+    modalBodyP: { marginBottom: '10px', fontSize: '18px' },
     modalFooter: { display: 'flex', justifyContent: 'flex-end' }
 };
+
+
 
 export default NhanVienPage;

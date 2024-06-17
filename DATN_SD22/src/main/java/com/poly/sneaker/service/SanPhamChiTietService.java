@@ -24,16 +24,15 @@ public class SanPhamChiTietService {
     public SanPhamChiTiet add(SanPhamChiTiet sanPhamChiTiet) {
         sanPhamChiTiet.setId(null);
         SanPhamChiTiet spct = repository.findTopMotCTSP();
-        if (spct == null) {
-            String ma = "SPCT000" + 1;
-            sanPhamChiTiet.setMa(ma);
-            return repository.save(sanPhamChiTiet);
-        } else {
-            String maHD = "SPCT000" + (spct.getId() + 1);
-            sanPhamChiTiet.setMa(maHD);
-            return repository.save(sanPhamChiTiet);
-        }
+        Long newId = spct.getId() + 1;
+
+        String ma = "SPCT" + newId;
+        sanPhamChiTiet.setMa(ma);
+
+        return repository.save(sanPhamChiTiet);
     }
+
+
 
     public SanPhamChiTiet finById(Long id) {
         Optional<SanPhamChiTiet> optional = repository.findById(id);
@@ -57,6 +56,10 @@ public class SanPhamChiTietService {
             o.setTrangThai(newSPCT.getTrangThai());
             o.setTen(newSPCT.getTen());
             o.setCanNang(newSPCT.getCanNang());
+            o.setNgayTao(newSPCT.getNgayTao());
+            o.setNgayCapNhat(newSPCT.getNgayCapNhat());
+            o.setNguoiTao(newSPCT.getNguoiTao());
+            o.setNguoiCapNhat(newSPCT.getNguoiCapNhat());
 
             o.setAnh(Anh.builder().id(newSPCT.getAnh().getId()).build());
             o.setSanPham(SanPham.builder().id(newSPCT.getSanPham().getId()).build());

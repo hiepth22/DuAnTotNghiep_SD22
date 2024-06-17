@@ -17,7 +17,7 @@ export const add = async (phieuGiamGia) => {
     }
 };
 
-export const detail = (id, phieuGiamGia) => axios.get(API_BASE_URL + '/' + id, phieuGiamGia);
+export const detail = (pggId, phieuGiamGia) => axios.get(API_BASE_URL + '/' + pggId, phieuGiamGia);
 
 export const update = async (pggId, phieuGiamGia) => {
     try {
