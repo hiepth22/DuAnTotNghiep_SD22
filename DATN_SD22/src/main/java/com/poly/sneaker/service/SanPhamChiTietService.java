@@ -29,10 +29,10 @@ public class SanPhamChiTietService {
             sanPhamChiTiet.setMa(ma);
             return repository.save(sanPhamChiTiet);
         } else {
-            String maHD = "SPCT000" + (spct.getId() + 1);
-            sanPhamChiTiet.setMa(maHD);
-            return repository.save(sanPhamChiTiet);
-        }
+        String maHD = "SPCT000" + (spct.getId() + 1);
+        sanPhamChiTiet.setMa(maHD);
+        return repository.save(sanPhamChiTiet);
+    }
     }
 
     public SanPhamChiTiet finById(Long id) {

@@ -149,7 +149,6 @@ function SanPhamAddPage() {
           ma: `SP00${sanPham.id}${mauSac.id}${kichCo.id}${randomChuoi()}`,
           mauSac: { id: color },
           kichCo: { id: size },
-          ngayTao: getDateNow(),
         });
       }
     }
@@ -174,6 +173,7 @@ function SanPhamAddPage() {
             object.sanPham = { id: defaultChiTietSP.sanPham.id };
             object.mauSac = { id: object.mauSac.id };
             object.kichCo = { id: object.kichCo.id };
+            object.ngayTao = getDateNow();
 
             await SanPhamChiTietService.add(object);
           });
