@@ -25,6 +25,7 @@ public class BanHangController {
 
     @Autowired
     HoaDonChiTietService hoaDonChiTietService;
+
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
 
@@ -44,8 +45,6 @@ public class BanHangController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn chi tiết hoặc chi tiết sản phẩm không tồn tại");
             }
-
-
     }
 
 

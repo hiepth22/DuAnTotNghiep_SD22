@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 @Builder
 
 public class SanPhamChiTiet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

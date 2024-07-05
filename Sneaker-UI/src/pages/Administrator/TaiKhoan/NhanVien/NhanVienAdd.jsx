@@ -10,8 +10,6 @@ import {
 } from "../../../../services/NhanVienSevice";
 
 import { useNavigate, useParams } from "react-router-dom";
-;
-
 const getDateNow = () => {
     return moment().format("YYYY-MM-DD HH:mm:ss");
 };
@@ -26,7 +24,7 @@ const buildCloudinaryUrl = (publicId) => {
 const NhanVienAdd = () => {
     const [anh, setAnh] = useState("");
     const [preview, setPreview] = useState(null);
-    const [ten, setTen] = useState('');
+    const [ten, setTen] = useState("");
     const [ma, setMa] = useState("");
     const [sdt, setSdt] = useState("");
     const [ngaySinh, setNgaySinh] = useState("");
@@ -50,7 +48,6 @@ const NhanVienAdd = () => {
 
         setProfileImage(e.target.files[0]);
         setImagePreview(URL.createObjectURL(e.target.files[0]));
-
     };
 
     const uploadImage = async (e) => {
@@ -98,10 +95,9 @@ const NhanVienAdd = () => {
 
                     if (nv.data.anh) {
                         setPreview(buildCloudinaryUrl(nv.data.anh));
-                        setProfileImage(nv.data.anh)
-                   
+                        setProfileImage(nv.data.anh);
                     }
-                console.log(buildCloudinaryUrl(nv.data.anh));
+                    console.log(buildCloudinaryUrl(nv.data.anh));
                 })
                 .catch((error) => {
                     console.log(error);
@@ -125,11 +121,11 @@ const NhanVienAdd = () => {
         if (!ngaySinh) {
             newErrors.ngaySinh = "Ngày sinh không được để trống";
         }
-        
+
         if (!email.trim()) {
             newErrors.email = "Email không được để trống";
         }
-        if (gioiTinh === '') {
+        if (gioiTinh === "") {
             newErrors.gioiTinh = "Giới tính không được để trống";
         }
         if (!cccd.trim()) {
@@ -147,7 +143,8 @@ const NhanVienAdd = () => {
         if (!matKhau.trim()) {
             newErrors.matKhau = "Mật khẩu không được để trống";
         } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(matKhau)) {
-            newErrors.matKhau = "Mật khẩu phải bao gồm ít nhất 8 ký tự và ít nhất một chữ cái và một số.";
+            newErrors.matKhau =
+                "Mật khẩu phải bao gồm ít nhất 8 ký tự và ít nhất một chữ cái và một số.";
         }
 
         setErrors(newErrors);
@@ -164,7 +161,6 @@ const NhanVienAdd = () => {
             return; // Nếu có lỗi thì không tiếp tục thực hiện lưu dữ liệu
         }
         if (errors || !profileImage) {
-
             return;
         }
         setItLoading(true);
@@ -207,7 +203,7 @@ const NhanVienAdd = () => {
         const trangThai = 1;
 
         const nhanVienData = {
-            anh: publicID || anh, // Sử dụng giá trị mới nếu có, nếu không sử dụng giá trị cũ
+            anh: publicID || anh,
             ten,
             ma,
             sdt,
@@ -237,20 +233,16 @@ const NhanVienAdd = () => {
             }
         } else {
             try {
-
-
                 const response = await addNhanVien(nhanVienData);
                 console.log(response);
                 navigate("/admin/nhan-vien");
                 toast.success("Nhân viên được thêm thành công!");
-
             } catch (error) {
                 console.error("Error:", error);
                 toast.warning("Thêm thất bại");
             }
         }
     };
-
 
     return (
         <div className="container mt-4">
@@ -313,7 +305,6 @@ const NhanVienAdd = () => {
                                 />
                             </p>
                         </div>
-
                     </div>
                 </div>
 
@@ -335,11 +326,19 @@ const NhanVienAdd = () => {
                                                 placeholder="Nhập tên Nhân Viên"
                                                 name="ten"
                                                 value={ten}
-                                                className={`form-control ${errors.ten ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setTen(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.ten
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setTen(e.target.value)
+                                                }
                                             />
                                             {errors.ten && (
-                                                <div className="text-danger">{errors.ten}</div>
+                                                <div className="text-danger">
+                                                    {errors.ten}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -351,11 +350,19 @@ const NhanVienAdd = () => {
                                                 placeholder="Nhập mã nhân viên"
                                                 name="ma"
                                                 value={ma}
-                                                className={`form-control ${errors.ma ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setMa(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.ma
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setMa(e.target.value)
+                                                }
                                             />
                                             {errors.ma && (
-                                                <div className="text-danger">{errors.ma}</div>
+                                                <div className="text-danger">
+                                                    {errors.ma}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -367,11 +374,19 @@ const NhanVienAdd = () => {
                                                 placeholder="Nhập SĐT"
                                                 name="sdt"
                                                 value={sdt}
-                                                className={`form-control ${errors.sdt ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setSdt(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.sdt
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setSdt(e.target.value)
+                                                }
                                             />
                                             {errors.sdt && (
-                                                <div className="text-danger">{errors.sdt}</div>
+                                                <div className="text-danger">
+                                                    {errors.sdt}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -382,11 +397,19 @@ const NhanVienAdd = () => {
                                                 type="date"
                                                 name="ngaySinh"
                                                 value={ngaySinh}
-                                                className={`form-control ${errors.ngaySinh ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setNgaySinh(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.ngaySinh
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setNgaySinh(e.target.value)
+                                                }
                                             />
                                             {errors.ngaySinh && (
-                                                <div className="text-danger">{errors.ngaySinh}</div>
+                                                <div className="text-danger">
+                                                    {errors.ngaySinh}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -398,11 +421,19 @@ const NhanVienAdd = () => {
                                                 placeholder="Nhập Email"
                                                 name="mail"
                                                 value={email}
-                                                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setMail(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.email
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setMail(e.target.value)
+                                                }
                                             />
                                             {errors.email && (
-                                                <div className="text-danger">{errors.email}</div>
+                                                <div className="text-danger">
+                                                    {errors.email}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -413,17 +444,28 @@ const NhanVienAdd = () => {
                                                 placeholder="Nhập địa chỉ"
                                                 name="diachi"
                                                 value={diachi}
-                                                className={`form-control ${errors.diachi ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setdiachi(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.diachi
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setdiachi(e.target.value)
+                                                }
                                             />
                                             {errors.diachi && (
-                                                <div className="text-danger">{errors.diachi}</div>
+                                                <div className="text-danger">
+                                                    {errors.diachi}
+                                                </div>
                                             )}
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-3">
-                                            <label className="form-label">Giới Tính:</label><br />
+                                            <label className="form-label">
+                                                Giới Tính:
+                                            </label>
+                                            <br />
                                             <div className="form-check form-check-inline">
                                                 <input
                                                     className="form-check-input"
@@ -432,9 +474,16 @@ const NhanVienAdd = () => {
                                                     id="nam"
                                                     value="true"
                                                     checked={gioiTinh === true}
-                                                    onChange={(e) => setGioiTinh(true)}
+                                                    onChange={(e) =>
+                                                        setGioiTinh(true)
+                                                    }
                                                 />
-                                                <label className="form-check-label" htmlFor="nam">Nam</label>
+                                                <label
+                                                    className="form-check-label"
+                                                    htmlFor="nam"
+                                                >
+                                                    Nam
+                                                </label>
                                             </div>
                                             <div className="form-check form-check-inline">
                                                 <input
@@ -444,12 +493,21 @@ const NhanVienAdd = () => {
                                                     id="nu"
                                                     value="false"
                                                     checked={gioiTinh === false}
-                                                    onChange={(e) => setGioiTinh(false)}
+                                                    onChange={(e) =>
+                                                        setGioiTinh(false)
+                                                    }
                                                 />
-                                                <label className="form-check-label" htmlFor="nu">Nữ</label>
+                                                <label
+                                                    className="form-check-label"
+                                                    htmlFor="nu"
+                                                >
+                                                    Nữ
+                                                </label>
                                             </div>
                                             {errors.gioiTinh && (
-                                                <div className="text-danger">{errors.gioiTinh}</div>
+                                                <div className="text-danger">
+                                                    {errors.gioiTinh}
+                                                </div>
                                             )}
                                         </div>
 
@@ -461,11 +519,19 @@ const NhanVienAdd = () => {
                                                 type="text"
                                                 name="cccd"
                                                 value={cccd}
-                                                className={`form-control ${errors.cccd ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setCccd(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.cccd
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setCccd(e.target.value)
+                                                }
                                             />
                                             {errors.cccd && (
-                                                <div className="text-danger">{errors.cccd}</div>
+                                                <div className="text-danger">
+                                                    {errors.cccd}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -476,11 +542,19 @@ const NhanVienAdd = () => {
                                                 type="password"
                                                 name="matKhau"
                                                 value={matKhau}
-                                                className={`form-control ${errors.matKhau ? 'is-invalid' : ''}`}
-                                                onChange={(e) => setMatKhau(e.target.value)}
+                                                className={`form-control ${
+                                                    errors.matKhau
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                onChange={(e) =>
+                                                    setMatKhau(e.target.value)
+                                                }
                                             />
                                             {errors.matKhau && (
-                                                <div className="text-danger">{errors.matKhau}</div>
+                                                <div className="text-danger">
+                                                    {errors.matKhau}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -488,17 +562,31 @@ const NhanVienAdd = () => {
                                                 Vai Trò:
                                             </label>
                                             <select
-                                                className={`form-select ${errors.vaiTro ? 'is-invalid' : ''}`}
+                                                className={`form-select ${
+                                                    errors.vaiTro
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
                                                 aria-label="Vai Trò"
                                                 value={vaiTro}
-                                                onChange={(e) => setVaiTro(e.target.value)}
+                                                onChange={(e) =>
+                                                    setVaiTro(e.target.value)
+                                                }
                                             >
-                                                <option value="">Chọn Vai Trò</option>
-                                                <option value="1">Nhân Viên</option>
-                                                <option value="2">Quản Lý</option>
+                                                <option value="">
+                                                    Chọn Vai Trò
+                                                </option>
+                                                <option value="1">
+                                                    Nhân Viên
+                                                </option>
+                                                <option value="2">
+                                                    Quản Lý
+                                                </option>
                                             </select>
                                             {errors.vaiTro && (
-                                                <div className="text-danger">{errors.vaiTro}</div>
+                                                <div className="text-danger">
+                                                    {errors.vaiTro}
+                                                </div>
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -506,16 +594,28 @@ const NhanVienAdd = () => {
                                                 Trạng Thái:
                                             </label>
                                             <select
-                                                className={`form-select ${errors.trangThai ? 'is-invalid' : ''}`}
+                                                className={`form-select ${
+                                                    errors.trangThai
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
                                                 aria-label="Trạng Thái"
                                                 value={trangThai}
-                                                onChange={(e) => setTrangThai(e.target.value)}
+                                                onChange={(e) =>
+                                                    setTrangThai(e.target.value)
+                                                }
                                             >
-                                                <option value="1">Hoạt động</option>
-                                                <option value="0">Không hoạt động</option>
+                                                <option value="1">
+                                                    Hoạt động
+                                                </option>
+                                                <option value="0">
+                                                    Không hoạt động
+                                                </option>
                                             </select>
                                             {errors.trangThai && (
-                                                <div className="text-danger">{errors.trangThai}</div>
+                                                <div className="text-danger">
+                                                    {errors.trangThai}
+                                                </div>
                                             )}
                                         </div>
                                     </div>

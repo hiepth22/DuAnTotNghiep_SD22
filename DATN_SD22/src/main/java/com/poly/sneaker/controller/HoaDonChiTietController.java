@@ -25,13 +25,13 @@ public class HoaDonChiTietController {
         return ResponseEntity.ok(hoaDonChiTiets);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody HoaDon hoaDon) {
-        HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
-        hoaDonChiTiet.setHoaDon(hoaDon);
-        HoaDonChiTiet addhdct = hoaDonChiTietService.addHoaDonChiTiet(hoaDonChiTiet);
-        return ResponseEntity.ok(addhdct);
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity<?> add(@RequestBody HoaDon hoaDon) {
+//        HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+//        hoaDonChiTiet.setHoaDon(hoaDon);
+//        HoaDonChiTiet addhdct = hoaDonChiTietService.addHoaDonChiTiet(hoaDonChiTiet);
+//        return ResponseEntity.ok(addhdct);
+//    }
 
 
 
